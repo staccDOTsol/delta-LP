@@ -1,0 +1,24 @@
+[workspace]
+resolver = "2"
+members = ["programs/vault", "crates/math", "tests/svm"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[workspace.dependencies]
+pinocchio = "0.11"
+pinocchio-token = "0.7"
+pinocchio-token-2022 = "0.4"
+pinocchio-system = "0.6"
+pinocchio-associated-token-account = "0.4"
+pinocchio-pubkey = "0.3"
+pinocchio-log = "0.5"
+dlp-math = { path = "crates/math" }
+
+[profile.release]
+overflow-checks = true
+lto = "fat"
+codegen-units = 1
+opt-level = 3

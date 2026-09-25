@@ -1,0 +1,28 @@
+[package]
+name = "dlp-vault"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+crate-type = ["cdylib", "lib"]
+
+[features]
+no-entrypoint = []
+
+[dependencies]
+pinocchio.workspace = true
+pinocchio-token.workspace = true
+pinocchio-token-2022.workspace = true
+pinocchio-system.workspace = true
+pinocchio-associated-token-account.workspace = true
+pinocchio-pubkey.workspace = true
+pinocchio-log.workspace = true
+dlp-math.workspace = true
+
+# host builds/tests need the software PDA derivation; on-chain uses the syscall
+[target.'cfg(not(target_os = "solana"))'.dependencies]
+solana-address = { version = "2", features = ["curve25519"] }
+
+[lints.rust]
+unexpected_cfgs = { level = "allow", check-cfg = ['cfg(target_os, values("solana"))'] }
