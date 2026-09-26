@@ -1,0 +1,250 @@
+{
+ "Multicall3": {
+  "address": "0xcA11bde05977b3631167028862bE2a173976CA11",
+  "codeSize": 3808
+ },
+ "Arachnid CREATE2 deployer (0x4e59)": {
+  "address": "0x4e59b44847b379578588920cA78FbF26c0B4956C",
+  "codeSize": 69
+ },
+ "Safe Singleton Factory": {
+  "address": "0x914d7Fec6aaC8cd542e72Bca78B30650d45643d7",
+  "codeSize": 69
+ },
+ "CreateX": {
+  "address": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+  "codeSize": 11838
+ },
+ "Create2Deployer (pcaversaccio 0x13b0)": {
+  "address": "0x13b0D85CcB8bf860b6b79AF3029fCA081AE9beF2",
+  "codeSize": 2933
+ },
+ "Permit2": {
+  "address": "0x000000000022D473030F116dDEE9F6B43aC78BA3",
+  "codeSize": 9152
+ },
+ "L2 Multicall (RH docs)": {
+  "address": "0x2cAC2D899eCC914d704FeaAE33ac1bF36277DaD1",
+  "codeSize": 3339
+ },
+ "Safe v1.3.0 GnosisSafe (canonical)": {
+  "address": "0xd9Db270c1B5E3Bd161E8c8503c55cEABeE709552",
+  "codeSize": 22958
+ },
+ "Safe v1.3.0 GnosisSafeL2 (canonical)": {
+  "address": "0x3E5c63644E683549055b9Be8653de26E0B4CD36E",
+  "codeSize": 23800
+ },
+ "Safe v1.3.0 ProxyFactory (canonical)": {
+  "address": "0xa6B71E26C5e0845f74c812102Ca7114b6a896AB2",
+  "codeSize": 3774
+ },
+ "Safe v1.3.0 GnosisSafeL2 (eip155)": {
+  "address": "0xfb1bffC9d739B8D520DaF37dF666da4C687191EA",
+  "codeSize": 23800
+ },
+ "Safe v1.3.0 ProxyFactory (eip155)": {
+  "address": "0xC22834581EbC8527d974F8a1c97E1bEA4EF910BC",
+  "codeSize": 3774
+ },
+ "Safe v1.4.1 Safe": {
+  "address": "0x41675C099F32341bf84BFc5382aF534df5C7461a",
+  "codeSize": 23579
+ },
+ "Safe v1.4.1 SafeL2": {
+  "address": "0x29fcB43b46531BcA003ddC8FCB67FFE91900C762",
+  "codeSize": 24421
+ },
+ "Safe v1.4.1 SafeProxyFactory": {
+  "address": "0x4e1DCf7AD4e460CfD30791CCC4F9c8a4f820ec67",
+  "codeSize": 3054
+ },
+ "Safe v1.4.1 MultiSendCallOnly": {
+  "address": "0x9641d764fc13c8B624c04430C7356C1C7C8102e2",
+  "codeSize": 410
+ },
+ "Safe v1.5.0 SafeL2": {
+  "address": "0xEdd160fEBBD92E350D4D398fb636302fccd67C7e",
+  "codeSize": 22231
+ },
+ "Safe v1.5.0 SafeProxyFactory": {
+  "address": "0x14F2982D601c9458F93bd70B218933A6f8165e7b",
+  "codeSize": 3321
+ },
+ "EntryPoint v0.6": {
+  "address": "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789",
+  "codeSize": 23689
+ },
+ "EntryPoint v0.7": {
+  "address": "0x0000000071727De22E5E9d8BAf0edAc6f37da032",
+  "codeSize": 16035
+ },
+ "EntryPoint v0.8": {
+  "address": "0x4337084D9E255Ff0702461CF8895CE9E3b5Ff108",
+  "codeSize": 21738
+ },
+ "Pyth (0x4305..)": {
+  "address": "0x4305FB66699C3B2702D4d05CF36551390A4c69C6",
+  "codeSize": 0
+ },
+ "Pyth (0xff1a..)": {
+  "address": "0xff1a0f4744e8582DF1aE09D5611b887B6a12925C",
+  "codeSize": 0
+ },
+ "Pyth (0x2880..)": {
+  "address": "0x2880aB155794e7179c9eE2e38200202908C17B43",
+  "codeSize": 1067
+ },
+ "Pyth (0xA2aa..)": {
+  "address": "0xA2aa501b19aff244D90cc15a4Cf739D2725B5729",
+  "codeSize": 0
+ },
+ "Pyth Lazer verifier (0xACeA..)": {
+  "address": "0xACeA761c27A909d4D3895128EBe6370FDE2dF481",
+  "codeSize": 183
+ },
+ "Pyth Entropy (0x4374..)": {
+  "address": "0x4374e5a8b9C22271E9EB878A2AA31DE97DF15DAF",
+  "codeSize": 0
+ },
+ "API3 Api3ServerV1": {
+  "address": "0x709944a48cAf83535e43471680fDA4905FB3920a",
+  "codeSize": 0
+ },
+ "API3 AccessControlRegistry": {
+  "address": "0x92e5125adF385d86beDb950793526106143b6Df1",
+  "codeSize": 0
+ },
+ "API3 Api3ReaderProxyV1Factory": {
+  "address": "0x9EB9798Dc1b602067DFe5A57c3bfc914B965acFD",
+  "codeSize": 0
+ },
+ "Chainlink DataStreams VerifierProxy (RH docs)": {
+  "address": "0xcE73c8ad08CBDEaCa6078BF0627C8fe0a9a536E7",
+  "codeSize": 7009
+ },
+ "Chronicle Chainlog (common)": {
+  "address": "0x0f6e5c62D8e82CdeBe09Fe44bDd8F6A4101dFa19",
+  "codeSize": 0
+ },
+ "LayerZero EndpointV2": {
+  "address": "0x6F475642a6e85809B1c36Fa62763669b1b48DD5B",
+  "codeSize": 24005
+ },
+ "LayerZero EndpointV1": {
+  "address": "0xb6319cC6c8c27A8F5dAF0dD3DF91EA35C4720dd7",
+  "codeSize": 15282
+ },
+ "CCIP Router": {
+  "address": "0x06fC836cf9839B1cd891C440A0a45242DA6Ae1c9",
+  "codeSize": 10761
+ },
+ "CCIP TokenAdminRegistry": {
+  "address": "0x1912C3cFafE8A76A32a92861d815aC2837F237Ca",
+  "codeSize": 5287
+ },
+ "Hyperlane Mailbox": {
+  "address": "0x3a867fCfFeC2B790970eeBDC9023E75B0a172aa7",
+  "codeSize": 2840
+ },
+ "L2 Gateway Router": {
+  "address": "0x1E324B9316138CA9a73F960213621AD1aaf01B89",
+  "codeSize": 2202
+ },
+ "L2 ERC20 Gateway": {
+  "address": "0xfd9b17206278C16DdaacF6AC8f05dBf97EdCb31e",
+  "codeSize": 2202
+ },
+ "L2 Arb-Custom Gateway": {
+  "address": "0x912285144fC0f6e89d3Ed16F5Ab72f87A1878959",
+  "codeSize": 2202
+ },
+ "L2 WETH Gateway": {
+  "address": "0x1D187C3E2dA52D72BC9C41e3AbA0fdFa6a7bF055",
+  "codeSize": 2202
+ },
+ "WETH (L2)": {
+  "address": "0x0Bd7D308f8E1639FAb988df18A8011f41EAcAD73",
+  "codeSize": 2202
+ },
+ "Lighter RH instance": {
+  "address": "0x94bAB9693Ba2f6358507eFfcbd372b0660AFfF9d",
+  "codeSize": 1367
+ },
+ "Morpho Blue": {
+  "address": "0x9D53d5E3bd5E8d4Cbfa6DB1ca238AEA02E651010",
+  "codeSize": 15582
+ },
+ "Morpho AdaptiveCurveIRM": {
+  "address": "0x2BD3d5965B26B51814AC95127B2b80dD6CcC0fa1",
+  "codeSize": 2282
+ },
+ "MorphoChainlinkOracleV2Factory": {
+  "address": "0xB7c16F6F8cF531447Bf27Ca7220f981E79C9cdF2",
+  "codeSize": 4464
+ },
+ "Morpho VaultV2Factory": {
+  "address": "0x0FBad98595b0186dA120E41f77C102beb49f803c",
+  "codeSize": 23124
+ },
+ "Morpho MorphoVaultV1AdapterFactory": {
+  "address": "0x7a91222F3f7B927bB8fb624593Ca86e111C2F85e",
+  "codeSize": 5775
+ },
+ "Morpho MorphoMarketV1AdapterV2Factory": {
+  "address": "0x79370Ed003CE325C088E530d5e8655c99c2993e1",
+  "codeSize": 13633
+ },
+ "Morpho Registry": {
+  "address": "0xe785a2eFD384BA7B95BaEd3851BC76aeD67C676f",
+  "codeSize": 1377
+ },
+ "Morpho PublicAllocator": {
+  "address": "0xCe5c1aFa115fF8b1D6913509bfc79D9AE08CC857",
+  "codeSize": 7697
+ },
+ "Morpho Bundler3": {
+  "address": "0x6478e9393d4C5bB4d53ee881d1DE78786A0344a6",
+  "codeSize": 1547
+ },
+ "Morpho GeneralAdapter1": {
+  "address": "0xc5E188541D107e8B79e43478bDE365F1406665D6",
+  "codeSize": 13830
+ },
+ "Morpho Midnight": {
+  "address": "0x6120765Ba5336150BbdDdD0Cd9108B5bFD369632",
+  "codeSize": 24557
+ },
+ "MetaMorpho Factory v1.1 (eth addr, expect none)": {
+  "address": "0x1897A8997241C1cD4bD0698647e4EB7213535c24",
+  "codeSize": 0
+ },
+ "UniV3Factory": {
+  "address": "0x1f7d7550B1b028f7571E69A784071F0205FD2EfA",
+  "codeSize": 24535
+ },
+ "UniV4PoolManager": {
+  "address": "0x8366a39CC670B4001A1121B8F6A443A643e40951",
+  "codeSize": 24009
+ },
+ "UniV4StateView": {
+  "address": "0xF3334192D15450CdD385c8B70e03f9A6bD9E673b",
+  "codeSize": 3531
+ },
+ "UniversalRouter": {
+  "address": "0x06AfBA43Fd06227fA663b0DAecF536f6EaA6bf99",
+  "codeSize": 24546
+ },
+ "UniV2Factory": {
+  "address": "0x8bcEaA40B9AcdfAedF85AdF4FF01F5Ad6517937f",
+  "codeSize": 13859
+ },
+ "Euler EVC (0x0C9a.. canonical eth)": {
+  "address": "0x0C9a3dd6b8F28529d72d7f9cE918D493519EE383",
+  "codeSize": 0
+ },
+ "Aave v3 PoolAddressesProvider (eth)": {
+  "address": "0x2f39d218133AFaB8F2B819B1066c7E434Ad94E9e",
+  "codeSize": 0
+ }
+}

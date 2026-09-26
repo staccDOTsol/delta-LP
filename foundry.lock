@@ -1,0 +1,26 @@
+{
+  "lib/morpho-blue": {
+    "tag": {
+      "name": "v1.0.0",
+      "rev": "55d2d99304fb3fb930c688462ae2ccabb1d533ad"
+    }
+  },
+  "lib/openzeppelin-contracts": {
+    "tag": {
+      "name": "v5.7.0",
+      "rev": "cab19933c33c2ad1d4c7a84864a3601dddfd16f3"
+    }
+  },
+  "lib/v3-core": {
+    "branch": {
+      "name": "0.8",
+      "rev": "6562c52e8f75f0c10f9deaf44861847585fc8129"
+    }
+  },
+  "lib/v3-periphery": {
+    "branch": {
+      "name": "0.8",
+      "rev": "b325bb0905d922ae61fcc7df85ee802e8df5e96c"
+    }
+  }
+}
