@@ -1,0 +1,4 @@
+target/
+fixtures/programs/*.so
+**/*.log
+node_modules/
