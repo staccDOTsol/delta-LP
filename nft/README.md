@@ -83,6 +83,20 @@ bindings, and submits source to Sourcify. Run again to read verification results
 submission is not verification. Do not use a second signing process alongside
 the keeper EOA.
 
+Check marketplace indexing independently, using an OpenSea API key from an
+ignored local environment file:
+
+```sh
+node --env-file=.env.local --env-file=.env.nft-opensea.local nft/check-opensea.mjs
+```
+
+This read-only check saves `artifacts/nft-deployment/opensea-status.json`: actual
+contract deployment, collection slug/URL when indexed, drop state when found,
+collection pauses, vault supply and adapter inventory/readiness. A 404 is
+recorded as not indexed, and an authentication error is not silently treated as
+proof of indexing. An active marketplace stage alone is not proof a funded mint
+will succeed. OpenSea's optional instant API keys expire after seven days.
+
 ## Funding and sales are separate
 
 `DnInventoryAdapter` sells existing activated receipts. A donor must understand
