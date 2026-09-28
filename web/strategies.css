@@ -115,3 +115,7 @@ button.inline-link{background:none;border:0;padding:0;color:var(--dlp-ink);font:
   .batch-meter dl{grid-template-columns:1fr 1fr}
   .batch-meter dl>div:last-child{grid-column:1/-1;flex-direction:row;justify-content:space-between;border-top:1px solid var(--dlp-line);padding-top:8px;margin-top:2px}
 }
+
+/* Sister site: in the header from tablet up, in the footer everywhere. */
+@media(max-width:850px){.strategy-shell .wl-header nav>a.nav-sister{display:none}}
+@media(max-width:1050px){.wl-header nav>a.nav-sister{display:none}}
