@@ -23,7 +23,7 @@ jobs:
       - uses: foundry-rs/foundry-toolchain@v1
         with:
           version: stable
-      - run: forge test --match-contract RobinhoodForkTest -vv
+      - run: forge test -vv
         working-directory: evm
   math:
     runs-on: ubuntu-latest

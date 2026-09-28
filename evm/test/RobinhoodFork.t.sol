@@ -159,7 +159,10 @@ contract RobinhoodForkTest is Test {
         int24 tl = ((cur - 60) / TS) * TS;
         int24 tu = ((cur + 60) / TS) * TS;
         // token0 = USDG, token1 = NVDA
-        uint128 L = vault.liquidityForAmounts(tl, tu, 2_000e6, type(uint128).max);
+        // Bound BOTH legs. At a different live tick, 2,000 USDG on one side can
+        // require far more than 2,000 USDG of NVDA on the other, breaching health.
+        uint256 baseBudget = FullMath.mulDiv(2_000e6, oracle.price(), 1e36);
+        uint128 L = vault.liquidityForAmounts(tl, tu, 2_000e6, baseBudget);
         (uint256 need0, uint256 need1) = vault.amountsForLiquidity(tl, tu, L);
         emit log_named_int("range lower", tl);
         emit log_named_int("range upper", tu);

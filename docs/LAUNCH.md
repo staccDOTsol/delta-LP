@@ -15,6 +15,10 @@ belong to the user's Lighter account and do not mint deltaLP vault receipts.
 The separate delta-neutral LP vault remains closed: LP inventory integration,
 asynchronous hedge rebalancing, and combined NAV/receipt accounting are unfinished.
 See [execution and recovery details](LIGHTER-ROUTE.md).
+The newer [tokenized Lighter member / V4 contracts](TOKENIZED-MEMBERS.md) implement
+the 2% mint / 4% redeem fee policy and pool activity checks in an experimental,
+undeployed package. They are separate from both the browser's direct-perps flow
+and the older NVDA/Morpho vault. No tokenized strategy launch is implied by the site deployment.
 The oil-subscription waitlist is at https://deltalp.fun/oil. Email verification, private
 passes, ranking, and referral points use the real database. No fuel subscription is sold.
 The preserved `platform/` code is a local fuel-operations sandbox with synthetic payments,
@@ -94,7 +98,7 @@ npm test
 npm run test:waitlist
 # Opt in with a database URL to execute the isolated Postgres integration suite:
 WAITLIST_TEST_DATABASE_URL=... npm test
-cd evm && forge test --match-contract RobinhoodForkTest -vv
+cd evm && forge test -vv
 ```
 
 Integration tests create a unique `wl_test_*` schema and remove it afterward; they never

@@ -12,3 +12,6 @@
 [submodule "lib/morpho-blue"]
 	path = evm/lib/morpho-blue
 	url = https://github.com/morpho-org/morpho-blue
+[submodule "evm/lib/v4-core"]
+	path = evm/lib/v4-core
+	url = https://github.com/Uniswap/v4-core.git
