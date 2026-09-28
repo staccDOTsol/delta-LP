@@ -7,7 +7,7 @@ import {put, head} from '@vercel/blob';
 
 const root = resolve(process.env.NFT_ART_ROOT || '/Users/stacc/10k');
 const out = resolve('artifacts/nft-publication');
-const denominations = [1,2,5,10,20,50,100];
+const denominations = [1,2,5,10]; // Higher tiers retained locally, excluded from this launch.
 const sha = data => createHash('sha256').update(data).digest('hex');
 const description = d => `Money Doubler $${d}: cartoon giveaway-scam parody art. This deltaLP edition uses an NFT-owned ERC-6551 account for delta-neutral strategy receipts. Account assets can be withdrawn by the current NFT owner; inspect current holdings before buying. The denomination is an art/mint-price target, not a dollar peg or redemption guarantee. No doubling, yield or risk-free return is promised.`;
 mkdirSync(out,{recursive:true});
@@ -125,5 +125,5 @@ try {
     summaries.push(summary);writeFileSync(join(out,'editions.json'),JSON.stringify(summaries,null,2));
     console.log(JSON.stringify({editionComplete:summary}));
   }
-  console.log('All 70,000 metadata/image URL pairs published and verified.');
+  console.log('All 40,000 metadata/image URL pairs published and verified.');
 } finally {clearInterval(tick);}

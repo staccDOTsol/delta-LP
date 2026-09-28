@@ -8,7 +8,7 @@ const client=createPublicClient({transport:http(endpoint)});
 const version=await client.request({method:'web3_clientVersion'});
 if(!version.toLowerCase().includes('anvil')||await client.getChainId()!==4663)throw Error('Expected a local Robinhood Anvil fork');
 const plan=JSON.parse(readFileSync('artifacts/nft-deployment/unsigned.json','utf8'));
-if(plan.chainId!==4663||plan.status!=='unsigned-paused-deployment')throw Error('Unexpected plan');
+if(plan.chainId!==4663||plan.status!=='unsigned-paused-deployment'||plan.collections.length!==4)throw Error('Unexpected four-edition plan');
 for(const [name,dependency] of Object.entries(plan.dependencies)){
  const code=await client.getCode({address:dependency.address});
  if(!code||keccak256(code)!==dependency.runtimeCodeHash)throw Error(`Fork dependency mismatch: ${name}`);
@@ -35,7 +35,12 @@ for(const collection of plan.collections){
 }
 const fanout=plan.dependencies.weightedFanout.address;
 if(!await read('WeightedNftFeeFanout',fanout,'configured')||await read('WeightedNftFeeFanout',fanout,'initializer')!=='0x0000000000000000000000000000000000000000')throw Error('Fanout not finalized');
-for(let i=0;i<7;i++)if((await read('WeightedNftFeeFanout',fanout,'collections',[BigInt(i)])).toLowerCase()!==plan.collections[i].address.toLowerCase())throw Error('Fanout collection ordering mismatch');
+for(let i=0;i<4;i++)if((await read('WeightedNftFeeFanout',fanout,'collections',[BigInt(i)])).toLowerCase()!==plan.collections[i].address.toLowerCase())throw Error('Fanout collection ordering mismatch');
 await client.request({method:'anvil_stopImpersonatingAccount',params:[plan.owner]});
-writeFileSync('artifacts/nft-deployment/fork-simulation.json',JSON.stringify({status:'local-fork-simulation-only',at:new Date().toISOString(),planHash:keccak256(toHex(readFileSync('artifacts/nft-deployment/unsigned.json','utf8'))),receipts},null,2));
-console.log(JSON.stringify({status:'local-fork-simulation-passed',calls:receipts.length,totalGas:String(receipts.reduce((n,r)=>n+BigInt(r.gasUsed),0n)),collections:7,paused:true}));
+const runtimeHashes={};
+for(const deployment of plan.deployments){
+ const code=await client.getCode({address:deployment.address});if(!code||code==='0x')throw Error('Missing simulated runtime');
+ runtimeHashes[deployment.address.toLowerCase()]=keccak256(code);
+}
+writeFileSync('artifacts/nft-deployment/fork-simulation.json',JSON.stringify({status:'local-fork-simulation-only',at:new Date().toISOString(),planHash:keccak256(toHex(readFileSync('artifacts/nft-deployment/unsigned.json','utf8'))),runtimeHashes,receipts},null,2));
+console.log(JSON.stringify({status:'local-fork-simulation-passed',calls:receipts.length,totalGas:String(receipts.reduce((n,r)=>n+BigInt(r.gasUsed),0n)),collections:4,paused:true}));

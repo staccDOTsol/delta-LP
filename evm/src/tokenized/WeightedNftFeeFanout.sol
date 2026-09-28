@@ -13,17 +13,17 @@ interface IWeightedEdition is IERC721 {
     function MAX_SUPPLY() external view returns (uint256);
 }
 
-/// Seven immutable 10k editions. Fixed weights reserve past entitlements for
+/// Four immutable 10k editions. Fixed weights reserve past entitlements for
 /// unminted IDs; minting later acquires those reserves. Claims follow ownerOf.
 /// No administrator withdrawal, recipient change, token sweep or share issuance.
 contract WeightedNftFeeFanout is ReentrancyGuard {
     using SafeERC20 for IERC20;
-    uint256 public constant tokenCount = 70_000;
-    uint256 public constant totalWeight = 1_880_000;
+    uint256 public constant tokenCount = 40_000;
+    uint256 public constant totalWeight = 180_000;
     uint256 public constant MAX_CLAIM = 50;
     address public initializer;
     bool public configured;
-    address[7] public collections;
+    address[4] public collections;
 
     struct Distribution {
         uint256 received;
@@ -33,7 +33,7 @@ contract WeightedNftFeeFanout is ReentrancyGuard {
     mapping(address => Distribution) public distributions;
     // Asset -> edition index -> token ID -> lifetime claimed whole token units.
     mapping(address => mapping(uint8 => mapping(uint256 => uint256))) public claimed;
-    event Configured(address[7] collections);
+    event Configured(address[4] collections);
     event Harvested(address indexed token, uint256 added, uint256 received);
     event Claimed(address indexed token, address indexed owner, uint256 amount);
     error InvalidConfiguration();
@@ -45,10 +45,10 @@ contract WeightedNftFeeFanout is ReentrancyGuard {
         initializer = initializer_;
     }
 
-    /// Order is $1, $2, $5, $10, $20, $50, $100. Authority is erased forever.
-    function configure(address[7] calldata editions) external {
+    /// Order is $1, $2, $5, $10. Authority is erased forever.
+    function configure(address[4] calldata editions) external {
         if (configured || msg.sender != initializer) revert InvalidConfiguration();
-        for (uint8 i; i < 7; ++i) {
+        for (uint8 i; i < 4; ++i) {
             address edition = editions[i];
             if (
                 edition.code.length == 0 || !IERC165(edition).supportsInterface(type(IERC721).interfaceId)
@@ -70,9 +70,6 @@ contract WeightedNftFeeFanout is ReentrancyGuard {
         if (index == 1) return 2;
         if (index == 2) return 5;
         if (index == 3) return 10;
-        if (index == 4) return 20;
-        if (index == 5) return 50;
-        if (index == 6) return 100;
         revert InvalidClaim();
     }
 
@@ -134,6 +131,6 @@ contract WeightedNftFeeFanout is ReentrancyGuard {
     }
 
     function _validId(uint8 index, uint256 id) private view {
-        if (!configured || index >= 7 || id == 0 || id > 10_000) revert InvalidClaim();
+        if (!configured || index >= 4 || id == 0 || id > 10_000) revert InvalidClaim();
     }
 }
