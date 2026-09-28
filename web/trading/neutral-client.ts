@@ -21,6 +21,15 @@ export class NeutralClient {
   private get key(){return `dlp.neutral.tx.v1.${this.deployment.address.toLowerCase()}.${this.address.toLowerCase()}`;}
   pending(){const raw=localStorage.getItem(this.key);return raw?journalSchema.parse(JSON.parse(raw)):null;}
   hasPending(){return localStorage.getItem(this.key)!==null;}
+  /** Wallet cash is independent of receipt valuation, venue setup and exit history. */
+  async walletBalance(){
+    const [chainId,balance]=await Promise.all([
+      rpc.getChainId(),
+      rpc.readContract({address:USDG,abi:tokenAbi,functionName:'balanceOf',args:[this.address]}),
+    ]);
+    if(chainId!==4663)throw new Error('Wallet balance RPC is on the wrong chain.');
+    return balance;
+  }
   private async identity(){
     const [accounts,id,code]=await Promise.all([this.provider.request({method:'eth_accounts'}),this.provider.request({method:'eth_chainId'}),rpc.getCode({address:this.deployment.address})]);
     if(accounts[0]?.toLowerCase()!==this.address.toLowerCase()||Number(id)!==4663)throw new Error('Wallet changed. Reconnect to continue.');
@@ -75,7 +84,7 @@ export class NeutralClient {
     const assets=usdgAmount(text),s=await this.snapshot();
     if(!s.state.configured||!s.state.entriesOpen||s.state.phase!==0)throw new Error('This pool is not collecting deposits right now.');
     if(assets>s.usdg)throw new Error('Your wallet has insufficient USDG.');
-    const minimum=receiptMinimum(assets,BigInt(s.state.totalSupply),s.state.nav===null?null:BigInt(s.state.nav));
+    const minimum=receiptMinimum(assets,BigInt(s.state.totalSupply),s.state.nav===null?null:BigInt(s.state.nav),s.state.entryFeeBps);
     const allowance=await rpc.readContract({address:USDG,abi:tokenAbi,functionName:'allowance',args:[this.address,this.deployment.address]});
     if(allowance<assets)await this.send(USDG,encodeFunctionData({abi:tokenAbi,functionName:'approve',args:[this.deployment.address,assets]}),'USDG approval');
     await this.send(this.deployment.address,encodeFunctionData({abi:neutralAbi,functionName:'enter',args:[assets,minimum,this.address,BigInt(Math.floor(Date.now()/1000)+300)]}),'DN deposit');
@@ -102,7 +111,7 @@ export class NeutralClient {
   });}
   async exit(inKind=false){return this.locked(async()=>{
     const s=await this.snapshot();
-    const minimum=inKind?0n:exitMinimum(s.balance,BigInt(s.state.totalSupply),s.state.nav===null?null:BigInt(s.state.nav));
+    const minimum=inKind?0n:exitMinimum(s.balance,BigInt(s.state.totalSupply),s.state.nav===null?null:BigInt(s.state.nav),s.state.exitFeeBps);
     await this.send(this.deployment.address,encodeFunctionData({abi:neutralAbi,functionName:'requestExit',args:[s.balance,minimum,this.address,BigInt(Math.floor(Date.now()/1000)+86400)]}),'DN exit');
     return 'LP receipt burned. USDG payout is pending position reduction and collateral settlement.';
   });}

@@ -99,7 +99,11 @@ contract NeutralVault is ERC20, ReentrancyGuard, IUnlockCallback {
         require(pairs.length == tiers);
         configured = true;
     }
-    function setEntriesOpen(bool open) external onlyCoordinator { require(configured); entriesOpen = open; }
+    function setEntriesOpen(bool open) external onlyCoordinator {
+        require(configured);
+        if (open) require(controller.feesReady(), "Fee recipients not configured");
+        entriesOpen = open;
+    }
     function memberIds() external view returns (uint256[] memory) { return ids; }
     function depositorAddresses() external view returns (address[] memory) { return depositors; }
     function pair(uint256 index) external view returns (Pair memory) { return pairs[index]; }

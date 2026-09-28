@@ -6,7 +6,7 @@ import { preferenceSchema } from './preferences.js';
 import { markets, sizeOrder } from '../strategy/lighter.js';
 import { vaultState } from '../strategy/vault.js';
 import { tokenizedState } from '../strategy/tokenized.js';
-import { neutralState } from '../strategy/neutral.js';
+import { neutralState } from '../strategy/neutral-server.js';
 
 export type Mailer = (email: string, token: string) => Promise<void>;
 export function resendMailer(origin: string): Mailer {

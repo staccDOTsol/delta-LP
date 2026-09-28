@@ -13,8 +13,8 @@ test('updated mint split is 10% OpenSea, 1% Wizards, 89% routed into DN', () => 
   assert.equal(p.openSea, 10n ** 17n);
   assert.equal(p.wizardsMint, 10n ** 16n);
   assert.equal(p.dnRoute, 89n * 10n ** 16n);
-  assert.equal(p.accounts[0].backingBeforeSwapCosts, 8722n * 10n ** 14n);
-  assert.equal(p.wizardsMint + p.accounts[0].entryFeeEstimate, 278n * 10n ** 14n);
+  assert.equal(p.accounts[0].backingBeforeSwapCosts, 8633n * 10n ** 14n);
+  assert.equal(p.wizardsMint + p.accounts[0].entryFeeEstimate / 2n, 2335n * 10n ** 13n);
 });
 
 test('all prices and batches conserve funds with at most one wei difference between NFTs', () => {

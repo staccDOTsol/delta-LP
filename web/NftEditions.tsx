@@ -10,10 +10,10 @@ export function NftEditions() {
   const [edition, setEdition] = useState<NftDenomination>(1);
   return <section className="nft-editions" id="nft-editions" aria-labelledby="nft-editions-title">
     <div className="nft-editions-heading">
-      <div><span className="wl-kicker">SEVEN EDITIONS · 10,000 EACH</span><h2 id="nft-editions-title">An NFT with its own portfolio.</h2></div>
+      <div><span className="wl-kicker">SEVEN COLLECTIONS · 10,000 EACH</span><h2 id="nft-editions-title">An NFT with its own portfolio.</h2></div>
       <span className="state-pill">Mint not open</span>
     </div>
-    <p className="nft-editions-intro">Each NFT has an ERC-6551 account that owns its delta-neutral strategy shares. Transfer the NFT and control of that account follows. Seven price points, the same ownership model.</p>
+    <p className="nft-editions-intro">Each NFT has an ERC-6551 account that owns its delta-neutral strategy shares. Transfer the NFT and control of that account follows. Seven separate collections, 70,000 NFTs total, with the same ownership model.</p>
     <fieldset className="nft-pricepoints"><legend>Explore a target mint price</legend><div>
       {NFT_DENOMINATIONS.map(value => <button key={value} type="button" aria-pressed={edition === value} onClick={() => setEdition(value)}>${value}</button>)}
     </div></fieldset>
@@ -23,10 +23,10 @@ export function NftEditions() {
         <div><dt>OpenSea mint fee · 10%</dt><dd>{usd.format(edition * 0.10)}</dd></div>
         <div><dt>Wizards mint fee · 1%</dt><dd>{usd.format(edition * 0.01)}</dd></div>
         <div><dt>Into the DN strategy · 89%</dt><dd>{usd.format(edition * 0.89)}</dd></div>
-        <div className="nft-backing"><dt>Illustrative backing after DN entry fee</dt><dd>{usd.format(edition * 0.8722)}</dd></div>
+        <div className="nft-backing"><dt>Illustrative backing after DN entry fee</dt><dd>{usd.format(edition * 0.8633)}</dd></div>
       </dl>
     </div>
-    <p className="nft-fee-detail">The strategy’s 2% entry fee also goes to Wizards. Backing shown is before swap costs and market changes. ETH mint prices will be quoted before launch; dollar values can move.</p>
+    <p className="nft-fee-detail">The planned 3% strategy entry fee is split half to Wizards and half to the seven NFT collections, weighted by mint tier. This illustration assumes the new fee deployment and excludes swap costs and market changes. ETH mint prices will be quoted before launch; dollar values can move.</p>
     <div className="nft-ownership-notes"><article><h3>The NFT controls the assets</h3><p>DN shares belong to the NFT’s account. Its owner can manage or withdraw them, so account holdings must be checked before buying an NFT.</p></article><article><h3>Royalties for Wizards</h3><p>A 10% secondary royalty is designated for the 8,010-share Homecoming fanout. Payment depends on marketplace enforcement.</p></article></div>
     <div className="nft-launch-status"><p>Mint integration is in testing. Opening the editions requires the production DN funding adapter, final artwork, and OpenSea setup.</p><a className="inline-link" href={design} target="_blank" rel="noreferrer">Ownership, fees & launch status <ArrowUpRight size={15}/></a></div>
   </section>;

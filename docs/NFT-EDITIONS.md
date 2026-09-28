@@ -21,10 +21,10 @@ The user accepted OpenSea's primary fee after the original 1%/99% proposal. The 
 | OpenSea | 10% | $10 |
 | Wizards mint fee | 1% | $1 |
 | DN funding route | 89% | $89 |
-| DN entry fee, taken from the preceding 89% | 1.78% | $1.78 |
-| DN backing before swap costs | 87.22% | $87.22 |
+| DN entry fee, taken from the preceding 89% | 2.67% | $2.67 |
+| DN backing before swap costs | 86.33% | $86.33 |
 
-The existing 2% DN entry / 4% DN exit policy remains. The entry fee goes to Wizards too, giving them 2.78% of gross mint in this illustration. Actual strategy conversion, receipt units, rounding and costs must be quoted by the production adapter. NFT resale itself is not a DN redemption. Member-token transfers remain untaxed; AMMs choose their own swap fees.
+The replacement policy is 3% DN entry / 6% DN exit, pending deployment. Its house fees split 50/50 between Wizards and the seven NFT collections, weighted 1/2/5/10/20/50/100 by mint tier. Including the separate 1% primary fee, Wizards receive 2.335% of gross mint in this illustration; the NFT distributor receives 1.335%. The existing v3 contracts still use 2%/4% until the replacement is deployed. Actual strategy conversion, receipt units, rounding and costs must be quoted by the production adapter. NFT resale itself is not a DN redemption. Member-token transfers remain untaxed; AMMs choose their own swap fees.
 
 The secondary royalty is 10% of the sale price, designated entirely to the Wizards fee router. ERC-2981 specifies a requested royalty; it does not force every marketplace to pay. ERC-721C/Seaport enforcement and OpenSea publication are separate launch work, not claimed complete here.
 

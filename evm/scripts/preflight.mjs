@@ -3,7 +3,11 @@ import { homedir } from 'node:os';
 import { createPublicClient, http, parseAbi, formatEther, getAddress, keccak256, encodeAbiParameters, parseAbiParameters } from 'viem';
 import { privateKeyToAccount } from 'viem/accounts';
 
-export const rpc = 'https://rpc.mainnet.chain.robinhood.com';
+export const rpc = process.env.ROBINHOOD_RPC_URL || 'https://rpc.mainnet.chain.robinhood.com';
+try {
+  const url = new URL(rpc);
+  if (url.protocol !== 'https:' || url.username || url.password || url.hash) throw new Error();
+} catch { throw new Error('Invalid Robinhood HTTPS RPC configuration.'); }
 export const addresses = {
   base: '0xd0601CE157Db5bdC3162BbaC2a2C8aF5320D9EEC',
   quote: '0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168',

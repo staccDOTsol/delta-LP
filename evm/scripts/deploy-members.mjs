@@ -1,24 +1,30 @@
 import {readFileSync, writeFileSync, existsSync, mkdirSync, renameSync} from 'node:fs';
-import {createWalletClient,defineChain,http,encodeDeployData,keccak256,getContractAddress,getCreate2Address,toHex,concat,formatEther,parseAbi} from 'viem';
+import {createWalletClient,defineChain,http,encodeDeployData,keccak256,getContractAddress,getCreate2Address,toHex,concat,formatEther,getAddress} from 'viem';
 import {client,rpc,loadSigner,stringify} from './preflight.mjs';
 
 // Deploys empty software only. Does not enable members, fund accounts, approve USDG,
 // place orders or seed pools. Reruns reconcile saved transaction hashes before proceeding.
 const broadcast=process.argv.includes('--broadcast');
 const version=process.argv.find(arg=>arg.startsWith('--version='))?.slice(10)??'v1';
+const splitFees=process.argv.includes('--split-fees');
+if(splitFees&&['v1','v2','v3'].includes(version))throw new Error('The replacement fee stack requires a new version (v4 or later).');
+const controllerName=splitFees?'SplitFeeMemberController':'MemberController';
 if(!/^v[1-9][0-9]*$/.test(version))throw new Error('Use --version=vN for an immutable deployment version.');
 const path=new URL(`../deployments/4663-tokenized-${version}.json`,import.meta.url);
 const journalDir=new URL(version==='v1'?'../../artifacts/member-deployment/':`../../artifacts/member-deployment-${version}/`,import.meta.url);
-const account=loadSigner();
+const operator=process.argv.find(arg=>arg.startsWith('--operator='))?.slice(11);
+if(!broadcast&&!operator)throw new Error('Simulation requires --operator=0x…; it never reads a signing key.');
+const account=broadcast?loadSigner():{address:getAddress(operator)};
 const chain=defineChain({id:4663,name:'Robinhood Chain',nativeCurrency:{name:'Ether',symbol:'ETH',decimals:18},rpcUrls:{default:{http:[rpc]}}});
-const wallet=createWalletClient({account,chain,transport:http(rpc)});
+const wallet=broadcast?createWalletClient({account,chain,transport:http(rpc)}):undefined;
 const dependencies={usdg:'0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168',lighter:'0x94bAB9693Ba2f6358507eFfcbd372b0660AFfF9d',
   poolManager:'0x8366a39CC670B4001A1121B8F6A443A643e40951',fanout:'0x1b88A6c6516FD2918905186F21Bb9F5CaA1a15c8',
   create2:'0x4e59b44847b379578588920cA78FbF26c0B4956C'};
 const maxTotalFee=1_000_000_000_000_000n; // 0.001 ETH maximum across this deployment journal
 const manifest=existsSync(path)?JSON.parse(readFileSync(path,'utf8')):{chainId:4663,authority:account.address,
-  version,status:'preparing-empty-contracts',dependencies,steps:{},depositsEnabled:false,liveTrading:false};
+  version,controllerName,feePolicy:splitFees?{entryFeeBps:300,exitFeeBps:600,wizardsBps:5000,nftsBps:5000}:{entryFeeBps:200,exitFeeBps:400,wizardsBps:10000,nftsBps:0},status:'preparing-empty-contracts',dependencies,steps:{},depositsEnabled:false,liveTrading:false};
 if(manifest.chainId!==4663||manifest.authority.toLowerCase()!==account.address.toLowerCase())throw new Error('Deployment journal identity mismatch.');
+if((manifest.controllerName??'MemberController')!==controllerName)throw new Error('Deployment fee version does not match its journal.');
 if(await client.getChainId()!==4663)throw new Error('Unexpected chain.');
 for(const [name,address] of Object.entries(dependencies))if(!(await client.getCode({address})))throw new Error(`Missing dependency: ${name}`);
 const art=name=>JSON.parse(readFileSync(new URL(`../out/${name==='NeutralEscrowFactory'?'NeutralEscrows':name}.sol/${name}.json`,import.meta.url),'utf8'));
@@ -91,15 +97,23 @@ async function deploy(name,args,create2=false){
   save();console.log(`${name}: deployed ${step.address}`);return step.address;
 }
 
-const controller=await deploy('MemberController',[dependencies.usdg,dependencies.lighter,account.address,account.address,account.address]);
+let router;
+if(splitFees){
+  const nftFanout=await deploy('WeightedNftFeeFanout',[account.address]);
+  if(!broadcast){console.log('NFT distributor simulation passed. No key read or transaction sent.');process.exit(0);}
+  router=await deploy('SplitHouseFeeRouter',[nftFanout]);
+  manifest.nftFanout=nftFanout;
+}
+const controller=await deploy(controllerName,[dependencies.usdg,dependencies.lighter,account.address,account.address,account.address,...(splitFees?[router]:[])]);
 if(!broadcast){console.log('Simulation complete. Subsequent dependencies are estimated after controller deployment; no transactions sent.');process.exit(0);}
-if(await read(controller,'MemberController','memberCount')!==0n)throw new Error('Expected an empty controller.');
-for(const role of ['owner','reporter','keeper'])if((await read(controller,'MemberController',role)).toLowerCase()!==account.address.toLowerCase())throw new Error(`${role} mismatch.`);
-const factory=await read(controller,'MemberController','factory');
+if(await read(controller,controllerName,'ENTRY_FEE_BPS')!==BigInt(manifest.feePolicy?.entryFeeBps??200)||await read(controller,controllerName,'EXIT_FEE_BPS')!==BigInt(manifest.feePolicy?.exitFeeBps??400))throw new Error('Deployed fee rates mismatch.');
+for(const role of ['owner','reporter','keeper'])if((await read(controller,controllerName,role)).toLowerCase()!==account.address.toLowerCase())throw new Error(`${role} mismatch.`);
+const factory=await read(controller,controllerName,'factory');
 if((await read(factory,'MemberFactory','controller')).toLowerCase()!==controller.toLowerCase())throw new Error('Factory controller mismatch.');
 manifest.factory={address:factory,runtimeCodeHash:keccak256(await client.getCode({address:factory}))};save();
-const router=await deploy('HouseFeeRouter',[]);
-if((await read(router,'HouseFeeRouter','FANOUT')).toLowerCase()!==dependencies.fanout.toLowerCase())throw new Error('Fanout mismatch.');
+router??=await deploy('HouseFeeRouter',[]);
+if((await read(router,splitFees?'SplitHouseFeeRouter':'HouseFeeRouter','FANOUT')).toLowerCase()!==dependencies.fanout.toLowerCase())throw new Error('Fanout mismatch.');
+if(splitFees&&(await read(controller,controllerName,'feeRouter')).toLowerCase()!==router.toLowerCase())throw new Error('Controller split router mismatch.');
 const hook=await deploy('MemberV4Hook',[dependencies.poolManager,controller],true);
 if((await read(hook,'MemberV4Hook','controller')).toLowerCase()!==controller.toLowerCase()||(await read(hook,'MemberV4Hook','manager')).toLowerCase()!==dependencies.poolManager.toLowerCase())throw new Error('Hook wiring mismatch.');
 if(process.argv.includes('--neutral')){

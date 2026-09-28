@@ -22,9 +22,14 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
     uint256 public constant BPS = 10_000;
     uint256 public constant SLIPPAGE_BPS = 10;
     uint256 public constant REBALANCE_BPS = 100;
-    uint256 public constant ENTRY_FEE_BPS = 200;
-    uint256 public constant EXIT_FEE_BPS = 400;
-    address public constant FEE_FANOUT = 0x1b88A6c6516FD2918905186F21Bb9F5CaA1a15c8;
+    // Preserve the legacy implementation and ABI; the replacement controller
+    // overrides these policies without rewriting historical deployment records.
+    function ENTRY_FEE_BPS() public pure virtual returns (uint256) { return 200; }
+    function EXIT_FEE_BPS() public pure virtual returns (uint256) { return 400; }
+    function FEE_FANOUT() public view virtual returns (address) {
+        return 0x1b88A6c6516FD2918905186F21Bb9F5CaA1a15c8;
+    }
+    function feesReady() public view virtual returns (bool) { return true; }
 
     struct Member {
         MemberToken token;
@@ -143,8 +148,8 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
                 && keeper_ != address(0)
         );
         require(
-            block.chainid == 4663 && IFeeFanout(FEE_FANOUT).tokenCount() == 8010
-                && IFeeFanout(FEE_FANOUT).collection() == 0x7c165Ae6E7BFD939Fee1ACA99Ca5aeDf85c52dD4
+            block.chainid == 4663 && IFeeFanout(0x1b88A6c6516FD2918905186F21Bb9F5CaA1a15c8).tokenCount() == 8010
+                && IFeeFanout(0x1b88A6c6516FD2918905186F21Bb9F5CaA1a15c8).collection() == 0x7c165Ae6E7BFD939Fee1ACA99Ca5aeDf85c52dD4
         );
         usdg = asset;
         lighter = venue;
@@ -415,7 +420,7 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
         if (r.redeem) {
             shares = r.amount;
             assets = Math.mulDiv(shares, m.nav, supply);
-            fee = Math.mulDiv(assets, EXIT_FEE_BPS, BPS);
+            fee = Math.mulDiv(assets, EXIT_FEE_BPS(), BPS);
             if (assets - fee < r.minimum) revert Slippage();
             if (assets > m.cash) revert InsufficientCash();
             uint256 remainingTarget = Math.mulDiv((m.nav - assets) * m.leverage, 10 ** m.sizeDecimals, m.mark);
@@ -429,7 +434,7 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
             usdg.safeTransfer(r.receiver, assets - fee);
         } else {
             if (!m.enabled) revert InvalidRequest();
-            fee = Math.mulDiv(r.amount, ENTRY_FEE_BPS, BPS);
+            fee = Math.mulDiv(r.amount, ENTRY_FEE_BPS(), BPS);
             assets = r.amount - fee;
             if (supply == 0) {
                 require(m.nav == 0);
@@ -445,9 +450,23 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
             m.nav += assets;
             m.token.mint(r.receiver, shares);
         }
-        if (fee != 0) usdg.safeTransfer(FEE_FANOUT, fee);
+        if (fee != 0) _payHouseFee(fee);
         emit HouseFeePaid(request, address(usdg), fee, r.redeem);
         emit RequestSettled(request, assets, shares);
+    }
+
+    /// Escrow-held cash uses the same fee destination as member redemptions.
+    /// Only the caller's approved assets can be routed; controller NAV is untouched.
+    function payHouseFee(uint256 amount) external nonReentrant {
+        require(amount != 0, "Zero fee");
+        uint256 beforeBalance = usdg.balanceOf(address(this));
+        usdg.safeTransferFrom(msg.sender, address(this), amount);
+        require(usdg.balanceOf(address(this)) - beforeBalance == amount, "Unsupported transfer tax");
+        _payHouseFee(amount);
+    }
+
+    function _payHouseFee(uint256 amount) internal virtual {
+        usdg.safeTransfer(FEE_FANOUT(), amount);
     }
 
     /// The trusted reporter must reconcile every operation/fill/transfer, including

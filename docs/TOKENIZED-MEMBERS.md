@@ -1,5 +1,7 @@
 # Tokenized Lighter members and V4 markets
 
+> September 28 fee revision: the replacement uses **3% entry / 6% exit**, split **50% Wizards / 50% seven NFT collections**, weighted by mint tier. The pinned live v3 addresses below retain their original 2%/4% policy until replacement. See [replacement implementation and operator steps](REPLACEMENT-FEES.md).
+
 Status: version 3 core and neutral receipt contracts are deployed on Robinhood mainnet;
 **funded tokenized trading is not live**. See the
 [deployment manifest](../evm/deployments/4663-tokenized-v3.json),

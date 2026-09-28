@@ -2,6 +2,7 @@ import {createServer} from 'node:http';
 import {mkdirSync,readFileSync,writeFileSync,chmodSync} from 'node:fs';
 import {join,resolve} from 'node:path';
 import {cloudHealth} from './cloud-health.js';
+import {errorSummary} from './errors.js';
 
 // Fly starts the same worker as the local CLI. Default observation mode has no
 // signing key, no transaction broadcast, and no public HTTP service.
@@ -40,4 +41,6 @@ const server=createServer((req,res)=>{
   res.writeHead(status.ok?200:503,{'content-type':'application/json','cache-control':'no-store'}).end(JSON.stringify(status));
 });
 await new Promise<void>((resolve,reject)=>{server.once('error',reject);server.listen(port,'0.0.0.0',resolve);});
-try{await import('./run.js');}finally{server.close();}
+try{await import('./run.js');}
+catch(error){console.error(errorSummary(error));process.exitCode=1;}
+finally{server.close();}

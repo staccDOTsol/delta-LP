@@ -3,8 +3,10 @@ import {z} from 'zod';
 import {accountSchema,assertNoOrders,assertTradingAccount,availableUSDG,exactUnits,makePlan,marginBps,reconcileOrder,signedPosition,transactionState,type OrderPlan,type TradingAccount} from '../../strategy/execution.js';
 import {LIGHTER_API,marketIds,type Market} from '../../strategy/lighter.js';
 import {wasm} from './wasm.js';
+import {rpcEndpoint} from '../../strategy/rpc-config.js';
 
-export const chain=defineChain({id:4663,name:'Robinhood Chain',nativeCurrency:{name:'Ether',symbol:'ETH',decimals:18},rpcUrls:{default:{http:['https://rpc.mainnet.chain.robinhood.com']}},blockExplorers:{default:{name:'Blockscout',url:'https://robinhoodchain.blockscout.com'}}});
+const browserRpcUrl=rpcEndpoint(import.meta.env?.VITE_ROBINHOOD_RPC_URL);
+export const chain=defineChain({id:4663,name:'Robinhood Chain',nativeCurrency:{name:'Ether',symbol:'ETH',decimals:18},rpcUrls:{default:{http:[browserRpcUrl]}},blockExplorers:{default:{name:'Blockscout',url:'https://robinhoodchain.blockscout.com'}}});
 export const USDG='0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168' as const;
 export const LIGHTER='0x94bAB9693Ba2f6358507eFfcbd372b0660AFfF9d' as const;
 const KEY_INDEX=42;

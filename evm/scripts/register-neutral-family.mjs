@@ -8,7 +8,8 @@ const version=process.argv.find(s=>s.startsWith('--version='))?.slice(10);
 if(!version||!/^v[1-9][0-9]*$/.test(version))throw new Error('An explicit --version=vN is required.');
 const broadcast=process.argv.includes('--broadcast');
 const manifest=JSON.parse(readFileSync(new URL(`../deployments/4663-tokenized-${version}.json`,import.meta.url),'utf8'));
-const controller=manifest.steps.MemberController.address,vault=manifest.steps.NeutralVault.address;
+const controllerName=manifest.controllerName??'MemberController';
+const controller=manifest.steps[controllerName].address,vault=manifest.steps.NeutralVault.address;
 const path=new URL(`../deployments/4663-neutral-${version}-registry.json`,import.meta.url);
 const privateDir=new URL(`../../artifacts/neutral-registry-${version}/`,import.meta.url);
 const signer=loadSigner();
@@ -16,9 +17,9 @@ const record=existsSync(path)?JSON.parse(readFileSync(path,'utf8')):{chainId:466
 if(record.controller!==controller||record.vault!==vault||manifest.authority.toLowerCase()!==signer.address.toLowerCase()||await client.getChainId()!==4663)throw new Error('Registry identity mismatch.');
 const chain=defineChain({id:4663,name:'Robinhood Chain',nativeCurrency:{name:'ETH',symbol:'ETH',decimals:18},rpcUrls:{default:{http:[rpc]}}});
 const wallet=createWalletClient({account:signer,chain,transport:http(rpc)});
-const artifacts=Object.fromEntries(['MemberController','NeutralVault'].map(name=>[name,JSON.parse(readFileSync(new URL(`../out/${name}.sol/${name}.json`,import.meta.url),'utf8'))]));
+const artifacts=Object.fromEntries(['MemberController','NeutralVault'].map(name=>{const artifactName=name==='MemberController'?controllerName:name;return [name,JSON.parse(readFileSync(new URL(`../out/${artifactName}.sol/${artifactName}.json`,import.meta.url),'utf8'))];}));
 for(const name of ['MemberController','NeutralVault']){
-  const entry=manifest.steps[name],code=await client.getCode({address:entry.address});
+  const entry=manifest.steps[name==='MemberController'?controllerName:name],code=await client.getCode({address:entry.address});
   if(!code||keccak256(code)!==entry.runtimeCodeHash)throw new Error(`${name} runtime mismatch.`);
 }
 const read=(name,functionName,args=[])=>client.readContract({address:name==='MemberController'?controller:vault,abi:artifacts[name].abi,functionName,args});

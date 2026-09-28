@@ -5,6 +5,7 @@ import {z} from 'zod';
 import {ChainIndex,verifyDeployment} from './rpc.js';
 import {observe} from './observe.js';
 import {executor} from './execute.js';
+import {errorSummary,retryableTransport} from './errors.js';
 
 const integer=z.string().regex(/^\d+$/).transform(BigInt);
 const schema=z.object({maxMemberAssets:integer,maxOrderNotional:integer,maximumGasWei:integer,
@@ -20,6 +21,7 @@ const lock=join(dir,'worker.lock');
 try{mkdirSync(lock,{mode:0o700});writeFileSync(join(lock,'pid'),String(process.pid),{mode:0o600});}
 catch{throw new Error('Another keeper holds this state-directory lock. After a crash, inspect pending transactions before removing worker.lock.');}
 let stopping=false;for(const signal of ['SIGINT','SIGTERM'] as const)process.on(signal,()=>{stopping=true;});
+let transportFailures=0;
 const json=(v:unknown)=>JSON.stringify(v,(_,x)=>typeof x==='bigint'?String(x):x,2);
 try{
   await verifyDeployment();
@@ -42,10 +44,17 @@ try{
           console.log(json(await writer.submit(calls)));
         }
       }
+      transportFailures=0;
     }catch(error){
       // Provider diagnostics can contain request material. Expose only a compact
       // top-level message; signed transaction journals remain private on disk.
-      console.error((error as {shortMessage?:string;message:string}).shortMessage??(error as Error).message);
+      console.error(errorSummary(error));
+      if(!once&&retryableTransport(error)){
+        const backoff=Math.min(30_000,1_000*2**Math.min(++transportFailures,5));
+        console.error(`Temporary provider failure; reconciling recorded transactions again after ${backoff/1000}s.`);
+        if(!stopping)await delay(backoff);
+        continue;
+      }
       if(live||once)throw new Error('Keeper cycle stopped. Inspect status and the transaction journal.');
     }
     if(!once&&!stopping)await delay(config.pollSeconds*1000);

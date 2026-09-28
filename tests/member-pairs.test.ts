@@ -25,7 +25,7 @@ test('proportional supply-and-balance adjustment alone leaves redemption and exp
 });
 test('all configured tiers receive equal USDG on both legs with exact fee conservation',()=>{
   const p=allocateNeutral(60_000005n,[3,5,10]);assert.equal(p.remainder,5n);assert.equal(p.legs.length,6);
-  for(const leg of p.legs){assert.equal(leg.gross,10_000000n);assert.equal(leg.fee,200000n);assert.equal(leg.backing,9_800000n);}
+  for(const leg of p.legs){assert.equal(leg.gross,10_000000n);assert.equal(leg.fee,300000n);assert.equal(leg.backing,9_700000n);}
   assert.equal(p.legs.reduce((sum,l)=>sum+l.fee+l.backing,0n)+p.remainder,60_000005n);
   const all=allocateNeutral(100_000000n,Array.from({length:50},(_,i)=>i+1));assert.equal(all.legs.length,100);
 });
@@ -33,10 +33,10 @@ test('insufficient funding cannot silently omit leverage tiers',()=>{
   assert.throws(()=>allocateNeutral(5_000000n,[3,5,10]),/every tier/);
   assert.throws(()=>allocateNeutral(10_000000n,[3,3]));
 });
-test('entry and exit costs leave 94.08 from a 100 deposit with no market PnL',()=>{
+test('entry and exit costs leave 91.18 from a 100 deposit with no market PnL',()=>{
   const {legs}=allocateNeutral(100_000000n,[3]);
-  const backing=legs.reduce((n,l)=>n+l.backing,0n);assert.equal(backing,98_000000n);
-  assert.deepEqual(redemption(98n,98n,backing),{gross:98_000000n,fee:3_920000n,proceeds:94_080000n});
+  const backing=legs.reduce((n,l)=>n+l.backing,0n);assert.equal(backing,97_000000n);
+  assert.deepEqual(redemption(97n,97n,backing),{gross:97_000000n,fee:5_820000n,proceeds:91_180000n});
 });
 test('different underlying, leverage, directions, stale snapshots and overclaimed reserves fail',()=>{
   for(const patch of [{group:'BTC'},{marketId:1},{leverage:5},{short:false},{observedAt:now-60_001},{observedAt:now+1}])assert.throws(()=>pairedExposure(long,{...short,...patch},1n,1n,mark,now));

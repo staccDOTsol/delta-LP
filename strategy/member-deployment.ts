@@ -1,6 +1,9 @@
 const deployment = {
   "chainId": 4663,
   "version": "v3",
+  "registryFile": "4663-neutral-v3-registry.json",
+  "genesisBlock": "74588238",
+  "feePolicy": {"entryFeeBps":200,"exitFeeBps":400,"wizardsBps":10000,"nftsBps":0},
   "status": "prototype",
   "contracts": {
     "MemberController": {

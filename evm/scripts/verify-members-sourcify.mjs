@@ -7,7 +7,7 @@ if(!/^v[1-9][0-9]*$/.test(version))throw new Error('Invalid deployment version.'
 const manifest=JSON.parse(readFileSync(new URL(`../deployments/4663-tokenized-${version}.json`,import.meta.url),'utf8'));
 const path=new URL(`../deployments/4663-tokenized-${version}-sourcify.json`,import.meta.url);
 const record=existsSync(path)?JSON.parse(readFileSync(path,'utf8')):{};
-const entries={...manifest.steps,MemberFactory:{...manifest.factory,transactionHash:manifest.steps.MemberController.transactionHash}};
+const entries={...manifest.steps,MemberFactory:{...manifest.factory,transactionHash:manifest.steps[manifest.controllerName??'MemberController'].transactionHash}};
 const endpoint='https://sourcify.dev/server/v2';
 for(const [name,entry] of Object.entries(entries)){
   const file=name==='NeutralEscrowFactory'?'NeutralEscrows':name;

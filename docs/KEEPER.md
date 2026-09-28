@@ -7,8 +7,7 @@ and reporter roles to `0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158`.
 The service has been tested with mocked venue execution, the real vendored signing
 WASM, and read-only snapshots of all 100 deployed members. It has **not** completed
 a funded mainnet lifecycle. The September 28 deployment left entries closed and
-strategy accounts unfunded. The Fly worker is running in **observation mode**;
-transaction signing is disabled and no private key was uploaded during deployment.
+strategy accounts unfunded. The initial Fly deployment was observation-only. The operator subsequently activated signing; the old image then stopped on nonce/RPC failures. Source now includes journal-aware nonce waiting and transient-provider retries. The supplied server RPC is staged on Fly; applying the new execution image remains an operator action.
 
 ## Fly deployment
 
@@ -209,3 +208,7 @@ remain requirements before presenting this as a proven live trading service.
 
 Implementation: `keeper/`. Run `npm run check`. Public deployment/source records
 are under `evm/deployments/`; signed operator journals stay in ignored `artifacts/`.
+
+## RPC and replacement fee deployment
+
+Use `ROBINHOOD_RPC_URL` for server reads and the keeper; `VITE_ROBINHOOD_RPC_URL` is the separate browser-scoped endpoint. Do not expose the server key in browser bundles. See [the replacement runbook](REPLACEMENT-FEES.md) for the new fee controller, seven-collection setup and journal-preserving migration.

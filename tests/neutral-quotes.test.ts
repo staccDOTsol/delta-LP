@@ -13,6 +13,14 @@ test('exit floor uses receipt ownership and does not double-charge entry',()=>{
   assert.throws(()=>exitMinimum(1n,0n,1n),/valuation/);
   assert.throws(()=>exitMinimum(1n,1n,null),/valuation/);
 });
+test('replacement receipt minimums use three and six percent fees',()=>{
+  assert.equal(receiptMinimum(100_000000n,0n,0n,300),96n*10n**18n);
+  assert.equal(exitMinimum(97n*10n**18n,97n*10n**18n,97_000000n,600),90_210000n);
+  for(const invalid of [-1,1.5,9900,10000,NaN]){
+    assert.throws(()=>receiptMinimum(100_000000n,0n,0n,invalid),/fee/);
+    assert.throws(()=>exitMinimum(1n,1n,1n,invalid),/fee/);
+  }
+});
 test('cash amount parsing never rounds user precision or accepts scientific notation',()=>{
   assert.equal(usdgAmount('0.01'),10000n);
   assert.equal(usdgAmount('28.9'),28_900_000n);

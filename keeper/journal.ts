@@ -48,8 +48,13 @@ export async function recover(item:JournalItem,port:RecoveryPort,now:number){
   }
   if(item.status!=='prepared')throw new Error('Confirmed keeper receipt disappeared; inspect chain reorganization.');
   if(await port.transactionKnown(item.hash as Hex))return 'pending';
-  if(await port.nonce()!==item.nonce)throw new Error('Signer nonce changed without the recorded transaction.');
+  const nonce=await port.nonce();
+  if(!Number.isSafeInteger(nonce)||nonce<0)throw new Error('Invalid RPC nonce.');
+  if(nonce>item.nonce)throw new Error('Signer nonce changed without the recorded transaction.');
   if(now>=item.expiresAt)throw new Error('Unresolved signed transaction expired; reconcile its nonce before restarting.');
+  // RPC replicas may briefly trail a preceding journaled submission. Never
+  // broadcast into a nonce gap, manufacture a replacement, or erase this item.
+  if(nonce<item.nonce)return 'pending';
   const hash=await port.broadcast(item.raw as Hex);
   if(hash.toLowerCase()!==item.hash.toLowerCase())throw new Error('Broadcast returned a different transaction hash.');
   return 'pending';

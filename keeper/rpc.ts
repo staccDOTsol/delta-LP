@@ -6,8 +6,9 @@ import {LIGHTER_API} from '../strategy/lighter.js';
 import {neutralAbi,allocationAbi} from '../strategy/neutral-abi.js';
 import {controllerAbi,custodyAbi,exitAbi} from './abi.js';
 import type {Action,Request,Snapshot} from './model.js';
+import {serverRpcUrl} from '../strategy/server-rpc.js';
 
-export const RPC='https://rpc.mainnet.chain.robinhood.com';
+export const RPC=serverRpcUrl;
 export const controller=deployment.contracts.MemberController.address;
 export const vault=deployment.contracts.NeutralVault.address;
 export const usdg='0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168';
@@ -19,9 +20,10 @@ export const lighterAbi=parseAbi(['function executedPriorityRequestCount() view 
   'function addressToAccountIndex(address) view returns(uint48)','function getPendingBalance(address,uint16) view returns(uint128)']);
 // This chain's public endpoint does not reliably support JSON-RPC batch arrays.
 export const client=createPublicClient({chain,batch:{multicall:{batchSize:65536,wait:10}},transport:http(RPC,{timeout:10000,retryCount:1})});
-const registry=JSON.parse(readFileSync(new URL('../evm/deployments/4663-neutral-v3-registry.json',import.meta.url),'utf8')) as {
+if(!/^4663-neutral-v[1-9][0-9]*-registry\.json$/.test(deployment.registryFile))throw new Error('Invalid keeper registry filename.');
+const registry=JSON.parse(readFileSync(new URL(`../evm/deployments/${deployment.registryFile}`,import.meta.url),'utf8')) as {
   members:{id:string;token:Address;custody:Address;tokenCodeHash:Hex;custodyCodeHash:Hex}[]};
-const genesis=74588238n;
+const genesis=BigInt(deployment.genesisBlock);
 const exitEvents=parseAbi(['event ExitRequested(address indexed owner, address indexed receiver, uint256 shares, address exitEscrow)',
   'event PendingRecovered(uint256 indexed epoch, address indexed owner, address exitEscrow)']);
 
@@ -37,6 +39,13 @@ export async function mapLimit<T,R>(items:T[],limit:number,fn:(item:T)=>Promise<
 }
 export async function verifyDeployment(){
   if(await client.getChainId()!==4663)throw new Error('Wrong keeper chain.');
+  const feeAbi=parseAbi(['function ENTRY_FEE_BPS() view returns(uint256)','function EXIT_FEE_BPS() view returns(uint256)','function FEE_FANOUT() view returns(address)']);
+  const [entryFee,exitFee,feeRecipient]=await Promise.all([
+    client.readContract({address:controller,abi:feeAbi,functionName:'ENTRY_FEE_BPS'}),
+    client.readContract({address:controller,abi:feeAbi,functionName:'EXIT_FEE_BPS'}),
+    client.readContract({address:controller,abi:feeAbi,functionName:'FEE_FANOUT'}),
+  ]);
+  if(entryFee!==BigInt(deployment.feePolicy.entryFeeBps)||exitFee!==BigInt(deployment.feePolicy.exitFeeBps)||feeRecipient.toLowerCase()!==deployment.fanout.toLowerCase())throw new Error('Keeper fee policy mismatch.');
   const multicallCode=await client.getCode({address:chain.contracts.multicall3.address});
   if(!multicallCode||keccak256(multicallCode)!=='0xd5c15df687b16f2ff992fc8d767b4216323184a2bbc6ee2f9c398c318e770891')throw new Error('Multicall runtime mismatch.');
   await mapLimit(Object.values(deployment.contracts),6,async e=>{

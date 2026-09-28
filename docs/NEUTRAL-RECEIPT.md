@@ -1,5 +1,7 @@
 # Pooled delta-neutral receipt
 
+> September 28 fee revision: the replacement uses **3% entry / 6% exit**, split **50% Wizards / 50% seven NFT collections**, weighted by mint tier. The pinned live v3 addresses below retain their original 2%/4% policy until replacement. See [replacement implementation and operator steps](REPLACEMENT-FEES.md).
+
 The ETH receipt vault is deployed on Robinhood Chain (4663) at
 `0xe9AE3aEb63680960995978ee6c33E68B57c00688`. Its controller is
 `0xB8B04378E9291a735E9552f7a8a5593Bca6529FD`. See the immutable

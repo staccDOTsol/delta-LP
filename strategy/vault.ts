@@ -1,6 +1,7 @@
 import {createPublicClient,http,parseAbi,formatUnits} from 'viem';
+import {serverRpcUrl} from './server-rpc.js';
 export const vaultAddress='0x32C47683D0E41DAc58A750fccb7200ad031D3993' as const;
-const client=createPublicClient({transport:http('https://rpc.mainnet.chain.robinhood.com',{timeout:8000,retryCount:1})});
+const client=createPublicClient({transport:http(serverRpcUrl,{timeout:8000,retryCount:1})});
 const vaultAbi=parseAbi(['function depositsEnabled() view returns (bool)','function totalSupply() view returns (uint256)','function phase() view returns (uint8)','function liquidity() view returns (uint128)']);
 let pending:Promise<unknown>|undefined;
 let cached:{at:number;value:unknown}|undefined;

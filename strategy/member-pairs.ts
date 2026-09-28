@@ -26,13 +26,13 @@ export function allocateNeutral(gross:bigint,tiers:readonly number[]){
   if(!tiers.length||tiers.length>50||new Set(tiers).size!==tiers.length||tiers.some(n=>!Number.isInteger(n)||n<1||n>50)||gross<=0n)throw new Error('Invalid leverage family.');
   const perLeg=gross/(2n*BigInt(tiers.length));
   if(perLeg<1_000_000n)throw new Error('Not enough USDG to allocate every tier.');
-  const fee=perLeg*200n/10_000n,net=perLeg-fee;
+  const fee=perLeg*300n/10_000n,net=perLeg-fee;
   const legs=tiers.flatMap(leverage=>(['long','short'] as const).map(side=>({leverage,side,gross:perLeg,fee,backing:net})));
   return {legs,allocated:perLeg*BigInt(legs.length),remainder:gross-perLeg*BigInt(legs.length)};
 }
 export function redemption(shares:bigint,supply:bigint,nav:bigint){
   if(shares<=0n||shares>supply||nav<0n)throw new Error('Invalid redemption.');
-  const gross=shares*nav/supply,fee=gross*400n/10_000n;
+  const gross=shares*nav/supply,fee=gross*600n/10_000n;
   return {gross,fee,proceeds:gross-fee};
 }
 

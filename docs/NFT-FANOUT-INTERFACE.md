@@ -29,7 +29,11 @@ No old v3 default is silently used. It requires all seven asset sets to complete
 
 `nft/simulate-deployment.mjs` runs the resulting zero-value deployment/configuration
 bundle only on a loopback Anvil fork, checking pauses, cap, receipt fee rate,
-metadata/provenance and finalized registry order. It cannot submit to mainnet.
+metadata/provenance and finalized registry order. It cannot submit to mainnet. The source verifier
+`nft/verify-collections.mjs` compares live runtime against that tested fork, checks
+configuration and submits source to Sourcify. Supply `--transactions=path` with a
+JSON mapping of deployed contract addresses to their actual CREATE2 transaction
+hashes; explorer challenge pages are not used as a creation-data source.
 
 ## Exact interface
 

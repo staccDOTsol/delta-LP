@@ -22,7 +22,7 @@ export function nftMintAllocation(mintPriceWei: bigint, quantity: number) {
     const routed = dnRoute / count + (BigInt(i) < dnRoute % count ? 1n : 0n);
     // Estimate in native units only. Production entry fees are assessed by the
     // DN route after ETH conversion, whose price, units and rounding can differ.
-    const entryFeeEstimate = routed * 200n / BPS;
+    const entryFeeEstimate = routed * 300n / BPS;
     return {routed, entryFeeEstimate, backingBeforeSwapCosts: routed - entryFeeEstimate};
   });
   return {gross, openSea, wizardsMint, dnRoute, accounts};

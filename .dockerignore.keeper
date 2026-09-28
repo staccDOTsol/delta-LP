@@ -9,7 +9,7 @@
 !strategy/**
 !evm/
 !evm/deployments/
-!evm/deployments/4663-neutral-v3-registry.json
+!evm/deployments/4663-neutral-v*-registry.json
 !public/
 !public/vendor/
 !public/vendor/lighter/

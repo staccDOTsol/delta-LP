@@ -6,17 +6,21 @@ export function usdgAmount(text:string){
   if(amount<10000n)throw new Error('The minimum pending deposit is 0.01 USDG.');
   return amount;
 }
-export function receiptMinimum(assets:bigint,supply:bigint,nav:bigint|null){
+function fee(value:number){
+  if(!Number.isSafeInteger(value)||value<0||value>=9900)throw new Error('Invalid fee quote.');
+  return BigInt(value);
+}
+export function receiptMinimum(assets:bigint,supply:bigint,nav:bigint|null,entryFeeBps=200){
   if(assets<=0n||supply<0n)throw new Error('Invalid quote.');
-  const minimumBacking=assets*9700n/10000n; // 2% entry, up to 1% execution movement
+  const minimumBacking=assets*(9900n-fee(entryFeeBps))/10000n; // chain fee plus 1% execution movement
   if(supply===0n)return minimumBacking*10n**12n;
   if(nav===null||nav<=0n)throw new Error('A current basket valuation is required. Refresh before depositing.');
   const shares=minimumBacking*supply/nav;
   if(shares===0n)throw new Error('Amount is too small for a receipt.');
   return shares;
 }
-export function exitMinimum(shares:bigint,supply:bigint,nav:bigint|null){
+export function exitMinimum(shares:bigint,supply:bigint,nav:bigint|null,exitFeeBps=400){
   if(shares<=0n||shares>supply||nav===null||nav<=0n)throw new Error('A current exit valuation is required.');
-  // 4% redemption fee and 1% further movement tolerance; user may later lower it.
-  return shares*nav/supply*9500n/10000n;
+  // Chain redemption fee and 1% further movement tolerance.
+  return shares*nav/supply*(9900n-fee(exitFeeBps))/10000n;
 }

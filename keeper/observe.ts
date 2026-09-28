@@ -1,4 +1,5 @@
 import {accountSchema} from '../strategy/execution.js';
+import deployment from '../strategy/member-deployment.js';
 import {memberMarketSchema} from '../strategy/member-reconciliation.js';
 import {actionEvidence,emptyAccountReport,hasOpenOrders,nextMemberAction,observedReport,type Call,type Decision,type Policy,type Report,type Snapshot} from './model.js';
 import {ChainIndex,client,controller,lighter,lighterAbi,mapLimit,marketData,readMember,readVault,venue} from './rpc.js';
@@ -78,7 +79,7 @@ export async function observe(index:ChainIndex,policy:Policy):Promise<Cycle>{
   }
   if(allIdle){
     if(vaultState.entriesOpen&&vaultState.phase===0&&vaultState.pendingAssets>=vaultState.minimumBatchAssets){
-      const perLeg=vaultState.pendingAssets/100n,net=perLeg-perLeg*200n/10000n;
+      const perLeg=vaultState.pendingAssets/100n,net=perLeg-perLeg*BigInt(deployment.feePolicy.entryFeeBps)/10000n;
       if(members.every(m=>m.snapshot!.enabled&&m.snapshot!.nav+net<=policy.maxMemberAssets)){
         const minima=members.map(m=>{const s=m.snapshot!;const expected=s.supply===0n?net*10n**12n:s.nav===0n?0n:net*s.supply/s.nav;return expected*9990n/10000n;});
         if(minima.every(m=>m>0n))calls.push({target:'vault',name:'startAllocation',args:[minima,BigInt(Math.floor(now/1000)+86400)],reason:'Start the eligible all-tier allocation with NAV-based claim minimums.',expiresAt});

@@ -90,8 +90,12 @@ contract NeutralExit {
         deadline = deadline_;
         IERC20 asset = controller.usdg();
         // Locally held USDG did not pass through a member redemption.
-        uint256 fee = Math.mulDiv(asset.balanceOf(address(this)), 400, 10_000);
-        if (fee != 0) asset.safeTransfer(controller.FEE_FANOUT(), fee);
+        uint256 fee = Math.mulDiv(asset.balanceOf(address(this)), controller.EXIT_FEE_BPS(), 10_000);
+        if (fee != 0) {
+            asset.forceApprove(address(controller), fee);
+            controller.payHouseFee(fee);
+            asset.forceApprove(address(controller), 0);
+        }
     }
     function memberCount() external view returns (uint256) { return ids.length; }
     /// Permissionless, bounded batches keep a 50-tier exit below transaction gas

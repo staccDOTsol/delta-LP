@@ -1,11 +1,12 @@
 import {createPublicClient,getAddress,http,keccak256,parseAbi} from 'viem';
 import deployment from './member-deployment.js';
+import {serverRpcUrl} from './server-rpc.js';
 
-const client=createPublicClient({transport:http('https://rpc.mainnet.chain.robinhood.com',{timeout:10_000})});
+const client=createPublicClient({transport:http(serverRpcUrl,{timeout:10_000})});
 const abi=parseAbi(['function memberCount() view returns (uint256)','function ENTRY_FEE_BPS() view returns (uint256)',
   'function EXIT_FEE_BPS() view returns (uint256)','function FEE_FANOUT() view returns (address)']);
 export type TokenizedStatus={chainId:number;block:string;observedAt:string;status:'prototype';memberCount:number;
-  entryFeeBps:number;exitFeeBps:number;fanout:string;contracts:{name:string;address:string;explorer:string}[]};
+  entryFeeBps:number;exitFeeBps:number;nftFeeShareBps:number;fanout:string;contracts:{name:string;address:string;explorer:string}[]};
 let cached:{at:number;value:TokenizedStatus}|undefined;
 let pending:Promise<TokenizedStatus>|undefined;
 export async function tokenizedState():Promise<TokenizedStatus>{
@@ -27,9 +28,9 @@ export async function tokenizedState():Promise<TokenizedStatus>{
       client.readContract({address,abi,functionName:'EXIT_FEE_BPS',blockNumber}),
       client.readContract({address,abi,functionName:'FEE_FANOUT',blockNumber}),
     ]);
-    if(entry!==200n||exit!==400n||fanout.toLowerCase()!==deployment.fanout.toLowerCase())throw new Error('Fee policy mismatch.');
+    if(entry!==BigInt(deployment.feePolicy.entryFeeBps)||exit!==BigInt(deployment.feePolicy.exitFeeBps)||fanout.toLowerCase()!==deployment.fanout.toLowerCase())throw new Error('Fee policy mismatch.');
     const value:TokenizedStatus={chainId,block:String(blockNumber),observedAt:new Date().toISOString(),status:'prototype',
-      memberCount:Number(count),entryFeeBps:Number(entry),exitFeeBps:Number(exit),fanout,contracts};
+      memberCount:Number(count),entryFeeBps:Number(entry),exitFeeBps:Number(exit),nftFeeShareBps:deployment.feePolicy.nftsBps,fanout,contracts};
     cached={at:Date.now(),value};return value;
   })();
   try{return await pending;}finally{pending=undefined;}

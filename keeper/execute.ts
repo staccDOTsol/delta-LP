@@ -1,12 +1,13 @@
 import {readFileSync,statSync} from 'node:fs';
-import {createWalletClient,encodeFunctionData,http,keccak256,type Abi,type Hex} from 'viem';
+import {createWalletClient,encodeFunctionData,http,type Abi,type Hex} from 'viem';
 import {privateKeyToAccount} from 'viem/accounts';
 import {neutralAbi} from '../strategy/neutral-abi.js';
 import {controllerAbi,exitAbi} from './abi.js';
 import {chain,client,controller,RPC,vault,mapLimit} from './rpc.js';
-import {callIdentity,type Call} from './model.js';
+import {type Call} from './model.js';
 import {Journal,recover,type RecoveryPort} from './journal.js';
 import {bootstrap} from './bootstrap.js';
+import {submitPrepared} from './submission.js';
 
 const controllerCalls=new Set(['bindAccount','reconcile','reconcileVenueSetup','fundVenue','requestVenueWithdrawal','collectVenueWithdrawal','rebalance','cancelVenueOrders','settleRequest','settleBatch','markGroupChecked','configureVenueKey','setEnabled']);
 const vaultCalls=new Set(['startAllocation','activate','setEntriesOpen']);
@@ -71,17 +72,10 @@ export async function executor(keyFile:string,stateDirectory:string,maximumGasWe
         return null;
       } // Simulation failure cannot become a broadcast.
     });
-    let nonce=await port.nonce(),submitted=0;
-    for(const p of prepared){
-      if(!p||Date.now()>=p.call.expiresAt)continue;
-      if(await port.nonce()!==nonce)throw new Error('Another writer is using the keeper account.');
-      if(await client.getBalance({address:account.address})<p.gas*gasPrice)throw new Error('Insufficient keeper gas.');
-      const raw=await wallet.signTransaction({...p.tx,gas:p.gas,gasPrice,nonce,type:'legacy'});
-      const item={hash:keccak256(raw),raw,nonce,expiresAt:p.call.expiresAt,maxCost:String(p.gas*gasPrice),callId:callIdentity(p.call),status:'prepared' as const};
-      journal.reserve(item,maximumGasWei);
-      // Journal + exact raw hash exist on disk before any network submission.
-      await recover(item,port,Date.now());journal.save();nonce++;submitted++;
-    }
-    return {submitted,pending:submitted>0,skipped};
+    const submitted=await submitPrepared(prepared,journal,{...port,
+      balance:()=>client.getBalance({address:account.address}),
+      sign:(p,nonce,price)=>wallet.signTransaction({...p.tx,gas:p.gas,gasPrice:price,nonce,type:'legacy'}),
+    },gasPrice,maximumGasWei);
+    return {...submitted,skipped};
   }};
 }

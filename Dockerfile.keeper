@@ -4,7 +4,7 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts && npm cache clean --force
 COPY keeper/ ./keeper/
 COPY strategy/ ./strategy/
-COPY evm/deployments/4663-neutral-v3-registry.json ./evm/deployments/4663-neutral-v3-registry.json
+COPY evm/deployments/4663-neutral-v*-registry.json ./evm/deployments/
 COPY public/vendor/lighter/ ./public/vendor/lighter/
 RUN node --import tsx -e "await import('./keeper/observe.ts'); console.log('Keeper image imports passed.');"
 CMD ["node", "--import", "tsx", "keeper/cloud.ts"]
