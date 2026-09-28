@@ -5,6 +5,7 @@ import { WaitlistStore, canonicalEmail, hash, signupSchema } from './store.js';
 import { preferenceSchema } from './preferences.js';
 import { markets, sizeOrder } from '../strategy/lighter.js';
 import { vaultState } from '../strategy/vault.js';
+import { tokenizedState } from '../strategy/tokenized.js';
 
 export type Mailer = (email: string, token: string) => Promise<void>;
 export function resendMailer(origin: string): Mailer {
@@ -42,6 +43,9 @@ export function createWaitlistApp(store: WaitlistStore, options: { origin: strin
   });
   app.get('/api/strategies/vault',async(_req,res)=>{
     try {res.json(await vaultState());}catch {res.status(503).json({error:'Mainnet vault data is temporarily unavailable.'});}
+  });
+  app.get('/api/strategies/tokenized',async(_req,res)=>{
+    try {res.json(await tokenizedState());}catch {res.status(503).json({error:'Tokenized contract status is temporarily unavailable.'});}
   });
   app.post('/api/strategies/estimate', async (req,res) => {
     try {

@@ -7,6 +7,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {MemberController} from "../../src/tokenized/MemberController.sol";
 import {MemberToken} from "../../src/tokenized/MemberToken.sol";
 import {LighterSeriesAccount, ILighterL1} from "../../src/tokenized/LighterSeriesAccount.sol";
+import {MemberFactory} from "../../src/tokenized/MemberFactory.sol";
 
 contract TestUSDG is ERC20 {
     constructor() ERC20("Test USDG", "USDG") {}
@@ -21,6 +22,14 @@ contract TestUSDG is ERC20 {
 }
 
 contract MockLighterL1 is ILighterL1 {
+    uint64 public executedPriorityRequestCount;
+    uint64 public openPriorityRequestCount;
+
+    function executeAll() external {
+        executedPriorityRequestCount += openPriorityRequestCount;
+        openPriorityRequestCount = 0;
+    }
+
     IERC20 public asset;
     mapping(address => uint256) public deposits;
     mapping(address => uint128) public pending;
@@ -43,21 +52,27 @@ contract MockLighterL1 is ILighterL1 {
         require(to == msg.sender && index == 3 && route == 0);
         asset.transferFrom(msg.sender, address(this), amount);
         deposits[to] += amount;
+        ++openPriorityRequestCount;
     }
 
     function createOrder(uint48, uint16 market, uint48 size, uint32 price, uint8 ask, uint8 kind) external {
         require(market == 0 && kind == 0);
         ++orderCount;
+        ++openPriorityRequestCount;
         lastSize = size;
         lastPrice = price;
         lastAsk = ask;
         lastOwner = msg.sender;
     }
-    function cancelAllOrders(uint48) external {}
+
+    function cancelAllOrders(uint48) external {
+        ++openPriorityRequestCount;
+    }
 
     function withdraw(uint48, uint16 index, uint8 route, uint64 amount) external {
         require(index == 3 && route == 0);
         pending[msg.sender] += amount;
+        ++openPriorityRequestCount;
     }
 
     function withdrawPendingBalance(address owner, uint16, uint128 amount) external {
@@ -111,6 +126,8 @@ contract MemberControllerTest is Test {
     }
 
     function _report(uint256 id, int256 venueEquity, int256 position) internal {
+        // Explicitly simulate priority execution; matching-engine fills are supplied by each test.
+        venue.executeAll();
         MemberController.Member memory m = controller.memberState(id);
         controller.reconcile(
             id,
@@ -123,7 +140,8 @@ contract MemberControllerTest is Test {
                 2_500e6,
                 venueEquity > 0 ? uint256(venueEquity) : 0,
                 true,
-                keccak256("test evidence only")
+                keccak256("test evidence only"),
+                200
             )
         );
     }
@@ -195,8 +213,8 @@ contract MemberControllerTest is Test {
         for (uint256 id = first; id < first + count; ++id) {
             (,,, uint256 amount,,,,,) = controller.requests(id);
             assertEq(amount, 10e6);
-            controller.settleRequest(id);
         }
+        controller.settleBatch(first);
         assertEq(controller.escrowAssets(), 0);
         for (uint256 id = 1; id <= 6; ++id) {
             assertEq(MemberToken(controller.memberToken(id)).balanceOf(alice), 9.8e18);
@@ -291,7 +309,8 @@ contract MemberControllerTest is Test {
             2_500e6,
             0,
             false,
-            keccak256("evidence")
+            keccak256("evidence"),
+            200
         );
         vm.expectRevert();
         controller.reconcile(long3, r);
@@ -367,5 +386,145 @@ contract MemberControllerTest is Test {
         assertEq(token.balanceOf(alice) + token.balanceOf(bob), 100e18);
         assertEq(controller.groupRequested(ETH), beforeSeq + 1);
         assertEq(controller.memberState(long3).nav, 100e6);
+    }
+
+    function testNeutralBatchFailureRollsBackEveryLegAndFeesAndCancelsInFull() public {
+        uint256[] memory minima = new uint256[](2);
+        minima[0] = 1;
+        minima[1] = 100e18; // second leg cannot satisfy this quote
+        vm.prank(alice);
+        (uint256 first,,) = controller.requestNeutral(ETH, 100e6, minima, alice, uint64(block.timestamp + 600));
+        vm.expectRevert();
+        controller.settleRequest(first);
+        vm.expectRevert();
+        controller.settleBatch(first);
+        assertEq(MemberToken(controller.memberToken(long3)).totalSupply(), 0);
+        assertEq(asset.balanceOf(controller.FEE_FANOUT()), 0);
+        assertEq(controller.escrowAssets(), 100e6);
+        vm.expectRevert();
+        vm.prank(alice);
+        controller.cancelRequest(first + 1);
+        vm.expectRevert();
+        vm.prank(bob);
+        controller.cancelBatch(first);
+        vm.prank(alice);
+        controller.cancelBatch(first);
+        assertEq(asset.balanceOf(alice), 1_000e6);
+        assertEq(controller.escrowAssets(), 0);
+        vm.expectRevert();
+        controller.settleBatch(first);
+    }
+
+    function testPrioritySubmissionCannotBeReportedAsExecuted() public {
+        _deposit(long3, 100e6);
+        controller.fundVenue(long3, 100e6);
+        MemberController.Member memory m = controller.memberState(long3);
+        MemberController.Report memory r = MemberController.Report(
+            m.reportSequence + 1,
+            m.requestedAction,
+            uint64(block.timestamp),
+            100e6,
+            0,
+            2_500e6,
+            100e6,
+            true,
+            keccak256("premature ACK"),
+            200
+        );
+        assertFalse(m.custody.priorityProcessed());
+        vm.expectRevert(MemberController.InvalidReport.selector);
+        controller.reconcile(long3, r);
+        venue.executeAll();
+        controller.reconcile(long3, r);
+        assertTrue(m.custody.priorityProcessed());
+        controller.rebalance(long3, 250_000);
+        assertFalse(m.custody.priorityProcessed());
+        // A processed order still leaves the controller pending until its position report.
+        venue.executeAll();
+        vm.expectRevert(MemberController.PendingOrStale.selector);
+        controller.target(long3);
+    }
+
+    function testDefaultTwoXVenueMarginCannotOpenThreeX() public {
+        _deposit(long3, 100e6);
+        controller.fundVenue(long3, 100e6);
+        venue.executeAll();
+        MemberController.Member memory m = controller.memberState(long3);
+        controller.reconcile(
+            long3,
+            MemberController.Report(
+                m.reportSequence + 1,
+                m.requestedAction,
+                uint64(block.timestamp),
+                100e6,
+                0,
+                2_500e6,
+                100e6,
+                true,
+                keccak256("default margin"),
+                5000
+            )
+        );
+        vm.expectRevert(MemberController.InsufficientCash.selector);
+        controller.rebalance(long3, 250_000);
+        assertEq(venue.orderCount(), 0);
+        _report(long3, 100e6, 0); // simulated explicit margin setup
+        controller.rebalance(long3, 250_000);
+        assertEq(venue.lastSize(), 1200);
+    }
+
+    function testFullRedeemClosesPositionThenWithdrawsAndPaysFees() public {
+        MemberToken token = _deposit(long3, 100e6);
+        controller.fundVenue(long3, 100e6);
+        _report(long3, 100e6, 0);
+        controller.rebalance(long3, 250_000);
+        _report(long3, 100e6, 1200);
+        vm.startPrank(alice);
+        token.approve(address(controller), 100e18);
+        uint256 r = controller.requestRedeem(long3, 100e18, 96e6, alice, uint64(block.timestamp + 600));
+        vm.stopPrank();
+        (int256 desired, int256 delta, bool needed) = controller.target(long3);
+        assertEq(desired, 0);
+        assertEq(delta, -1200);
+        assertTrue(needed);
+        vm.expectRevert();
+        controller.settleRequest(r);
+        controller.rebalance(long3, 250_000);
+        assertEq(venue.lastAsk(), 1);
+        _report(long3, 100e6, 0);
+        controller.requestVenueWithdrawal(long3, 100e6);
+        venue.executeAll();
+        controller.collectVenueWithdrawal(long3);
+        vm.expectRevert();
+        controller.settleRequest(r);
+        _report(long3, 0, 0);
+        uint256 beforeBalance = asset.balanceOf(alice);
+        controller.settleRequest(r);
+        assertEq(asset.balanceOf(alice) - beforeBalance, 96e6);
+        assertEq(token.totalSupply(), 0);
+        assertEq(controller.memberState(long3).redeemShares, 0);
+        assertEq(controller.memberState(long3).nav, 0);
+        assertEq(asset.balanceOf(address(controller)), 0);
+    }
+
+    function testCancellationRestoresExposureTargetWithoutBurningShares() public {
+        MemberToken token = _deposit(short3, 100e6);
+        vm.startPrank(alice);
+        token.approve(address(controller), 25e18);
+        uint256 r = controller.requestRedeem(short3, 25e18, 1, alice, uint64(block.timestamp + 600));
+        vm.stopPrank();
+        (int256 desired,,) = controller.target(short3);
+        assertEq(desired, -900);
+        vm.prank(alice);
+        controller.cancelRequest(r);
+        (desired,,) = controller.target(short3);
+        assertEq(desired, -1200);
+        assertEq(token.balanceOf(alice), 100e18);
+    }
+
+    function testFactoryCannotCreateForeignControllerMembers() public {
+        MemberFactory factory = controller.factory();
+        vm.expectRevert();
+        factory.create(999, 0, "Foreign", "NO");
     }
 }

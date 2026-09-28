@@ -6,9 +6,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {LighterSeriesAccount, ILighterL1} from "../../src/tokenized/LighterSeriesAccount.sol";
 import {HouseFeeRouter, IFeeFanout} from "../../src/tokenized/HouseFeeRouter.sol";
 
-interface ILighterQueue is ILighterL1 {
-    function openPriorityRequestCount() external view returns (uint64);
-}
+interface ILighterQueue is ILighterL1 {}
 
 contract TokenizedRobinhoodIntegrationTest is Test {
     IERC20 constant USDG = IERC20(0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168);
@@ -28,6 +26,8 @@ contract TokenizedRobinhoodIntegrationTest is Test {
         uint64 beforeQueue = LIGHTER.openPriorityRequestCount();
         custody.deposit(10e6);
         assertEq(LIGHTER.openPriorityRequestCount(), beforeQueue + 1);
+        assertFalse(custody.priorityProcessed());
+        assertEq(custody.priorityEnd(), LIGHTER.executedPriorityRequestCount() + beforeQueue + 1);
         uint48 index = LIGHTER.addressToAccountIndex(address(custody));
         assertGt(index, 2);
         vm.expectRevert();

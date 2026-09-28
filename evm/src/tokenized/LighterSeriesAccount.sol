@@ -5,6 +5,8 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 interface ILighterL1 {
+    function executedPriorityRequestCount() external view returns (uint64);
+    function openPriorityRequestCount() external view returns (uint64);
     function addressToAccountIndex(address owner) external view returns (uint48);
     function deposit(address to, uint16 assetIndex, uint8 route, uint256 amount) external payable;
     function createOrder(
@@ -31,6 +33,7 @@ contract LighterSeriesAccount {
     uint16 public immutable marketId;
     uint48 public accountIndex;
     bool public bound;
+    uint64 public priorityEnd;
 
     error OnlyController();
     modifier onlyController() {
@@ -60,6 +63,7 @@ contract LighterSeriesAccount {
         usdg.forceApprove(address(lighter), amount);
         lighter.deposit(address(this), 3, 0, amount);
         usdg.forceApprove(address(lighter), 0);
+        _queued();
     }
 
     function order(uint48 size, uint32 limitPrice, bool ask) external onlyController {
@@ -67,16 +71,30 @@ contract LighterSeriesAccount {
         // L1 limit order. It can rest or partially fill: the controller stays
         // pending until fills, cancellation and the resulting position reconcile.
         lighter.createOrder(accountIndex, marketId, size, limitPrice, ask ? 1 : 0, 0);
+        _queued();
     }
 
     function cancelOrders() external onlyController {
         require(bound);
         lighter.cancelAllOrders(accountIndex);
+        _queued();
     }
 
     function withdraw(uint64 amount) external onlyController {
         require(bound && amount >= 1e6);
         lighter.withdraw(accountIndex, 3, 0, amount);
+        _queued();
+    }
+
+    /// Execution of the priority request is necessary but does not prove a fill.
+    function priorityProcessed() external view returns (bool) {
+        return lighter.executedPriorityRequestCount() >= priorityEnd;
+    }
+
+    function _queued() private {
+        uint64 end = lighter.executedPriorityRequestCount() + lighter.openPriorityRequestCount();
+        require(end > priorityEnd, "Priority request missing");
+        priorityEnd = end;
     }
 
     function collect() external onlyController returns (uint256 amount) {

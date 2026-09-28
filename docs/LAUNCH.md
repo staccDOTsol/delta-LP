@@ -17,7 +17,7 @@ asynchronous hedge rebalancing, and combined NAV/receipt accounting are unfinish
 See [execution and recovery details](LIGHTER-ROUTE.md).
 The newer [tokenized Lighter member / V4 contracts](TOKENIZED-MEMBERS.md) implement
 the 2% mint / 4% redeem fee policy and pool activity checks in an experimental,
-undeployed package. They are separate from both the browser's direct-perps flow
+package whose empty core is now deployed on Robinhood mainnet. The [manifest](../evm/deployments/4663-tokenized-v1.json) records the controller, factory, hook and router. They are separate from both the browser's direct-perps flow
 and the older NVDA/Morpho vault. No tokenized strategy launch is implied by the site deployment.
 The oil-subscription waitlist is at https://deltalp.fun/oil. Email verification, private
 passes, ranking, and referral points use the real database. No fuel subscription is sold.

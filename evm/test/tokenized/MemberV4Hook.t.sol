@@ -60,7 +60,9 @@ contract MemberV4HookTest is Test {
         controller.setEnabled(id, true);
         controller.reconcile(
             id,
-            MemberController.Report(1, 0, uint64(block.timestamp), 0, 0, 2_500e6, 0, true, keccak256("fork fixture"))
+            MemberController.Report(
+                1, 0, uint64(block.timestamp), 0, 0, 2_500e6, 0, true, keccak256("fork fixture"), 200
+            )
         );
     }
 

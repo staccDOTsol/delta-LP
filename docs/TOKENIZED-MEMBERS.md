@@ -1,6 +1,9 @@
 # Tokenized Lighter members and V4 markets
 
-Status: experimental contracts and fork-tested integration, **not deployed or live**.
+Status: experimental core contracts deployed on Robinhood mainnet; **tokenized trading is not live**.
+Deployment: [transaction and bytecode manifest](../evm/deployments/4663-tokenized-v1.json).
+The controller has zero registered members and no funded accounts.
+The site reads `/api/strategies/tokenized` to verify the four deployed runtime-code hashes.
 These contracts do not upgrade the deployed NVDA/Morpho vault. The public trading UI
 still accesses the visitor's own Lighter account and does not mint these tokens.
 
@@ -13,7 +16,9 @@ netting away at the venue. Tokens expose the opposite-direction members of their
 
 Neutral allocation divides a deposit equally between long and short at every enabled,
 matched tier. It does not silently drop a tier when the deposit is too small. This is
-currently a queue of individual member deposits, **not an atomic hedged basket or LP receipt**.
+an allocation queue whose member claims now settle or cancel as one transaction. A failed
+leg rolls back all issuance and fees. This does **not** make venue fills atomic or create
+a neutral LP receipt.
 Registry configuration must match actual venue leverage, precision and order-size limits;
 the Solidity bounds alone are not a venue capability check.
 
@@ -77,11 +82,18 @@ action nonce, the right position direction, and an observation no older than 60 
 Mint/redeem settlement additionally requires a report observed at or after the request.
 
 Venue deposits, withdrawals, order submissions and collected withdrawals advance an action
-nonce and block pricing until reconciled. Withdrawal collection invalidates the old report
+nonce and block pricing until reconciled. Each custody contract also records the end of
+the actual L1 priority queue; reconciliation fails until the venue execution count reaches it. Withdrawal collection invalidates the old report
 so the same assets cannot remain counted in both local cash and reported venue equity.
 Lighter account binding checks the venue's actual L1 owner-to-account mapping.
 
-Rebalance targets derive from NAV, leverage and mark. Orders have a bounded limit price.
+Rebalance targets derive from NAV, leverage and mark, reduced proportionally for shares
+queued for redemption. This lets the keeper close exposure before withdrawing cash.
+Cancelling an exit restores its target without burning shares. Settlement cannot pay a
+redemption that leaves exposure above the remaining backing target. Orders have a bounded
+limit price. Increasing exposure also checks the reported initial margin fraction against
+venue equity with 1% headroom. The L1 order method does not configure leverage: a default
+2x venue margin setting must not be used to claim a functioning 3x/5x/10x strategy.
 The L1 priority route can rest or partially fill: submission is never reported as a fill.
 The reporter must establish executed transfers and reconciled fills/cancelled remainders
 before unlocking pricing. These contracts do not independently prove that reconciliation.
@@ -124,13 +136,19 @@ No APY target, market-beating comparison, or no-liquidation claim has been estab
 - Proportional rebasing of every balance and supply leaves proportional backing and
   external delta unchanged. A supply-adjustment rule needs explicit value-conservation,
   dilution and AMM-inventory accounting before implementation.
-- Build and operate the reporter/keeper, including persistent fill reconciliation,
-  queue confirmation, retries, freshness monitoring and recovery from partial actions.
-- Add tested margin buffers, mark validation, position limits, order minimums, liquidity
-  constraints and an emergency unwind policy. Frequent rebalancing cannot guarantee
+- Operate the reporter/keeper, including persistent action evidence, retry recovery and
+  freshness monitoring. `strategy/member-reconciliation.ts` validates unsigned report
+  candidates against account identity, exact amounts, priority execution, pending orders,
+  market settings and an evidence watermark. It does not run a signing service.
+- Complete contract-owned account bootstrap and margin configuration. No API key is
+  currently installed for these accounts, and the custody ABI deliberately cannot
+  register one. Default venue margin can therefore block higher target leverage.
+- Complete independent mark validation, liquidity constraints and an emergency unwind
+  policy. Integer sizing, order minimums and opening-margin headroom now have tests. Frequent rebalancing cannot guarantee
   that a venue position avoids liquidation during gaps or outages.
-- Implement atomic paired settlement where possible, coordinated pending-leg recovery,
-  neutral LP ownership/NAV/redemption, and production wallet/router integration.
+- Complete coordinated pending-leg recovery, neutral LP ownership/NAV/redemption, the
+  supply-clearing rule, and production wallet/router integration. Atomic claim issuance
+  and full-batch cancellation are implemented; matching-engine atomicity is not.
 - Stress-test net returns under actual volume, spread, funding, adverse selection,
   price paths and execution delays. Validate with a reviewed, bounded funded round trip.
 
@@ -150,3 +168,21 @@ forge test --root evm -vv
 References: [V4 PoolManager and flash accounting](https://developers.uniswap.org/docs/protocols/v4/concepts/poolmanager),
 [V4 hooks](https://developers.uniswap.org/docs/protocols/v4/concepts/hooks),
 [Lighter order/transaction streams](https://apidocs.lighter.xyz/docs/websocket-reference).
+
+## Deployment and operator commands
+
+- `node evm/scripts/deploy-members.mjs`: simulate the first undeployed dependency.
+- `node evm/scripts/deploy-members.mjs --broadcast`: resume the saved empty-core deployment.
+  Does not create members, enable deposits, transfer USDG, trade or seed pools. Signed
+  creation transactions are journaled under ignored `artifacts/` before broadcast.
+- `ETHERSCAN_API_KEY=... node evm/scripts/verify-members.mjs`: submit source verification
+  or check saved verification requests; the key is never saved in deployment manifests.
+- `node --import tsx evm/scripts/plan-member-families.ts`: read the live venue registry and
+  write unsigned creation calls for every supported integer ETH/NVDA/SPY leverage tier.
+  The plan includes all tiers and an indicative equal-allocation minimum, before execution
+  buffers. It does not create or enable any member.
+
+The controller runtime is 17,494 bytes after extracting child creation into `MemberFactory`.
+The V4 hook's deployed address has the required low bits `0x2540`. Source-verification
+status is recorded separately from transaction success; a pending explorer job is not
+reported as verified.

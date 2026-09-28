@@ -2,7 +2,7 @@
 
 The current tokenized-Lighter work is in `src/tokenized/`: per-member custody and
 accounting, 2% mint / 4% redeem fees to the Wizards fanout, untaxed member transfers,
-and a V4 pool activity hook. It is experimental, fork-tested and **not deployed**.
+and a V4 pool activity hook. Its empty core is deployed on Robinhood mainnet and fork-tested; **tokenized trading is not live**.
 See [the architecture, fee policy and remaining work](../docs/TOKENIZED-MEMBERS.md).
 Run `forge test -vv` for the full contract suite.
 

@@ -10,6 +10,7 @@ import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol
 import {MemberToken, ITransferRebalance} from "./MemberToken.sol";
 import {LighterSeriesAccount, ILighterL1} from "./LighterSeriesAccount.sol";
 import {IFeeFanout} from "./HouseFeeRouter.sol";
+import {MemberFactory} from "./MemberFactory.sol";
 
 /// Experimental managed-NAV controller. The reporter is a TRUSTED valuation role,
 /// not an on-chain proof of Lighter equity. Do not describe this model as trustless.
@@ -45,6 +46,8 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
         uint256 mark; // USDG micro-units per whole underlying
         int256 position; // venue base ticks
         uint256 venueAvailable;
+        uint256 redeemShares;
+        uint16 initialMarginBps;
     }
 
     struct Request {
@@ -69,12 +72,14 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
         uint256 available;
         bool ordersAndTransfersSettled;
         bytes32 evidenceHash;
+        uint16 initialMarginBps;
     }
 
     IERC20 public immutable usdg;
     ILighterL1 public immutable lighter;
     address public immutable reporter;
     address public immutable keeper;
+    MemberFactory public immutable factory;
     uint256 public memberCount;
     uint256 public requestCount;
     uint256 public escrowAssets;
@@ -85,6 +90,8 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
     mapping(bytes32 => uint64) public groupRequested;
     mapping(bytes32 => uint64) public groupChecked;
     mapping(bytes32 => uint256) public registeredSeries;
+    mapping(uint256 => uint256) public requestBatch;
+    mapping(uint256 => uint256) public batchSize;
 
     event MemberCreated(
         uint256 indexed member, bytes32 indexed group, address token, address custody, uint8 leverage, bool short
@@ -99,6 +106,7 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
     );
     event RequestSettled(uint256 indexed request, uint256 assets, uint256 shares);
     event RequestCancelled(uint256 indexed request);
+    event NeutralBatchRequested(uint256 indexed firstRequest, uint256 count, uint256 assets);
     event HouseFeePaid(uint256 indexed request, address indexed token, uint256 amount, bool exit);
     event VenueAction(uint256 indexed member, uint64 nonce, uint8 kind, int256 amount);
     event Reconciled(
@@ -131,6 +139,7 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
         lighter = venue;
         reporter = reporter_;
         keeper = keeper_;
+        factory = new MemberFactory(asset, venue);
     }
 
     function createMember(
@@ -162,9 +171,8 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
         m.short = short;
         m.sizeDecimals = sizeDecimals;
         m.priceDecimals = priceDecimals;
-        m.token = new MemberToken(name, symbol, id, address(this));
+        (m.token, m.custody) = factory.create(id, market, name, symbol);
         memberIds[address(m.token)] = id;
-        m.custody = new LighterSeriesAccount(usdg, lighter, market, address(this));
         siblings.push(id);
         registeredSeries[key] = id;
         emit MemberCreated(id, group, address(m.token), address(m.custody), leverage, short);
@@ -267,12 +275,14 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
             if (_eligiblePair(all[i])) {
                 uint256 id = all[i];
                 uint256 other = registeredSeries[keccak256(abi.encode(group, members[id].leverage, true))];
-                // This is an allocation queue, not an atomic filled/hedged LP deposit.
-                _request(id, perLeg, minimumShares[count], receiver, deadline, false);
-                _request(other, perLeg, minimumShares[count + 1], receiver, deadline, false);
+                requestBatch[_request(id, perLeg, minimumShares[count], receiver, deadline, false)] = firstRequest;
+                requestBatch[_request(other, perLeg, minimumShares[count + 1], receiver, deadline, false)] =
+                firstRequest;
                 count += 2;
             }
         }
+        batchSize[firstRequest] = count;
+        emit NeutralBatchRequested(firstRequest, count, allocated);
     }
 
     function setMinimum(uint256 request, uint256 minimum) external {
@@ -295,6 +305,7 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
         Member storage m = _member(id);
         if (shares == 0 || receiver == address(0) || deadline <= block.timestamp) revert InvalidRequest();
         IERC20(address(m.token)).safeTransferFrom(msg.sender, address(this), shares);
+        m.redeemShares += shares;
         request = _request(id, shares, minAssets, receiver, deadline, true);
     }
 
@@ -309,10 +320,24 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
     }
 
     function cancelRequest(uint256 request) external nonReentrant {
+        if (requestBatch[request] != 0) revert InvalidRequest();
+        _cancelRequest(request);
+    }
+
+    function cancelBatch(uint256 first) external nonReentrant {
+        uint256 count = batchSize[first];
+        if (count == 0) revert InvalidRequest();
+        for (uint256 i; i < count; ++i) {
+            _cancelRequest(first + i);
+        }
+    }
+
+    function _cancelRequest(uint256 request) private {
         Request storage r = requests[request];
         if (r.owner != msg.sender || r.completed) revert InvalidRequest();
         r.completed = true;
         if (r.redeem) {
+            members[r.member].redeemShares -= r.amount;
             IERC20(address(members[r.member].token)).safeTransfer(r.owner, r.amount);
         } else {
             escrowAssets -= r.amount;
@@ -322,6 +347,20 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
     }
 
     function settleRequest(uint256 request) external onlyKeeper nonReentrant {
+        if (requestBatch[request] != 0) revert InvalidRequest();
+        _settleRequest(request);
+    }
+
+    /// Atomic claim issuance, not a claim that both venue orders fill atomically.
+    function settleBatch(uint256 first) external onlyKeeper nonReentrant {
+        uint256 count = batchSize[first];
+        if (count == 0) revert InvalidRequest();
+        for (uint256 i; i < count; ++i) {
+            _settleRequest(first + i);
+        }
+    }
+
+    function _settleRequest(uint256 request) private {
         Request storage r = requests[request];
         if (r.owner == address(0) || r.completed || r.deadline < block.timestamp || r.minimum == 0) {
             revert InvalidRequest();
@@ -339,7 +378,11 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
             fee = Math.mulDiv(assets, EXIT_FEE_BPS, BPS);
             if (assets - fee < r.minimum) revert Slippage();
             if (assets > m.cash) revert InsufficientCash();
+            uint256 remainingTarget = Math.mulDiv((m.nav - assets) * m.leverage, 10 ** m.sizeDecimals, m.mark);
+            uint256 exposure = uint256(m.position < 0 ? -m.position : m.position);
+            if (exposure > remainingTarget + Math.mulDiv(remainingTarget, REBALANCE_BPS, BPS)) revert PendingOrStale();
             r.completed = true;
+            m.redeemShares -= shares;
             m.cash -= assets;
             m.nav -= assets;
             m.token.burn(address(this), shares);
@@ -373,11 +416,12 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
         if (msg.sender != reporter) revert NotAuthorized();
         Member storage m = _member(id);
         if (
-            !r.ordersAndTransfersSettled || r.evidenceHash == bytes32(0) || r.sequence <= m.reportSequence
-                || r.action != m.requestedAction || r.observedAt > block.timestamp
+            !m.custody.priorityProcessed() || !r.ordersAndTransfersSettled || r.evidenceHash == bytes32(0)
+                || r.sequence <= m.reportSequence || r.action != m.requestedAction || r.observedAt > block.timestamp
                 || block.timestamp - r.observedAt > MAX_AGE || r.observedAt < m.lastActionAt
                 || r.observedAt < m.observedAt || r.mark == 0 || r.mark > 1e18
                 || r.position > int256(uint256(type(uint48).max)) || r.position < -int256(uint256(type(uint48).max))
+                || r.initialMarginBps == 0 || r.initialMarginBps > BPS
         ) revert InvalidReport();
         if ((m.short && r.position > 0) || (!m.short && r.position < 0)) revert InvalidReport();
         require(m.cash <= uint256(type(int256).max));
@@ -386,6 +430,7 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
         m.position = r.position;
         m.mark = r.mark;
         m.venueAvailable = r.available;
+        m.initialMarginBps = r.initialMarginBps;
         m.reportSequence = r.sequence;
         m.confirmedAction = r.action;
         m.observedAt = r.observedAt;
@@ -424,7 +469,9 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
     function target(uint256 id) public view returns (int256 desired, int256 delta, bool needed) {
         Member storage m = _member(id);
         _fresh(m);
-        uint256 raw = Math.mulDiv(m.nav * m.leverage, 10 ** m.sizeDecimals, m.mark);
+        uint256 supply = m.token.totalSupply();
+        uint256 backing = supply == 0 ? 0 : Math.mulDiv(m.nav, supply - m.redeemShares, supply);
+        uint256 raw = Math.mulDiv(backing * m.leverage, 10 ** m.sizeDecimals, m.mark);
         require(raw <= type(uint48).max);
         desired = m.short ? -int256(raw) : int256(raw);
         delta = desired - m.position;
@@ -436,6 +483,17 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
         Member storage m = _member(id);
         (, int256 delta, bool needed) = target(id);
         require(needed);
+        // L1 createOrder does not change the venue's initial margin setting.
+        // Increasing exposure requires a reconciled setting and collateral buffer.
+        if ((delta > 0 && !m.short) || (delta < 0 && m.short)) {
+            uint256 venueEquity = m.nav > m.cash ? m.nav - m.cash : 0;
+            (int256 desired,,) = target(id);
+            uint256 notional = Math.mulDiv(
+                uint256(desired < 0 ? -desired : desired), m.mark, 10 ** m.sizeDecimals, Math.Rounding.Ceil
+            );
+            uint256 margin = Math.mulDiv(notional, m.initialMarginBps, BPS, Math.Rounding.Ceil);
+            if (margin > Math.mulDiv(venueEquity, BPS - REBALANCE_BPS, BPS)) revert InsufficientCash();
+        }
         uint256 markTicks = m.mark / 10 ** (6 - m.priceDecimals);
         if (
             markTicks == 0 || limitPrice < Math.mulDiv(markTicks, BPS - SLIPPAGE_BPS, BPS, Math.Rounding.Ceil)
@@ -473,7 +531,9 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
 
     function _fresh(Member storage m) private view {
         if (m.reportSequence == 0 || m.requestedAction != m.confirmedAction || block.timestamp - m.observedAt > MAX_AGE)
-        revert PendingOrStale();
+        {
+            revert PendingOrStale();
+        }
     }
 
     function _member(uint256 id) private view returns (Member storage m) {
