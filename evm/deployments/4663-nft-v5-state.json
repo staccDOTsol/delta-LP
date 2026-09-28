@@ -1,0 +1,53 @@
+{
+  "chainId": 4663,
+  "checkedBlock": "74676620",
+  "at": "2026-09-28T09:06:09.754Z",
+  "fanout": {
+    "address": "0x5D38705D0c40c814CF2Eeb67d9ECD885cd9708FC",
+    "configured": true,
+    "initializer": "0x0000000000000000000000000000000000000000",
+    "tokenCount": "40000",
+    "totalWeight": "180000"
+  },
+  "entryFeeBps": "300",
+  "exitFeeBps": "600",
+  "directWizardFanout": "0x1b88A6c6516FD2918905186F21Bb9F5CaA1a15c8",
+  "editions": [
+    {
+      "denomination": 1,
+      "address": "0xa8dC97388FD0919A654bc05E21034afaafd1FF43",
+      "cap": "10000",
+      "royaltyBps": "1000",
+      "royaltyReceiver": "0xBfac70063f04e116F5a509cC746BEeb2F053467D",
+      "paused": true,
+      "totalMinted": "0"
+    },
+    {
+      "denomination": 2,
+      "address": "0x95fc6306d95F8264Ad6cc5336FB8df7e58BCbb7A",
+      "cap": "10000",
+      "royaltyBps": "1000",
+      "royaltyReceiver": "0xBfac70063f04e116F5a509cC746BEeb2F053467D",
+      "paused": true,
+      "totalMinted": "0"
+    },
+    {
+      "denomination": 5,
+      "address": "0xA09255F0D9cF94475369A962B3Df6Fd7ac926761",
+      "cap": "10000",
+      "royaltyBps": "1000",
+      "royaltyReceiver": "0xBfac70063f04e116F5a509cC746BEeb2F053467D",
+      "paused": true,
+      "totalMinted": "0"
+    },
+    {
+      "denomination": 10,
+      "address": "0xDa66c3e243D15813E6810c0370823A67b1497672",
+      "cap": "10000",
+      "royaltyBps": "1000",
+      "royaltyReceiver": "0xBfac70063f04e116F5a509cC746BEeb2F053467D",
+      "paused": true,
+      "totalMinted": "0"
+    }
+  ]
+}

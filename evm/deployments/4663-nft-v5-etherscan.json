@@ -1,0 +1,42 @@
+{
+  "pending-adapter": {
+    "address": "0x7518E5121A2841568dDE5A81eec8C962EcfCc0C5",
+    "status": "pending",
+    "guid": "8zphuuatrahshubkfkg4lggctpsre2tmdgnnje29spauqxnfux",
+    "submittedAt": "2026-09-28T09:03:57.182Z",
+    "result": "Pending in queue",
+    "checkedAt": "2026-09-28T09:11:21.808Z"
+  },
+  "edition-1": {
+    "address": "0xa8dC97388FD0919A654bc05E21034afaafd1FF43",
+    "status": "pending",
+    "guid": "cku4ktscp6uafp8mf2fnr2i8cpvlnwblv8q7s9vmwifwfh9km4",
+    "submittedAt": "2026-09-28T09:03:58.185Z",
+    "result": "Pending in queue",
+    "checkedAt": "2026-09-28T09:11:23.086Z"
+  },
+  "edition-2": {
+    "address": "0x95fc6306d95F8264Ad6cc5336FB8df7e58BCbb7A",
+    "status": "pending",
+    "guid": "imz76b3ktnw7ptwie8z1uxvjiilmtkeazjenlq2e5xg8rptnsx",
+    "submittedAt": "2026-09-28T09:03:59.166Z",
+    "result": "Pending in queue",
+    "checkedAt": "2026-09-28T09:11:24.354Z"
+  },
+  "edition-5": {
+    "address": "0xA09255F0D9cF94475369A962B3Df6Fd7ac926761",
+    "status": "pending",
+    "guid": "gpzk2nv1rewultztlprvxuvwaqes8xhgnfe1yaukinnxvdji6l",
+    "submittedAt": "2026-09-28T09:04:00.197Z",
+    "result": "Pending in queue",
+    "checkedAt": "2026-09-28T09:11:25.625Z"
+  },
+  "edition-10": {
+    "address": "0xDa66c3e243D15813E6810c0370823A67b1497672",
+    "status": "pending",
+    "guid": "6nuyh1m4uzpv23fm9vrjyexwty3cumcwelsium5tg4qzubuyep",
+    "submittedAt": "2026-09-28T09:04:01.522Z",
+    "result": "Pending in queue",
+    "checkedAt": "2026-09-28T09:11:26.894Z"
+  }
+}
