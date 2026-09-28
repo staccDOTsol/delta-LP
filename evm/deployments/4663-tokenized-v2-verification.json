@@ -1,0 +1,26 @@
+{
+  "MemberController": {
+    "address": "0x934ceF5C005529a90F45Bd59BA78c7D697672a28",
+    "status": "pending",
+    "guid": "ek2qs41hqkyezrnwzctsghr8nukgzhbs3fb2iqqrcrafvx6nc4",
+    "submittedAt": "2026-09-28T06:05:38.966Z"
+  },
+  "HouseFeeRouter": {
+    "address": "0x83B7a36d9BB5bB20D23b26b8A57E1571B6587224",
+    "status": "pending",
+    "guid": "mm8gr9ugp5yhgczw6d1enmnadedkuyzwve42fp6qtusr6q8ktb",
+    "submittedAt": "2026-09-28T06:05:40.183Z"
+  },
+  "MemberV4Hook": {
+    "address": "0xc5fAA1076716a01Cad3D885AE9850492D7076540",
+    "status": "pending",
+    "guid": "lubrcayx3bvimrv3ldzygh8cmtmx5n7urjc5kf2wuhkvujz1m4",
+    "submittedAt": "2026-09-28T06:05:41.383Z"
+  },
+  "MemberFactory": {
+    "address": "0xb8BD90e3538d5a1f7147e05C067B4745592a40F1",
+    "status": "pending",
+    "guid": "swmwmxt7h6j9r2etzsnsbmp7hnxjnczgm8byyfgmkae8pawadn",
+    "submittedAt": "2026-09-28T06:05:42.542Z"
+  }
+}

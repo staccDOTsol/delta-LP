@@ -38,6 +38,12 @@ contract TokenizedRobinhoodIntegrationTest is Test {
         assertEq(LIGHTER.openPriorityRequestCount(), beforeQueue + 2);
         custody.cancelOrders();
         assertEq(LIGHTER.openPriorityRequestCount(), beforeQueue + 3);
+        bytes memory key = new bytes(40);
+        key[0] = 0x01;
+        custody.configureKey(key);
+        assertEq(LIGHTER.openPriorityRequestCount(), beforeQueue + 4);
+        assertEq(custody.priorityEnd(), LIGHTER.executedPriorityRequestCount() + beforeQueue + 4);
+        assertFalse(custody.priorityProcessed());
     }
 
     function testReal8010FanoutReceivesAndHarvestsHouseFeesOnFork() public {

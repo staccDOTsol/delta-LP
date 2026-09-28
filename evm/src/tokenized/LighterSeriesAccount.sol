@@ -8,6 +8,7 @@ interface ILighterL1 {
     function executedPriorityRequestCount() external view returns (uint64);
     function openPriorityRequestCount() external view returns (uint64);
     function addressToAccountIndex(address owner) external view returns (uint48);
+    function changePubKey(uint48 accountIndex, uint8 apiKeyIndex, bytes calldata publicKey) external;
     function deposit(address to, uint16 assetIndex, uint8 route, uint256 amount) external payable;
     function createOrder(
         uint48 accountIndex,
@@ -24,7 +25,8 @@ interface ILighterL1 {
 }
 
 /// Per-series L1 owner: opposite strategies cannot net in the same Lighter account.
-/// No API-key registration, arbitrary calls, external transfer recipients or delegatecall.
+/// The controller owner can rotate slot 42. Its private-key holder is a trusted
+/// venue operator, NOT a permission-restricted or trade-only signer.
 contract LighterSeriesAccount {
     using SafeERC20 for IERC20;
     address public immutable controller;
@@ -34,6 +36,7 @@ contract LighterSeriesAccount {
     uint48 public accountIndex;
     bool public bound;
     uint64 public priorityEnd;
+    uint8 public constant API_KEY_INDEX = 42;
 
     error OnlyController();
     modifier onlyController() {
@@ -77,6 +80,23 @@ contract LighterSeriesAccount {
     function cancelOrders() external onlyController {
         require(bound);
         lighter.cancelAllOrders(accountIndex);
+        _queued();
+    }
+
+    function configureKey(bytes calldata publicKey) external onlyController {
+        require(bound && publicKey.length == 40, "Invalid venue key");
+        bool nonzero;
+        // Lighter encodes five canonical Goldilocks field elements, little endian.
+        for (uint256 i; i < 5; ++i) {
+            uint64 word;
+            for (uint256 j; j < 8; ++j) {
+                word |= uint64(uint8(publicKey[i * 8 + j])) << (8 * j);
+            }
+            require(word < 0xffffffff00000001, "Noncanonical venue key");
+            nonzero = nonzero || word != 0;
+        }
+        require(nonzero, "Zero venue key");
+        lighter.changePubKey(accountIndex, API_KEY_INDEX, publicKey);
         _queued();
     }
 

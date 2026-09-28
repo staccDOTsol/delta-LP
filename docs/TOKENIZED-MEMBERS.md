@@ -1,19 +1,21 @@
 # Tokenized Lighter members and V4 markets
 
 Status: experimental core contracts deployed on Robinhood mainnet; **tokenized trading is not live**.
-Deployment: [transaction and bytecode manifest](../evm/deployments/4663-tokenized-v1.json).
+Deployment: [transaction and bytecode manifest](../evm/deployments/4663-tokenized-v2.json).
 The controller has zero registered members and no funded accounts.
 The site reads `/api/strategies/tokenized` to verify the four deployed runtime-code hashes.
 All four have matching creation and runtime source on Sourcify; see the
-[verification record](../evm/deployments/4663-tokenized-v1-sourcify.json).
+[verification record](../evm/deployments/4663-tokenized-v2-sourcify.json).
 Etherscan's separate verification submissions remain pending.
 
 | Contract | Robinhood mainnet address |
 | --- | --- |
-| Controller | `0x5231bc96BfdDD9982c0464ECEcAEA640c9F70a08` |
-| Member factory | `0xff73D192FCb5fFEb1E6E9316175a5d9f84d50247` |
-| V4 activity hook | `0x72385de34b845bB5Ac3ea88df6d6D8B013b5a540` |
-| Wizards fee router | `0xd28aD2F603D46e8081C9Df475ce2362d02601E11` |
+| Controller | `0x934ceF5C005529a90F45Bd59BA78c7D697672a28` |
+| Member factory | `0xb8BD90e3538d5a1f7147e05C067B4745592a40F1` |
+| V4 activity hook | `0xc5fAA1076716a01Cad3D885AE9850492D7076540` |
+| Wizards fee router | `0x83B7a36d9BB5bB20D23b26b8A57E1571B6587224` |
+
+Version 2 adds contract-owned key setup and recovery. The immutable [v1 deployment](../evm/deployments/4663-tokenized-v1.json) remains archived and unchanged.
 
 These contracts do not upgrade the deployed NVDA/Morpho vault. The public trading UI
 still accesses the visitor's own Lighter account and does not mint these tokens.
@@ -109,6 +111,48 @@ The L1 priority route can rest or partially fill: submission is never reported a
 The reporter must establish executed transfers and reconciled fills/cancelled remainders
 before unlocking pricing. These contracts do not independently prove that reconciliation.
 
+## Contract-owned key setup and recovery (v2)
+
+The owner page is `/operator`. It verifies the pinned controller bytecode, owner,
+member and bound custody account before enabling setup controls. It does not fund
+accounts or place orders. The owner signs a domain/controller/custody/account/member/
+generation-scoped message; its hash seeds the pinned Lighter WASM signer. The signature
+and seed remain in browser memory, never local storage or the server.
+
+`configureVenueKey(id, publicKey, marginBps)` registers or replaces fixed slot 42 through
+Lighter’s actual L1 `changePubKey` method. It checks canonical nonzero key encoding,
+pauses entries and advances the action nonce and priority watermark. Rotation is allowed
+while a previous action is unresolved, so a stale reporter does not prevent key recovery.
+Earlier orders and transfers still require reconciliation. Rotation is not instantaneous
+revocation: the old key remains usable until Lighter executes the replacement.
+
+The key holder is a **trusted venue operator with broad API-key authority**, not a
+trade-only signer. Controller restrictions on L1 order calls do not restrict what a
+privileged API key can do directly at Lighter. This is an additional trust boundary,
+not a claim of trustless execution. An unexpected live key in another slot blocks setup.
+
+The browser confirms the registered key before signing a cross-margin update. It refuses
+margin changes while positions or orders exist. Both wallet submission and margin updates
+have durable public-only journals; an ambiguous transport result is reconciled, never
+silently resubmitted. An executed margin transaction is insufficient until the actual
+account row shows the requested fraction and cross-margin mode.
+
+A trusted reporter submits `reconcileVenueSetup` only after verifying the key registry,
+margin row, fresh account equity, earlier actions, and completed priority queue. The
+unsigned `memberSetupReport` helper checks these inputs and includes key evidence in the
+report hash. Ordinary reports and entry re-enablement cannot bypass pending setup. Setup
+confirmation leaves entries disabled until the owner explicitly enables them.
+
+If a margin change is rejected, `abandonVenueMargin` removes only the requested-margin
+requirement. The new key and account state still need confirmation; entries stay closed.
+This permits recovery at the actual venue setting without pretending the intended margin
+was installed. A zero public key is rejected, not presented as revocation.
+
+The tests cover owner/controller authorization, rejected and stale confirmations, rotation
+while pending, rollback on malformed keys, margin recovery, interrupted browser sends,
+page reload, superseded journals, and actual L1 registration on a local Robinhood fork.
+They do not prove a live L2 registration or a funded strategy round trip.
+
 ## Neutrality and the source of returns
 
 The intended advantage is market-making income with reduced underlying direction risk.
@@ -151,9 +195,12 @@ No APY target, market-beating comparison, or no-liquidation claim has been estab
   freshness monitoring. `strategy/member-reconciliation.ts` validates unsigned report
   candidates against account identity, exact amounts, priority execution, pending orders,
   market settings and an evidence watermark. It does not run a signing service.
-- Complete contract-owned account bootstrap and margin configuration. No API key is
-  currently installed for these accounts, and the custody ABI deliberately cannot
-  register one. Default venue margin can therefore block higher target leverage.
+- Run account bootstrap with user-signed funding and verified reporter evidence. Version 2
+  now supports key registration/rotation and browser margin configuration, but no member
+  account is currently registered or funded. The reporter/keeper is not operating live.
+- Resolve maximum-tier collateral sizing: an exact 50x target at the venue minimum
+  200 bps cannot also satisfy the controller’s 1% opening headroom. It stays blocked;
+  the application must not silently label a lower exposure as an exact 50x strategy.
 - Complete independent mark validation, liquidity constraints and an emergency unwind
   policy. Integer sizing, order minimums and opening-margin headroom now have tests. Frequent rebalancing cannot guarantee
   that a venue position avoids liquidation during gaps or outages.
@@ -189,11 +236,11 @@ References: [V4 PoolManager and flash accounting](https://developers.uniswap.org
 
 ## Deployment and operator commands
 
-- `node evm/scripts/deploy-members.mjs`: simulate the first undeployed dependency.
-- `node evm/scripts/deploy-members.mjs --broadcast`: resume the saved empty-core deployment.
+- `node evm/scripts/deploy-members.mjs --version=v2`: simulate the first undeployed dependency.
+- `node evm/scripts/deploy-members.mjs --version=v2 --broadcast`: resume the saved empty-core deployment.
   Does not create members, enable deposits, transfer USDG, trade or seed pools. Signed
   creation transactions are journaled under ignored `artifacts/` before broadcast.
-- `ETHERSCAN_API_KEY=... node evm/scripts/verify-members.mjs`: submit source verification
+- `ETHERSCAN_API_KEY=... node evm/scripts/verify-members.mjs --version=v2`: submit source verification
   or check saved verification requests; the key is never saved in deployment manifests.
 - `node --import tsx evm/scripts/plan-member-families.ts`: read the live venue registry and
   write unsigned creation calls for every supported integer ETH/NVDA/SPY leverage tier.

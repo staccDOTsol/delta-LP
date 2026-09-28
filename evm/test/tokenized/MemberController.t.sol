@@ -43,6 +43,16 @@ contract MockLighterL1 is ILighterL1 {
     uint32 public lastPrice;
     uint8 public lastAsk;
     address public lastOwner;
+    bytes public lastPublicKey;
+    uint8 public lastKeySlot;
+
+    function changePubKey(uint48 index, uint8 slot, bytes calldata key) external {
+        require(addressToAccountIndex[msg.sender] == index);
+        lastOwner = msg.sender;
+        lastKeySlot = slot;
+        lastPublicKey = key;
+        ++openPriorityRequestCount;
+    }
 
     constructor(IERC20 a) {
         asset = a;
@@ -153,6 +163,114 @@ contract MemberControllerTest is Test {
         _report(id, 0, 0);
         controller.settleRequest(request);
         token = MemberToken(controller.memberToken(id));
+    }
+
+    function _setupReport(uint16 margin) internal view returns (MemberController.Report memory) {
+        MemberController.Member memory m = controller.memberState(long3);
+        return MemberController.Report(
+            m.reportSequence + 1,
+            m.requestedAction,
+            uint64(block.timestamp),
+            0,
+            0,
+            2500e6,
+            0,
+            true,
+            keccak256("setup evidence"),
+            margin
+        );
+    }
+
+    function _key(uint8 value) internal pure returns (bytes memory key) {
+        key = new bytes(40);
+        key[0] = bytes1(value);
+    }
+
+    function testVenueKeySetupRequiresOwnerAndCustodyOnlyAcceptsController() public {
+        vm.prank(alice);
+        vm.expectRevert();
+        controller.configureVenueKey(long3, _key(1), 200);
+        LighterSeriesAccount custody = controller.memberState(long3).custody;
+        vm.expectRevert(LighterSeriesAccount.OnlyController.selector);
+        custody.configureKey(_key(1));
+        controller.configureVenueKey(long3, _key(1), 200);
+        assertEq(venue.lastOwner(), address(controller.memberState(long3).custody));
+        assertEq(venue.lastKeySlot(), 42);
+        assertEq(venue.lastPublicKey(), _key(1));
+        assertFalse(controller.memberState(long3).enabled);
+        vm.expectRevert();
+        controller.setEnabled(long3, true);
+    }
+
+    function testKeyQueueReceiptAndMarginAckCannotUnlockPricing() public {
+        controller.configureVenueKey(long3, _key(1), 200);
+        MemberController.Report memory report = _setupReport(200);
+        vm.expectRevert();
+        controller.reconcileVenueSetup(long3, report, keccak256(_key(1)));
+        venue.executeAll();
+        vm.expectRevert();
+        controller.reconcile(long3, report);
+        vm.expectRevert();
+        controller.reconcileVenueSetup(long3, report, keccak256(_key(2)));
+        report.initialMarginBps = 5000;
+        vm.expectRevert();
+        controller.reconcileVenueSetup(long3, report, keccak256(_key(1)));
+        report.initialMarginBps = 200;
+        controller.reconcileVenueSetup(long3, report, keccak256(_key(1)));
+        assertFalse(controller.memberState(long3).enabled);
+        controller.setEnabled(long3, true);
+        assertTrue(controller.memberState(long3).enabled);
+    }
+
+    function testKeyRotationRecoversStaleAndUnresolvedSetupWithoutAcceptingOldReport() public {
+        controller.configureVenueKey(long3, _key(1), 200);
+        MemberController.Report memory oldReport = _setupReport(200);
+        vm.warp(block.timestamp + 600);
+        controller.configureVenueKey(long3, _key(2), 250);
+        (bytes32 keyHash, uint16 margin, uint64 generation, bool pendingSetup) = controller.venueSetup(long3);
+        assertEq(generation, 2);
+        assertEq(keyHash, keccak256(_key(2)));
+        assertEq(margin, 250);
+        assertTrue(pendingSetup);
+        assertEq(venue.openPriorityRequestCount(), 2);
+        venue.executeAll();
+        vm.expectRevert();
+        controller.reconcileVenueSetup(long3, oldReport, keyHash);
+        controller.reconcileVenueSetup(long3, _setupReport(250), keyHash);
+        assertEq(controller.memberState(long3).requestedAction, controller.memberState(long3).confirmedAction);
+    }
+
+    function testRejectedMarginSetupCanRecoverAtObservedSettingButStillRequiresTheNewKey() public {
+        controller.configureVenueKey(long3, _key(1), 200);
+        vm.prank(alice);
+        vm.expectRevert();
+        controller.abandonVenueMargin(long3);
+        controller.abandonVenueMargin(long3);
+        venue.executeAll();
+        MemberController.Report memory report = _setupReport(5000);
+        vm.expectRevert();
+        controller.reconcileVenueSetup(long3, report, keccak256(_key(2)));
+        controller.reconcileVenueSetup(long3, report, keccak256(_key(1)));
+        assertFalse(controller.memberState(long3).enabled);
+        assertEq(controller.memberState(long3).initialMarginBps, 5000);
+    }
+
+    function testInvalidVenueKeysRevertEntireSetupAndCannotBeUsedAsRevocation() public {
+        vm.expectRevert();
+        controller.configureVenueKey(long3, new bytes(39), 200);
+        vm.expectRevert();
+        controller.configureVenueKey(long3, new bytes(40), 200);
+        bytes memory bad = new bytes(40);
+        for (uint256 i; i < 8; ++i) {
+            bad[i] = 0xff;
+        }
+        vm.expectRevert();
+        controller.configureVenueKey(long3, bad, 200);
+        (,, uint64 generation, bool pendingSetup) = controller.venueSetup(long3);
+        assertEq(generation, 0);
+        assertFalse(pendingSetup);
+        assertTrue(controller.memberState(long3).enabled);
+        assertEq(venue.openPriorityRequestCount(), 0);
     }
 
     function testTransfersIncludingAMMsTriggerTheWholeUnderlyingGroup() public {

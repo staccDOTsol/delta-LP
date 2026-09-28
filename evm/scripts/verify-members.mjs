@@ -6,8 +6,10 @@ import {setTimeout as wait} from 'node:timers/promises';
 
 const key=process.env.ETHERSCAN_API_KEY;
 if(!key)throw new Error('Set ETHERSCAN_API_KEY in the process environment.');
-const manifest=JSON.parse(readFileSync(new URL('../deployments/4663-tokenized-v1.json',import.meta.url),'utf8'));
-const path=new URL('../deployments/4663-tokenized-v1-verification.json',import.meta.url);
+const version=process.argv.find(arg=>arg.startsWith('--version='))?.slice(10)??'v1';
+if(!/^v[1-9][0-9]*$/.test(version))throw new Error('Invalid deployment version.');
+const manifest=JSON.parse(readFileSync(new URL(`../deployments/4663-tokenized-${version}.json`,import.meta.url),'utf8'));
+const path=new URL(`../deployments/4663-tokenized-${version}-verification.json`,import.meta.url);
 const record=existsSync(path)?JSON.parse(readFileSync(path,'utf8')):{};
 const entries={...manifest.steps,MemberFactory:{...manifest.factory,constructorArgs:[manifest.dependencies.usdg,manifest.dependencies.lighter]}};
 for(const [name,entry] of Object.entries(entries)){

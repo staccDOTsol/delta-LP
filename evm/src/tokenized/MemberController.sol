@@ -62,6 +62,13 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
         bool completed;
     }
 
+    struct VenueSetup {
+        bytes32 publicKeyHash;
+        uint16 initialMarginBps; // zero only when the owner abandons margin setup
+        uint64 generation;
+        bool pending;
+    }
+
     struct Report {
         uint64 sequence;
         uint64 action;
@@ -92,6 +99,7 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
     mapping(bytes32 => uint256) public registeredSeries;
     mapping(uint256 => uint256) public requestBatch;
     mapping(uint256 => uint256) public batchSize;
+    mapping(uint256 => VenueSetup) public venueSetup;
 
     event MemberCreated(
         uint256 indexed member, bytes32 indexed group, address token, address custody, uint8 leverage, bool short
@@ -109,6 +117,9 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
     event NeutralBatchRequested(uint256 indexed firstRequest, uint256 count, uint256 assets);
     event HouseFeePaid(uint256 indexed request, address indexed token, uint256 amount, bool exit);
     event VenueAction(uint256 indexed member, uint64 nonce, uint8 kind, int256 amount);
+    event VenueSetupRequested(uint256 indexed member, uint64 generation, bytes32 publicKeyHash, uint16 marginBps);
+    event VenueSetupConfirmed(uint256 indexed member, uint64 generation, bytes32 evidenceHash);
+    event VenueMarginAbandoned(uint256 indexed member, uint64 generation);
     event Reconciled(
         uint256 indexed member, uint64 sequence, uint64 action, uint256 nav, int256 position, bytes32 evidenceHash
     );
@@ -205,7 +216,36 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
     }
 
     function setEnabled(uint256 id, bool enabled) external onlyOwner {
+        if (enabled && venueSetup[id].pending) revert PendingOrStale();
         _member(id).enabled = enabled;
+    }
+
+    /// Rotation remains possible during an unresolved action or stale report.
+    /// It does not erase earlier venue work: the final report must reconcile ALL
+    /// orders/transfers and the custody priority watermark includes every request.
+    function configureVenueKey(uint256 id, bytes calldata publicKey, uint16 marginBps) external onlyOwner nonReentrant {
+        require(marginBps != 0 && marginBps <= BPS);
+        Member storage m = _member(id);
+        VenueSetup storage setup = venueSetup[id];
+        bytes32 keyHash = keccak256(publicKey);
+        require(keyHash != setup.publicKeyHash, "Key already requested");
+        setup.publicKeyHash = keyHash;
+        setup.initialMarginBps = marginBps;
+        ++setup.generation;
+        setup.pending = true;
+        m.enabled = false;
+        _action(id, m, 5, int256(uint256(marginBps)));
+        m.custody.configureKey(publicKey);
+        emit VenueSetupRequested(id, setup.generation, keyHash, marginBps);
+    }
+
+    /// If the venue refuses a margin change, allow recovery at its observed setting.
+    /// This does not bypass key confirmation, unsettled actions, or reopen entries.
+    function abandonVenueMargin(uint256 id) external onlyOwner {
+        VenueSetup storage setup = venueSetup[id];
+        require(setup.pending);
+        setup.initialMarginBps = 0;
+        emit VenueMarginAbandoned(id, setup.generation);
     }
 
     function bindAccount(uint256 id, uint48 index) external {
@@ -414,6 +454,24 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
     /// cancelled remainders, before reporting a settled state. No HTTP ACK is a fill.
     function reconcile(uint256 id, Report calldata r) external {
         if (msg.sender != reporter) revert NotAuthorized();
+        if (venueSetup[id].pending) revert PendingOrStale();
+        _reconcile(id, r);
+    }
+
+    /// Trusted reporter attests the API's registered key and observed cross-margin
+    /// setting together with the ordinary account/queue/settlement evidence.
+    /// An L1 receipt or a sendTx ACK is insufficient for this report.
+    function reconcileVenueSetup(uint256 id, Report calldata r, bytes32 observedKeyHash) external {
+        if (msg.sender != reporter) revert NotAuthorized();
+        VenueSetup storage setup = venueSetup[id];
+        require(setup.pending && observedKeyHash == setup.publicKeyHash, "Venue key not confirmed");
+        require(setup.initialMarginBps == 0 || r.initialMarginBps == setup.initialMarginBps, "Margin not confirmed");
+        _reconcile(id, r);
+        setup.pending = false;
+        emit VenueSetupConfirmed(id, setup.generation, r.evidenceHash);
+    }
+
+    function _reconcile(uint256 id, Report calldata r) private {
         Member storage m = _member(id);
         if (
             !m.custody.priorityProcessed() || !r.ordersAndTransfersSettled || r.evidenceHash == bytes32(0)

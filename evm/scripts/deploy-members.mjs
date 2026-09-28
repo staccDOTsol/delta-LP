@@ -5,8 +5,10 @@ import {client,rpc,loadSigner,stringify} from './preflight.mjs';
 // Deploys empty software only. Does not enable members, fund accounts, approve USDG,
 // place orders or seed pools. Reruns reconcile saved transaction hashes before proceeding.
 const broadcast=process.argv.includes('--broadcast');
-const path=new URL('../deployments/4663-tokenized-v1.json',import.meta.url);
-const journalDir=new URL('../../artifacts/member-deployment/',import.meta.url);
+const version=process.argv.find(arg=>arg.startsWith('--version='))?.slice(10)??'v1';
+if(!/^v[1-9][0-9]*$/.test(version))throw new Error('Use --version=vN for an immutable deployment version.');
+const path=new URL(`../deployments/4663-tokenized-${version}.json`,import.meta.url);
+const journalDir=new URL(version==='v1'?'../../artifacts/member-deployment/':`../../artifacts/member-deployment-${version}/`,import.meta.url);
 const account=loadSigner();
 const chain=defineChain({id:4663,name:'Robinhood Chain',nativeCurrency:{name:'Ether',symbol:'ETH',decimals:18},rpcUrls:{default:{http:[rpc]}}});
 const wallet=createWalletClient({account,chain,transport:http(rpc)});
@@ -15,7 +17,7 @@ const dependencies={usdg:'0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168',lighter:'0
   create2:'0x4e59b44847b379578588920cA78FbF26c0B4956C'};
 const maxTotalFee=1_000_000_000_000_000n; // 0.001 ETH maximum across this deployment journal
 const manifest=existsSync(path)?JSON.parse(readFileSync(path,'utf8')):{chainId:4663,authority:account.address,
-  status:'preparing-empty-contracts',dependencies,steps:{},depositsEnabled:false,liveTrading:false};
+  version,status:'preparing-empty-contracts',dependencies,steps:{},depositsEnabled:false,liveTrading:false};
 if(manifest.chainId!==4663||manifest.authority.toLowerCase()!==account.address.toLowerCase())throw new Error('Deployment journal identity mismatch.');
 if(await client.getChainId()!==4663)throw new Error('Unexpected chain.');
 for(const [name,address] of Object.entries(dependencies))if(!(await client.getCode({address})))throw new Error(`Missing dependency: ${name}`);
