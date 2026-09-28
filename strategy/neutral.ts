@@ -4,15 +4,30 @@ import {legacyNeutralDeployment} from './legacy-neutral-deployment.js';
 import {neutralAbi,allocationAbi} from './neutral-abi.js';
 import {neutralDeployments,type NeutralDeployment} from './neutral-deployment.js';
 import {rpcEndpoint} from './rpc-config.js';
+import {nftDeployment} from './nft-deployment.js';
 
 export type NeutralState={symbol:string;address:Address;block:string;observedAt:string;tiers:number;
   entryFeeBps:number;exitFeeBps:number;
-  configured:boolean;entriesOpen:boolean;epoch:string;phase:number;pendingAssets:string;minimumBatchAssets:string;
+  configured:boolean;entriesOpen:boolean;epoch:string;phase:number;pendingAssets:string;nftContributions:string;minimumBatchAssets:string;
   totalSupply:string;nav:string|null;delta:string|null;gross:string|null;allocationSettled:boolean;
   readyToActivate:boolean;activationIssue:string|null};
 // This reader is also imported by the browser. Only the public endpoint belongs
 // here; the server wrapper supplies its own client without importing secrets.
 const publicRpc=createPublicClient({transport:http(rpcEndpoint(import.meta.env?.VITE_ROBINHOOD_RPC_URL),{timeout:10000})});
+const batchAbi=parseAbi(['function currentBatch() view returns(address)','function collecting() view returns(bool)','function totalContributions() view returns(uint256)']);
+// USDG minted into the NFT contribution escrow counts toward the batch minimum
+// (NftContributionBatch.queue checks contributions + vault.pendingAssets) but only
+// reaches vault.pendingAssets once queued, so it is read separately while collecting.
+async function readNftContributions(vault:Address,rpc:typeof publicRpc,blockNumber:bigint):Promise<bigint>{
+  if(!nftDeployment||nftDeployment.receipt.toLowerCase()!==vault.toLowerCase())return 0n;
+  const batch=await rpc.readContract({address:nftDeployment.adapter,abi:batchAbi,functionName:'currentBatch',blockNumber}).catch(()=>zeroAddress);
+  if(batch===zeroAddress)return 0n;
+  const [collecting,total]=await Promise.all([
+    rpc.readContract({address:batch,abi:batchAbi,functionName:'collecting',blockNumber}),
+    rpc.readContract({address:batch,abi:batchAbi,functionName:'totalContributions',blockNumber}),
+  ]).catch(()=>[false,0n] as const);
+  return collecting?total:0n;
+}
 const feeAbi=parseAbi(['function ENTRY_FEE_BPS() view returns(uint256)','function EXIT_FEE_BPS() view returns(uint256)']);
 export async function readNeutral(d:NeutralDeployment,rpc=publicRpc):Promise<NeutralState>{
   const legacy=d.address.toLowerCase()===legacyNeutralDeployment.address.toLowerCase();
@@ -33,7 +48,10 @@ export async function readNeutral(d:NeutralDeployment,rpc=publicRpc):Promise<Neu
     rpc.readContract({address:controller,abi:feeAbi,functionName:'EXIT_FEE_BPS',blockNumber:block.number}),
   ]);
   if(entryFee!==BigInt(fees.entryFeeBps)||exitFee!==BigInt(fees.exitFeeBps))throw new Error('Neutral fee policy mismatch.');
-  const portfolio=await rpc.readContract({address:d.address,abi:neutralAbi,functionName:'portfolio',blockNumber:block.number}).catch(()=>null);
+  const [portfolio,nftContributions]=await Promise.all([
+    rpc.readContract({address:d.address,abi:neutralAbi,functionName:'portfolio',blockNumber:block.number}).catch(()=>null),
+    legacy?Promise.resolve(0n):readNftContributions(d.address,rpc,block.number),
+  ]);
   const allocationSettled=allocation!==zeroAddress&&await rpc.readContract({address:allocation,abi:allocationAbi,functionName:'settled',blockNumber:block.number});
   let readyToActivate=false,activationIssue:string|null=null;
   if(phase===1&&allocationSettled){
@@ -42,7 +60,7 @@ export async function readNeutral(d:NeutralDeployment,rpc=publicRpc):Promise<Neu
   }
   return {symbol:d.symbol,address:d.address,block:String(block.number),observedAt:new Date(Number(block.timestamp)*1000).toISOString(),tiers,
     entryFeeBps:Number(entryFee),exitFeeBps:Number(exitFee),
-    configured,entriesOpen,epoch:String(epoch),phase,pendingAssets:String(pending),minimumBatchAssets:String(minimum),totalSupply:String(supply),
+    configured,entriesOpen,epoch:String(epoch),phase,pendingAssets:String(pending),nftContributions:String(nftContributions),minimumBatchAssets:String(minimum),totalSupply:String(supply),
     nav:portfolio?String(portfolio[0]):null,delta:portfolio?String(portfolio[1]):null,gross:portfolio?String(portfolio[2]):null,
     allocationSettled,readyToActivate,activationIssue};
 }
