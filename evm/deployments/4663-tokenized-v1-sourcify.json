@@ -1,0 +1,30 @@
+{
+  "MemberController": {
+    "address": "0x5231bc96BfdDD9982c0464ECEcAEA640c9F70a08",
+    "match": "match",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T05:40:53Z"
+  },
+  "HouseFeeRouter": {
+    "address": "0xd28aD2F603D46e8081C9Df475ce2362d02601E11",
+    "match": "match",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T05:42:02Z"
+  },
+  "MemberV4Hook": {
+    "address": "0x72385de34b845bB5Ac3ea88df6d6D8B013b5a540",
+    "match": "match",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T05:42:46Z"
+  },
+  "MemberFactory": {
+    "address": "0xff73D192FCb5fFEb1E6E9316175a5d9f84d50247",
+    "match": "match",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T05:42:47Z"
+  }
+}

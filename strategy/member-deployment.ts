@@ -1,4 +1,4 @@
-{
+const deployment = {
   "chainId": 4663,
   "status": "prototype",
   "contracts": {
@@ -23,4 +23,5 @@
     }
   },
   "fanout": "0x1b88A6c6516FD2918905186F21Bb9F5CaA1a15c8"
-}
+} as const;
+export default deployment;

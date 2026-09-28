@@ -9,3 +9,5 @@ docs/
 .git/
 .venv-execution/
 execution/
+artifacts/
+coverage/

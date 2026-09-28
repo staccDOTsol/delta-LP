@@ -1,5 +1,5 @@
 import {createPublicClient,getAddress,http,keccak256,parseAbi} from 'viem';
-import deployment from './member-deployment.json';
+import deployment from './member-deployment.js';
 
 const client=createPublicClient({transport:http('https://rpc.mainnet.chain.robinhood.com',{timeout:10_000})});
 const abi=parseAbi(['function memberCount() view returns (uint256)','function ENTRY_FEE_BPS() view returns (uint256)',

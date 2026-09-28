@@ -4,6 +4,17 @@ Status: experimental core contracts deployed on Robinhood mainnet; **tokenized t
 Deployment: [transaction and bytecode manifest](../evm/deployments/4663-tokenized-v1.json).
 The controller has zero registered members and no funded accounts.
 The site reads `/api/strategies/tokenized` to verify the four deployed runtime-code hashes.
+All four have matching creation and runtime source on Sourcify; see the
+[verification record](../evm/deployments/4663-tokenized-v1-sourcify.json).
+Etherscan's separate verification submissions remain pending.
+
+| Contract | Robinhood mainnet address |
+| --- | --- |
+| Controller | `0x5231bc96BfdDD9982c0464ECEcAEA640c9F70a08` |
+| Member factory | `0xff73D192FCb5fFEb1E6E9316175a5d9f84d50247` |
+| V4 activity hook | `0x72385de34b845bB5Ac3ea88df6d6D8B013b5a540` |
+| Wizards fee router | `0xd28aD2F603D46e8081C9Df475ce2362d02601E11` |
+
 These contracts do not upgrade the deployed NVDA/Morpho vault. The public trading UI
 still accesses the visitor's own Lighter account and does not mint these tokens.
 
