@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {formatUnits} from 'viem';
-import {exactUnits,makePlan,marginBps,reconcileOrder,transactionState,type TradingAccount} from '../strategy/execution.js';
+import {accountSchema,availableUSDG,exactUnits,makePlan,marginBps,reconcileOrder,transactionState,type TradingAccount} from '../strategy/execution.js';
 import type {Market} from '../strategy/lighter.js';
 
 export const testAccount:TradingAccount={index:100000,l1_address:'0x1111111111111111111111111111111111111111',account_type:0,account_trading_mode:0,
@@ -37,12 +37,39 @@ test('too little collateral, excess balance and outstanding orders fail before s
   assert.throws(()=>makePlan(request,market,{...account,pending_order_count:1}));
   account.positions[0].position_tied_order_count=1;assert.throws(()=>makePlan(request,market,account));
 });
-test('new opens require a flat, classic, master account',()=>{
+test('new opens require a flat master account and verified collateral mode',()=>{
   const {account,market}=fixture();
   assert.throws(()=>makePlan(request,market,{...account,account_type:2}));
   assert.throws(()=>makePlan(request,market,{...account,account_trading_mode:1}));
   account.positions[0].position='0.0010';account.positions[0].sign=1;
   assert.throws(()=>makePlan(request,market,account));
+});
+test('newly funded Unified account plans isolated orders from confirmed USDG margin',()=>{
+  const {account,market}=fixture();
+  // Shape of the first-deposit account response, with no positions yet.
+  const unified=accountSchema.parse({...account,account_trading_mode:1,positions:[],available_balance:'5.000000',collateral:'5.000000',assets:[
+    {asset_id:3,symbol:'USDG',balance:'0.000000',locked_balance:'0.000000',margin_mode:'enabled',margin_balance:'5.000000',multiplier:'1.000000000000000000'},
+  ]});
+  for(const side of ['long','short'] as const)for(const leverage of [3,5,10] as const){
+    const plan=makePlan({...request,side,leverage},market,unified);assert.ok(Number(plan.notional)<5*leverage);assert.equal(plan.reduceOnly,false);
+  }
+  assert.equal(availableUSDG(unified),5_000_000n);
+  assert.equal(availableUSDG({...unified,available_balance:'10'}),5_000_000n);
+  assert.equal(availableUSDG({...unified,available_balance:'4'}),4_000_000n);
+});
+test('Unified openings reject unknown, mixed, disabled or mismatched collateral',()=>{
+  const {account,market}=fixture();
+  const asset={asset_id:3,symbol:'USDG',margin_mode:'enabled',margin_balance:'5',multiplier:'1'};
+  const unified={...account,account_trading_mode:1,assets:[asset]};
+  for(const assets of [undefined,[],[asset,asset],[{...asset,symbol:'USDC'}],[{...asset,margin_mode:'disabled'}],[{...asset,multiplier:'1.01'}],[{...asset,margin_balance:'4'}],[asset,{...asset,asset_id:20,symbol:'SPY',margin_balance:'1'}],[asset,{...asset,asset_id:20,symbol:'SPY',margin_balance:'-1'}]]){
+    assert.throws(()=>makePlan(request,market,{...unified,assets}));
+  }
+  assert.throws(()=>makePlan(request,market,{...unified,account_trading_mode:2}));
+});
+test('Unified reduce-only exits remain available with mixed collateral or negative equity',()=>{
+  const {account,market}=fixture();account.account_trading_mode=1;account.available_balance='-1';account.collateral='-1';
+  account.positions[0].position='0.0001';account.positions[0].sign=1;
+  const plan=makePlan({...request,collateral:'0'},market,account,true);assert.equal(plan.reduceOnly,true);assert.equal(plan.side,'short');
 });
 test('close uses exact current size and reduce-only, including below opening minimum',()=>{
   for(const sign of [-1,1]){

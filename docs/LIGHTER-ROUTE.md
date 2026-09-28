@@ -32,7 +32,9 @@ pending transaction recovery. `TradingPanel.tsx` renders the user's review step.
    no seed, private key, signature, or auth token is saved in localStorage or sent to
    the deltaLP backend. Reconnect with the same wallet/domain to recover the key.
    API slot 42 is dedicated to this client; an occupied nonmatching slot is never
-   overwritten. Revocation uses a separate wallet signature. Closing the page alone
+   overwritten. Lookup uses the documented all-keys endpoint (`api_key_index=255`),
+   since an unregistered single slot returns HTTP 400/code 21109. Registration must
+   also appear in the key list before the client reports authorization. Revocation uses a separate wallet signature. Closing the page alone
    does **not** revoke the registered key; use the revoke control or Lighter UI.
 4. Select long/short, market, leverage, and collateral input. Review sets isolated
    margin when needed, then reads a fresh book. 3× rounds conservatively to 3334
@@ -76,8 +78,12 @@ Public venue market reads and mobile rendering are checked separately. A funded
 mainnet open/close/withdraw round trip remains unverified. These checks are not an
 audit. The UI's initial collateral input is a sizing budget, not a guarantee that
 funding fees, liquidation losses or venue-calculated margin can never exceed it.
-Use a dedicated classic-mode master account; shared exposures, unified collateral,
-and public pools require different risk accounting and are rejected by this version.
+Use a dedicated master account. Classic mode and Unified mode backed solely by USDG
+are supported. Unified spendable USDG is capped at the lower of available margin and
+the confirmed USDG margin balance; mixed collateral and unknown account modes fail
+before an opening order. Reduce-only exits do not require positive collateral.
+The adapter never changes the account mode. Shared exposures and public pools are
+not supported. The venue currently requires at least 1 USDG for withdrawals.
 
 ## Delta-neutral LP work still required
 

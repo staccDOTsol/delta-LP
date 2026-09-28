@@ -1,6 +1,6 @@
 import {createPublicClient,createWalletClient,custom,defineChain,encodeFunctionData,formatUnits,http,parseAbi,toHex,type Address,type EIP1193Provider,type Hash} from 'viem';
 import {z} from 'zod';
-import {accountSchema,assertNoOrders,exactUnits,makePlan,marginBps,reconcileOrder,signedPosition,signedUnits,transactionState,type OrderPlan,type TradingAccount} from '../../strategy/execution.js';
+import {accountSchema,assertNoOrders,assertTradingAccount,availableUSDG,exactUnits,makePlan,marginBps,reconcileOrder,signedPosition,transactionState,type OrderPlan,type TradingAccount} from '../../strategy/execution.js';
 import {LIGHTER_API,marketIds,type Market} from '../../strategy/lighter.js';
 import {wasm} from './wasm.js';
 
@@ -17,9 +17,15 @@ export type Outcome={state:string;message:string;hash?:string};
 const delay=(ms:number)=>new Promise(resolve=>setTimeout(resolve,ms));
 
 export async function venueGet(path:string,token?:string):Promise<unknown>{
-  const response=await fetch(`${LIGHTER_API}/api/v1/${path}`,{headers:token?{Authorization:token}:{},signal:AbortSignal.timeout(10_000),cache:'no-store'});
-  const value=await response.json();if(value.code===21100)return null;
-  if(!response.ok||value.code!==200)throw new Error('Lighter did not return a valid response. Try refreshing.');
+  const endpoint=path.split('?')[0];
+  let response:Response;
+  try{response=await fetch(`${LIGHTER_API}/api/v1/${path}`,{headers:token?{Authorization:token}:{},signal:AbortSignal.timeout(10_000),cache:'no-store'});}
+  catch{throw new Error('Could not reach Lighter. Check your connection and refresh status.');}
+  const parsed=z.object({code:z.number().int()}).passthrough().safeParse(await response.json().catch(()=>null));
+  if(!parsed.success)throw new Error(`Lighter returned an unreadable response (HTTP ${response.status}). Refresh status.`);
+  const value=parsed.data;
+  if(response.status===400&&value.code===21100&&endpoint==='accountsByL1Address')return null;
+  if(!response.ok||value.code!==200)throw new Error(`Lighter ${endpoint} failed (code ${value.code}, HTTP ${response.status}). Refresh status.`);
   return value;
 }
 const txSchema=z.object({code:z.number(),tx_hash:z.string()});
@@ -59,25 +65,37 @@ export class TradingClient{
     if(!this.account)throw new Error('Deposit USDG to create your Lighter account first.');
     return z.object({nonce:z.number().int().nonnegative()}).parse(await venueGet(`nextNonce?account_index=${this.account.index}&api_key_index=${KEY_INDEX}`)).nonce;
   }
+  private async registeredKey(index:number){
+    // The single-slot endpoint returns HTTP 400 / 21109 for a new key. The
+    // documented all-keys query returns an empty list without treating setup as failure.
+    const keys=z.object({api_keys:z.array(z.object({account_index:z.number().int(),api_key_index:z.number().int(),public_key:z.string().regex(/^(?:0x)?[\da-fA-F]+$/)}))})
+      .parse(await venueGet(`apikeys?account_index=${index}&api_key_index=255`)).api_keys;
+    if(keys.some(key=>key.account_index!==index))throw new Error('Trading key account mismatch.');
+    const matches=keys.filter(key=>key.api_key_index===KEY_INDEX);
+    if(matches.length>1)throw new Error('Duplicate trading key records. Inspect your account on Lighter.');
+    return matches[0]?.public_key.replace(/^0x/,'').toLowerCase();
+  }
   async authorize(){return this.lock(async()=>{
     await this.identity();await this.refresh();if(!this.account)throw new Error('Deposit USDG first.');
-    const index=this.account.index,nonce=await this.nonce();
+    const index=this.account.index,current=await this.registeredKey(index),nonce=await this.nonce();
     // Wallet signature derives a reproducible browser key. Nothing secret is persisted,
     // sent to deltaLP, or included in the execution journal.
     const message=`deltaLP browser trading key\nOnly sign this on ${location.origin}.\nRobinhood Chain: 4663\nLighter signing domain: 466324\nWallet: ${this.address.toLowerCase()}\nAccount: ${index}\nAPI key: ${KEY_INDEX}\nThis signature derives a key that can submit orders. Never share this signature.\nVersion: 1`;
     const signature=await this.wallet().signMessage({message});await this.identity();
     const seed=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(signature)))).map(v=>v.toString(16).padStart(2,'0')).join('');
     const generated=await this.signer<{pk:string;body:string}>('_createClient',seed,466324,index,nonce,KEY_INDEX,false);
-    const keys=z.object({api_keys:z.array(z.object({public_key:z.string()}))}).parse(await venueGet(`apikeys?account_index=${index}&api_key_index=${KEY_INDEX}`));
-    const current=keys.api_keys[0]?.public_key;
-    if(current&&current.replace(/^0x/,'')===generated.pk.replace(/^0x/,'')){this.authorized=true;return {state:'ready',message:'Trading authorized in this browser.'};}
+    const publicKey=generated.pk.replace(/^0x/,'').toLowerCase();
+    if(current&&current===publicKey){this.authorized=true;return {state:'ready',message:'Trading authorized in this browser.'};}
     this.ensureClear();
-    if(current&&!/^0+$/.test(current.replace(/^0x/,'')))throw new Error('API key 42 is already in use. Revoke it in Lighter before authorizing deltaLP.');
+    if(current&&!/^0+$/.test(current))throw new Error('API key 42 is already in use. Revoke it in Lighter before authorizing deltaLP.');
     const proof=await this.signer<{body:string}>('_getChangePubKeyTransaction',index,nonce,KEY_INDEX);
     const registration=await this.wallet().signMessage({message:proof.body});await this.identity();
     const signed=await this.signer<Signed>('_signChangePubKey',index,registration,nonce,KEY_INDEX);
     const result=await this.submit(signed,8,{kind:'key',accountIndex:index});
-    if(result.state==='executed'){this.authorized=true;return {...result,message:'Trading authorized in this browser.'};}return result;
+    if(result.state==='executed'){
+      if(await this.registeredKey(index)!==publicKey)return {...result,state:'pending',message:'Key transaction executed. Authorize again to confirm the registered key.'};
+      this.authorized=true;return {...result,message:'Trading authorized in this browser.'};
+    }return result;
   });}
   async revoke(){return this.lock(async()=>{
     await this.identity();this.ensureClear();if(!this.account)throw new Error('No Lighter account.');
@@ -139,9 +157,10 @@ export class TradingClient{
   }
   async prepare(input:{symbol:keyof typeof marketIds;side:'long'|'short';leverage:3|5|10;collateral:string},close=false){return this.lock(async()=>{
     await this.identity();this.ensureClear();if(!this.authorized)throw new Error('Authorize trading first.');
-    const account=await this.refresh();if(!account)throw new Error('Deposit USDG first.');assertNoOrders(account);
+    const account=await this.refresh();if(!account)throw new Error('Deposit USDG first.');assertNoOrders(account);assertTradingAccount(account);
     if(!close){
       if(account.positions.some(p=>exactUnits(p.position,18)>0n))throw new Error('Close existing positions before opening another.');
+      const requested=exactUnits(input.collateral,6);if(!requested||requested>availableUSDG(account))throw new Error('Not enough available USDG in Lighter.');
       const current=account.positions.find(p=>p.market_id===marketIds[input.symbol]);
       if(current?.margin_mode!==1||exactUnits(current.initial_margin_fraction,2)!==BigInt(marginBps(input.leverage))){
         const signed=await this.signer<Signed>('_signUpdateLeverage',account.index,marketIds[input.symbol],marginBps(input.leverage),1,await this.nonce());
@@ -157,10 +176,10 @@ export class TradingClient{
   async trade(plan:OrderPlan){return this.lock(async()=>{
     await this.identity();this.ensureClear();if(!this.authorized)throw new Error('Authorize trading first.');
     const account=await this.refresh();if(!account||Date.now()>plan.expiresAt)throw new Error('Quote expired. Review a fresh quote.');
-    assertNoOrders(account);
+    assertNoOrders(account);assertTradingAccount(account);
     if(signedPosition(account,plan.marketId,plan.sizeDecimals)!==BigInt(plan.before))throw new Error('Position changed. Review a fresh quote.');
     if(!plan.reduceOnly){
-      if(account.positions.some(p=>exactUnits(p.position,18)>0n)||signedUnits(account.available_balance,6)<exactUnits(plan.collateral,6))throw new Error('Account exposure or balance changed.');
+      if(account.positions.some(p=>exactUnits(p.position,18)>0n)||availableUSDG(account)<exactUnits(plan.collateral,6))throw new Error('Account exposure or balance changed.');
       const margin=account.positions.find(p=>p.market_id===plan.marketId);
       if(!margin||margin.margin_mode!==1||exactUnits(margin.initial_margin_fraction,2)!==BigInt(plan.marginBps))throw new Error('Isolated margin is not confirmed.');
     }
@@ -173,7 +192,8 @@ export class TradingClient{
     await this.identity();this.ensureClear();if(!this.authorized)throw new Error('Authorize trading first.');
     const account=await this.refresh();if(!account)throw new Error('No Lighter account.');assertNoOrders(account);
     if(account.positions.some(p=>exactUnits(p.position,18)>0n))throw new Error('Close positions before withdrawing.');
-    const units=exactUnits(value,6);if(!units||units>signedUnits(account.available_balance,6))throw new Error('Insufficient available USDG.');
+    const units=exactUnits(value,6);if(units<1_000_000n)throw new Error('Withdraw at least 1 USDG.');
+    if(units>availableUSDG(account))throw new Error('Insufficient available USDG.');
     const signed=await this.signer<Signed>('_signWithdraw',account.index,3,0,String(units),await this.nonce());
     const outcome=await this.submit(signed,13,{kind:'withdraw',accountIndex:account.index});
     return outcome.state==='executed'?{...outcome,message:'Withdrawal accepted by Lighter. Settlement to your wallet is still pending; check your wallet balance.'}:outcome;
