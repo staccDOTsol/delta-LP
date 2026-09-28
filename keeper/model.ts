@@ -86,13 +86,20 @@ export function executableLimit(m:Snapshot,report:Report,rawMarket:unknown,rawBo
 
 export function nextMemberAction(m:Snapshot,report:Report,rawMarket:unknown,rawBook:unknown,policy:Policy,now:number):Decision {
   const call=(name:string,args:readonly unknown[],reason:string):Decision=>({state:'ready',call:{target:'controller',name,args,member:m.id,reason,expiresAt:now+5_000}});
+  const rebalance=(reason:string):Decision=>{
+    try{
+      const plan=memberPlan(m,report,rawMarket);
+      const increasing=m.short?plan.delta<0n:plan.delta>0n;
+      if(m.nav>policy.maxMemberAssets&&increasing)return {state:'blocked',reason:'Member NAV exceeds the capital limit; increasing exposure is blocked.'};
+      return call('rebalance',[m.id,executableLimit(m,report,rawMarket,rawBook,policy.maxOrderNotional)],reason);
+    }catch(error){return {state:'blocked',reason:(error as Error).message};}
+  };
   if(m.pendingWithdrawal+m.custodyCash>0n)return call('collectVenueWithdrawal',[m.id],'Collect confirmed returned USDG.');
   const redeem=m.requests.filter(r=>r.redeem&&!r.completed&&r.deadline>=BigInt(Math.floor(now/1000)));
   if(redeem.length){
     const plan=memberPlan(m,report,rawMarket);
     if(plan.state!=='balanced'){
-      try{return call('rebalance',[m.id,executableLimit(m,report,rawMarket,rawBook,policy.maxOrderNotional)],'Reduce actual exposure for queued exits.');}
-      catch(error){return {state:'blocked',reason:(error as Error).message};}
+      return rebalance('Adjust actual exposure for queued exits.');
     }
     const required=m.supply?m.nav*m.redeemShares/m.supply:0n;
     if(required>m.cash){
@@ -105,6 +112,13 @@ export function nextMemberAction(m:Snapshot,report:Report,rawMarket:unknown,rawB
   // Expired requests still reserve shares until their owner cancels. Do not fund
   // or restore exposure against those shares or silently cancel an owner request.
   if(m.redeemShares>0n)return {state:'blocked',reason:'An expired redemption must be recovered by its owner.'};
+  const plan=memberPlan(m,report,rawMarket);
+  // Reductions must not be starved by a capital-limit breach, idle cash or a
+  // pending deposit. Keep the same venue, depth, slippage and order-size checks.
+  const reducing=plan.state==='requires-order-review'&&(m.short
+    ?report.position<plan.desired&&plan.desired<=0n
+    :report.position>plan.desired&&plan.desired>=0n);
+  if(reducing)return rebalance('Reduce existing exposure before considering additional capital.');
   if(m.nav>policy.maxMemberAssets)return {state:'blocked',reason:'Member NAV exceeds the configured capital limit.'};
   const deposit=m.requests.find(r=>!r.redeem&&!r.completed&&r.batch===0n&&r.deadline>=BigInt(Math.floor(now/1000)));
   if(deposit){
@@ -113,10 +127,8 @@ export function nextMemberAction(m:Snapshot,report:Report,rawMarket:unknown,rawB
     return call('settleRequest',[deposit.id],'Issue an eligible individual member deposit.');
   }
   if(m.cash>=1_000_000n&&m.supply>0n)return call('fundVenue',[m.id,m.cash],'Fund the member with its own accounted USDG.');
-  const plan=memberPlan(m,report,rawMarket);
   if(plan.state==='balanced')return {state:'idle',reason:'Actual member exposure is within the controller tolerance.'};
-  try{return call('rebalance',[m.id,executableLimit(m,report,rawMarket,rawBook,policy.maxOrderNotional)],'Rebalance actual exposure using bounded order-book depth.');}
-  catch(error){return {state:'blocked',reason:(error as Error).message};}
+  return rebalance('Rebalance actual exposure using bounded order-book depth.');
 }
 
 export function hasOpenOrders(raw:unknown){const a=accountSchema.parse(raw);try{assertNoOrders(a);return false;}catch{return true;}}

@@ -4,13 +4,21 @@ import {mkdirSync,readFileSync,writeFileSync,existsSync,chmodSync,statSync} from
 import {homedir} from 'node:os';
 import {resolve,join} from 'node:path';
 import {spawn,spawnSync} from 'node:child_process';
-import {exactUnits} from '../strategy/execution.js';
+import {formatUnits} from 'viem';
+import {parseOperatorAmount,UNLIMITED_MEMBER_ASSETS} from './launch-input.js';
 
 // Interactive owner entry point. Never invoked by an observe/check/build command.
 if(!stdin.isTTY)throw new Error('Run keeper:launch in your own interactive terminal.');
 const io=createInterface({input:stdin,output:stdout});
 const directory=resolve('artifacts/keeper-v3'),configPath=join(directory,'config.json');
 const fly=process.argv.includes('--fly'),app='delta-lp-keeper';
+const askAmount=async(label:string,decimals:number,allowUnlimited=false):Promise<bigint>=>{
+  for(;;){
+    const answer=await io.question(label);
+    try{return parseOperatorAmount(answer,decimals,allowUnlimited);}
+    catch(error){console.error((error as Error).message);}
+  }
+};
 let keyFile:string;
 try{
   console.log(`deltaLP operator — ${fly?'Fly.io':'local'}, Robinhood mainnet, ETH 1–50x, 100 members.`);
@@ -20,10 +28,12 @@ try{
     console.log('Existing operator settings:',readFileSync(configPath,'utf8'));
     if((await io.question('Use these saved limits? Type YES: ')).trim()!=='YES')throw new Error('Stopped; edit the saved config before restarting.');
   }else{
-    const member=exactUnits((await io.question('Maximum NAV per member, in USDG: ')).trim(),6);
-    const order=exactUnits((await io.question('Maximum single order notional, in USDG: ')).trim(),6);
-    const gas=exactUnits((await io.question('Lifetime gas budget for this operator journal, in ETH: ')).trim(),18);
-    if(member===0n||order===0n||gas===0n)throw new Error('All limits must be positive.');
+    console.log('A member is one long or short account at one leverage; there are 100. This cap limits equity, not order exposure.');
+    console.log('Amounts accept decimals, commas or scientific notation. The equity cap also accepts unlimited (no practical capital ceiling).');
+    const member=await askAmount('Maximum equity per strategy account, in USDG (or unlimited): ',6,true);
+    console.log(`Per-account equity cap: ${member===UNLIMITED_MEMBER_ASSETS?'unlimited':`${formatUnits(member,6)} USDG`}. Order and gas limits are separate.`);
+    const order=await askAmount('Maximum single order notional, in USDG: ',6);
+    const gas=await askAmount('Lifetime gas budget for this operator journal, in ETH: ',18);
     mkdirSync(directory,{recursive:true,mode:0o700});chmodSync(directory,0o700);
     writeFileSync(configPath,JSON.stringify({maxMemberAssets:String(member),maxOrderNotional:String(order),maximumGasWei:String(gas),
       refreshSeconds:15,cancelAfterSeconds:5,pollSeconds:3,ownerBootstrap:true},null,2)+'\n',{mode:0o600});

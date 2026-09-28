@@ -71,6 +71,32 @@ test('cash funding uses only accounted member cash and respects configured capit
   assert.equal(d.state,'ready');if(d.state==='ready'){assert.equal(d.call.name,'fundVenue');assert.equal(d.call.args[1],10_000_000n);}
   assert.equal(nextMemberAction({...funded,nav:300_000_000n},report(),market,book,policy,1_011_000).state,'blocked');
 });
+test('capital breaches and pending deposits cannot starve long or short exposure reductions',()=>{
+  const deposit={id:9n,member:1n,amount:250_000_000n,minimum:1n,createdAt:1000n,deadline:2000n,redeem:false,completed:false,batch:0n};
+  for(const short of [false,true])for(const cap of [200_000_000n,400_000_000n]){
+    const member={...m,short,nav:300_000_000n,cash:10_000_000n,requests:[deposit]};
+    const r={...report(),venueEquity:290_000_000n,position:short?-4000n:4000n};
+    const d=nextMemberAction(member,r,market,book,{...policy,maxMemberAssets:cap},1_011_000);
+    assert.equal(d.state,'ready');
+    if(d.state==='ready'){assert.equal(d.call.name,'rebalance');assert.equal(d.call.args[1],short?250250:249750);}
+    const bounded=nextMemberAction(member,r,market,book,{...policy,maxMemberAssets:cap,maxOrderNotional:1n},1_011_000);
+    assert.equal(bounded.state,'blocked');if(bounded.state==='blocked')assert.match(bounded.reason,/notional/);
+    const shallow={...book,bids:[{price:'2499.99',remaining_base_amount:'0.001'}],asks:[{price:'2500.01',remaining_base_amount:'0.001'}]};
+    const noDepth=nextMemberAction(member,r,market,shallow,{...policy,maxMemberAssets:cap},1_011_000);
+    assert.equal(noDepth.state,'blocked');if(noDepth.state==='blocked')assert.match(noDepth.reason,/depth/);
+  }
+});
+test('capital breaches still block exposure increases, including underweight partial exits',()=>{
+  for(const short of [false,true]){
+    const member={...m,short,nav:300_000_000n};
+    const r={...report(),venueEquity:300_000_000n,position:short?-3400n:3400n};
+    assert.equal(nextMemberAction(member,r,market,book,policy,1_011_000).state,'blocked');
+    const shares=m.supply/2n;
+    const exit={...member,redeemShares:shares,requests:[{id:10n,member:1n,amount:shares,minimum:1n,createdAt:1000n,deadline:2000n,redeem:true,completed:false,batch:0n}]};
+    const d=nextMemberAction(exit,{...r,position:short?-1000n:1000n},market,book,policy,1_011_000);
+    assert.equal(d.state,'blocked');if(d.state==='blocked')assert.match(d.reason,/increasing exposure/);
+  }
+});
 test('queued full exit reduces first, withdraws second, then settles; over-budget exits remain possible',()=>{
   const exiting={...m,redeemShares:m.supply,requests:[{id:1n,member:1n,amount:m.supply,minimum:90_000_000n,createdAt:1000n,deadline:2000n,redeem:true,completed:false,batch:0n}]};
   const smallPolicy={...policy,maxMemberAssets:1n};

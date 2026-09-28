@@ -58,6 +58,14 @@ puts the key in shell arguments or image layers. This is an explicit upload of
 signing authority to Fly; the cloud worker writes restricted runtime files under
 `/run/delta-keeper`, outside the persistent journal volume.
 
+Amount prompts accept plain decimals, grouped commas (`1,000,000`) and scientific
+notation (`1e30`) without rounding. The per-member equity cap also accepts
+`unlimited`, `inf` or `infinity`, stored as the maximum uint256 value in USDG
+micro-units. This removes the practical capital ceiling; it does not disable
+venue checks, the separately chosen order limit or the gas budget. Invalid input
+prints an explanation and repeats the prompt. The order and gas prompts require
+finite positive values.
+
 To return the worker to observation mode, run:
 
 ```sh
@@ -114,7 +122,7 @@ Edit `artifacts/keeper-v3/config.json` and replace the three zero limits:
 
 | Setting | Meaning |
 | --- | --- |
-| `maxMemberAssets` | Maximum accounted NAV for each individual member, in USDG micro-units. `1000000` is 1 USDG. There are 100 members. |
+| `maxMemberAssets` | Capital ceiling for additional equity and exposure per individual member, in USDG micro-units. `1000000` is 1 USDG. There are 100 members. The launcher supports explicit `unlimited`; JSON stores its integer uint256 maximum. |
 | `maxOrderNotional` | Maximum notional of any single rebalance, in USDG micro-units, including reductions. It must accommodate the tiers you operate. |
 | `maximumGasWei` | Lifetime ETH gas budget for this journal, in wei. `1000000000000000` is 0.001 ETH. Unconfirmed transactions reserve their maximum cost. |
 | `ownerBootstrap` | Set `true` to initialize unused members, open deposit collection, register first venue keys, and configure cross margin. It never rotates an existing configured key. |
@@ -123,6 +131,12 @@ Capital and gas limits are operator decisions, not defaults supplied by the app.
 Keep the polling, cancellation and reporting intervals from the example initially.
 The gas budget includes ongoing reports for 100 members; the displayed deployment
 gas cost is not an estimate of ongoing operating cost.
+
+Above the capital ceiling, the keeper blocks new capital and exposure increases.
+It still permits exposure reductions, withdrawal collection and eligible exits,
+subject to the same order, venue and accounting checks. Reductions take priority
+over additional funding or a pending deposit. This ceiling does not automatically
+close a position or limit its possible losses.
 
 Start the signing process yourself:
 
