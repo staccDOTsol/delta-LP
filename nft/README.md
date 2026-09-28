@@ -84,12 +84,17 @@ Start an isolated Anvil fork on loopback port9557, then run:
 
 ```sh
 node nft/simulate-deployment.mjs
+node nft/simulate-pending-mint.mjs
 ```
 
 The script rejects remote endpoints, checks chain/client identity, simulates the
 complete plan, and records plan/runtime hashes and configuration checks. The
 impersonation balance is local test ETH only. Submit the reviewed bundle through
 the deployment task's sole transaction writer; do not compete with the keeper.
+The second script uses the actual simulated CREATE2 addresses to mint two editions
+with zero DN supply, verify real USDG pooling, transfer one NFT and withdraw its
+pending cash through the new owner's account. Those mint/withdrawal transactions
+exist only on the isolated fork; their report is not evidence of mainnet sales.
 
 After broadcast, save actual address-to-creation-tx hashes and run:
 
