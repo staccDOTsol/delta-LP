@@ -9,6 +9,7 @@ const root=new URL('../../',import.meta.url);
 const manifest=JSON.parse(readFileSync(new URL(`evm/deployments/4663-tokenized-${version}.json`,root),'utf8'));
 const registryFile=`4663-neutral-${version}-registry.json`;
 const registry=JSON.parse(readFileSync(new URL(`evm/deployments/${registryFile}`,root),'utf8'));
+const nft=JSON.parse(readFileSync(new URL(`evm/deployments/4663-nft-${version}.json`,root),'utf8'));
 if(manifest.controllerName!=='SplitFeeMemberController'||manifest.chainId!==4663||await client.getChainId()!==4663)throw new Error('Wrong replacement deployment.');
 const art=name=>JSON.parse(readFileSync(new URL(`evm/out/${name==='NeutralEscrowFactory'?'NeutralEscrows':name}.sol/${name}.json`,root),'utf8'));
 const names={MemberController:'SplitFeeMemberController',HouseFeeRouter:'SplitHouseFeeRouter',WeightedNftFeeFanout:'WeightedNftFeeFanout',MemberV4Hook:'MemberV4Hook',NeutralEscrowFactory:'NeutralEscrowFactory',NeutralVault:'NeutralVault'};
@@ -25,7 +26,12 @@ const read=(label,functionName,args=[])=>client.readContract({address:contracts[
 const controller=contracts.MemberController.address,vault=contracts.NeutralVault.address,router=contracts.HouseFeeRouter.address;
 if(registry.controller.toLowerCase()!==controller.toLowerCase()||registry.vault.toLowerCase()!==vault.toLowerCase()||registry.members.length!==100||new Set(registry.members.map(m=>m.id)).size!==100)throw new Error('Replacement registry mismatch.');
 if(await read('MemberController','ENTRY_FEE_BPS')!==300n||await read('MemberController','EXIT_FEE_BPS')!==600n||(await read('MemberController','feeRouter')).toLowerCase()!==router.toLowerCase())throw new Error('Replacement fee policy mismatch.');
-if(!await read('WeightedNftFeeFanout','configured')||await read('WeightedNftFeeFanout','tokenCount')!==70000n||await read('WeightedNftFeeFanout','totalWeight')!==1880000n)throw new Error('Seven NFT collections must be permanently configured before publishing bindings.');
+if(!await read('WeightedNftFeeFanout','configured')||await read('WeightedNftFeeFanout','tokenCount')!==40000n||await read('WeightedNftFeeFanout','totalWeight')!==180000n)throw new Error('Four NFT collections must be permanently configured before publishing bindings.');
+if(nft.status!=='deployed-paused'||nft.collections.length!==4||nft.dependencies.receipt.address.toLowerCase()!==vault.toLowerCase())throw new Error('Pending NFT deployment mismatch.');
+const pendingAdapter=nft.deployments.find(d=>d.contract==='DnPendingAdapter');
+const pendingCode=pendingAdapter&&await client.getCode({address:pendingAdapter.address,blockNumber});
+if(!pendingCode||keccak256(pendingCode)!==pendingAdapter.runtimeCodeHash)throw new Error('NFT adapter runtime mismatch.');
+for(let i=0;i<4;i++)if((await read('WeightedNftFeeFanout','collections',[BigInt(i)])).toLowerCase()!==nft.collections[i].address.toLowerCase())throw new Error('NFT collection registry mismatch.');
 if((await read('HouseFeeRouter','nftFanout')).toLowerCase()!==contracts.WeightedNftFeeFanout.address.toLowerCase())throw new Error('NFT router wiring mismatch.');
 if(!await read('NeutralVault','configured')||await read('NeutralVault','entriesOpen')||await read('NeutralVault','totalSupply')!==0n||await read('NeutralVault','pendingAssets')!==0n)throw new Error('Replacement must be configured, closed and empty before initial promotion.');
 if((await read('NeutralVault','controller')).toLowerCase()!==controller.toLowerCase()||await read('NeutralVault','tiers')!==50)throw new Error('Replacement vault identity mismatch.');
@@ -41,4 +47,7 @@ const deployment={chainId:4663,version,registryFile,genesisBlock,feePolicy:{entr
 writeFileSync(new URL('strategy/member-deployment.ts',root),`const deployment = ${JSON.stringify(deployment,null,2)} as const;\nexport default deployment;\n`);
 const neutral=[{symbol:'ETH',address:vault,runtimeCodeHash:contracts.NeutralVault.runtimeCodeHash,block:manifest.steps.NeutralVault.blockNumber,tiers:50}];
 writeFileSync(new URL('strategy/neutral-deployment.ts',root),`import type {Address,Hash} from 'viem';\nexport type NeutralDeployment={symbol:'ETH';address:Address;runtimeCodeHash:Hash;block:string;tiers:number};\nexport const neutralDeployments:readonly NeutralDeployment[]=${JSON.stringify(neutral,null,2)};\n`);
+const nftBinding={adapter:pendingAdapter.address,adapterRuntimeCodeHash:pendingAdapter.runtimeCodeHash,receipt:vault,
+  collections:nft.collections.map(({denomination,address})=>({denomination,address}))};
+writeFileSync(new URL('strategy/nft-deployment.ts',root),`import type {Address,Hash} from 'viem';\nexport type NftDeployment={adapter:Address;adapterRuntimeCodeHash:Hash;receipt:Address;collections:readonly {denomination:number;address:Address}[]};\nexport const nftDeployment:NftDeployment|null=${JSON.stringify(nftBinding,null,2)};\n`);
 console.log(JSON.stringify({version,block:String(blockNumber),controller,vault,router,status:'Local bindings written; rebuild site and worker before activation.'}));

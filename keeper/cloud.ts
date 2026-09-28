@@ -3,6 +3,7 @@ import {mkdirSync,readFileSync,writeFileSync,chmodSync} from 'node:fs';
 import {join,resolve} from 'node:path';
 import {cloudHealth} from './cloud-health.js';
 import {errorSummary} from './errors.js';
+import deployment from '../strategy/member-deployment.js';
 
 // Fly starts the same worker as the local CLI. Default observation mode has no
 // signing key, no transaction broadcast, and no public HTTP service.
@@ -10,7 +11,7 @@ const mode=process.env.DELTA_KEEPER_MODE??'observe';
 if(!['observe','execute'].includes(mode))throw new Error('Unknown keeper cloud mode.');
 const port=Number(process.env.DELTA_KEEPER_HEALTH_PORT??8080);
 if(!Number.isInteger(port)||port<1024||port>65535)throw new Error('Invalid keeper health port.');
-const directory=resolve(process.env.DELTA_KEEPER_STATE??'/data/keeper-v3');
+const directory=resolve(process.env.DELTA_KEEPER_STATE??`/data/keeper-${deployment.version}`);
 mkdirSync(directory,{recursive:true,mode:0o700});chmodSync(directory,0o700);
 process.env.DELTA_KEEPER_STATE=directory;
 const runtime=process.env.DELTA_KEEPER_RUNTIME??'/run/delta-keeper';

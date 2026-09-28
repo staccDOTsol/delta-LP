@@ -2,10 +2,13 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {NFT_DENOMINATIONS, NFT_TOTAL_SUPPLY, nftMintAllocation, nftEditionQuote} from '../strategy/nft-editions.js';
 
-test('seven denominations total 70,000 NFTs and $1,880,000 target gross', () => {
-  assert.deepEqual(NFT_DENOMINATIONS, [1, 2, 5, 10, 20, 50, 100]);
-  assert.equal(NFT_TOTAL_SUPPLY, 70_000);
-  assert.equal(NFT_DENOMINATIONS.reduce((sum, value) => sum + value * 10_000, 0), 1_880_000);
+test('four denominations total 40,000 NFTs and $180,000 target gross', () => {
+  assert.deepEqual(NFT_DENOMINATIONS, [1, 2, 5, 10]);
+  assert.equal(NFT_TOTAL_SUPPLY, 40_000);
+  assert.equal(NFT_DENOMINATIONS.reduce((sum, value) => sum + value * 10_000, 0), 180_000);
+  for (const excluded of [20, 50, 100]) {
+    assert.throws(() => nftEditionQuote(excluded as 1, 2500_000000n, 1000, 1000), /Unsupported edition/);
+  }
 });
 
 test('updated mint split is 10% OpenSea, 1% Wizards, 89% routed into DN', () => {

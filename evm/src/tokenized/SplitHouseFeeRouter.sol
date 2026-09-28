@@ -29,7 +29,7 @@ contract SplitHouseFeeRouter is ReentrancyGuard {
         require(IFeeFanout(FANOUT).tokenCount() == 8010 && IFeeFanout(FANOUT).collection() == HOMECOMING,
             "Wizards identity mismatch");
         require(address(WETH).code.length != 0 && address(recipient).code.length != 0, "Missing dependency");
-        require(recipient.tokenCount() == 70_000 && recipient.totalWeight() == 1_880_000, "NFT weights mismatch");
+        require(recipient.tokenCount() == 40_000 && recipient.totalWeight() == 180_000, "NFT weights mismatch");
         nftFanout = recipient;
     }
 

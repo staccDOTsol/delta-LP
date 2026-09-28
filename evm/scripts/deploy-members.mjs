@@ -59,7 +59,7 @@ async function deploy(name,args,create2=false){
       data=concat([salt,init]);
     }
     const estimate=await client.estimateGas({account:account.address,data,to}),gas=estimate*120n/100n;
-    const gasPrice=(await client.getGasPrice())*2n,maximum=gas*gasPrice;
+    const gasPrice=(await client.getGasPrice())*125n/100n,maximum=gas*gasPrice;
     if(spent()+maximum>maxTotalFee)throw new Error('Deployment journal would exceed 0.001 ETH gas cap.');
     if(await client.getBalance({address:account.address})<maximum)throw new Error('Insufficient gas balance.');
     console.log(stringify({name,mode:broadcast?'broadcast':'simulation',address,maximumGasFeeETH:formatEther(maximum)}));
@@ -86,7 +86,7 @@ async function deploy(name,args,create2=false){
       if(pendingNonce!==step.nonce)throw new Error('Account nonce moved; reconcile the prepared deployment before retrying.');
       await client.sendRawTransaction({serializedTransaction:raw});
     }
-    receipt=await client.waitForTransactionReceipt({hash:step.transactionHash,confirmations:2,timeout:60_000});
+    receipt=await client.waitForTransactionReceipt({hash:step.transactionHash,confirmations:2,pollingInterval:1000,timeout:60_000});
   }
   if(receipt.status!=='success')throw new Error(`${name} deployment reverted; inspect the saved receipt.`);
   if(!create2&&receipt.contractAddress?.toLowerCase()!==step.address.toLowerCase())throw new Error('Creation address mismatch.');

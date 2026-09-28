@@ -6,11 +6,12 @@ import {resolve,join} from 'node:path';
 import {spawn,spawnSync} from 'node:child_process';
 import {formatUnits} from 'viem';
 import {parseOperatorAmount,UNLIMITED_MEMBER_ASSETS} from './launch-input.js';
+import deployment from '../strategy/member-deployment.js';
 
 // Interactive owner entry point. Never invoked by an observe/check/build command.
 if(!stdin.isTTY)throw new Error('Run keeper:launch in your own interactive terminal.');
 const io=createInterface({input:stdin,output:stdout});
-const directory=resolve('artifacts/keeper-v3'),configPath=join(directory,'config.json');
+const directory=resolve(`artifacts/keeper-${deployment.version}`),configPath=join(directory,'config.json');
 const fly=process.argv.includes('--fly'),app='delta-lp-keeper';
 const askAmount=async(label:string,decimals:number,allowUnlimited=false):Promise<bigint>=>{
   for(;;){
@@ -21,7 +22,8 @@ const askAmount=async(label:string,decimals:number,allowUnlimited=false):Promise
 };
 let keyFile:string;
 try{
-  console.log(`deltaLP operator — ${fly?'Fly.io':'local'}, Robinhood mainnet, ETH 1–50x, 100 members.`);
+  console.log(`deltaLP operator — ${deployment.version}, ${fly?'Fly.io':'local'}, Robinhood mainnet, ETH 1–50x, 100 members.`);
+  console.log(`Controller: ${deployment.contracts.MemberController.address}. State: ${fly?`/data/keeper-${deployment.version}`:directory}.`);
   console.log('This starts real account setup, collateral transfers and trading. It does not deposit USDG from your wallet.');
   console.log('The DN pool activates at 2,000 USDG total; your capital limits must accommodate all 100 members.');
   if(existsSync(configPath)){
@@ -64,7 +66,7 @@ if(fly){
   for(const field of ['maxMemberAssets','maxOrderNotional','maximumGasWei'])if(typeof config[field]!=='string'||!/^\d+$/.test(config[field])||BigInt(config[field])===0n)throw new Error('Set positive capital, order and gas limits before Fly activation.');
   // No secret in process arguments, shell history, image layers or printed output.
   const imported=spawnSync('flyctl',['secrets','import','--app',app,'--stage'],{encoding:'utf8',input:
-    `DELTA_KEEPER_PRIVATE_KEY=${key}\nDELTA_KEEPER_CONFIG_JSON=${JSON.stringify(config)}\nDELTA_KEEPER_MODE=execute\n`});
+    `DELTA_KEEPER_PRIVATE_KEY=${key}\nDELTA_KEEPER_CONFIG_JSON=${JSON.stringify(config)}\nDELTA_KEEPER_MODE=execute\nDELTA_KEEPER_STATE=/data/keeper-${deployment.version}\n`});
   if(imported.status!==0)throw new Error('Fly secret import failed; secret command output was withheld.');
   console.log('Operator secrets staged. Deploying the single Fly worker.');
   child=spawn('flyctl',['deploy','--app',app,'--config','fly.toml','--ha=false','--no-public-ips','--yes'],{stdio:'inherit'});

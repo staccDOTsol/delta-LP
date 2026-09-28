@@ -10,10 +10,10 @@ export function NftEditions() {
   const [edition, setEdition] = useState<NftDenomination>(1);
   return <section className="nft-editions" id="nft-editions" aria-labelledby="nft-editions-title">
     <div className="nft-editions-heading">
-      <div><span className="wl-kicker">SEVEN COLLECTIONS · 10,000 EACH</span><h2 id="nft-editions-title">An NFT with its own portfolio.</h2></div>
+      <div><span className="wl-kicker">FOUR COLLECTIONS · 10,000 EACH</span><h2 id="nft-editions-title">An NFT with its own portfolio.</h2></div>
       <span className="state-pill">Mint not open</span>
     </div>
-    <p className="nft-editions-intro">Each NFT has an ERC-6551 account that owns its delta-neutral strategy shares. Transfer the NFT and control of that account follows. Seven separate collections, 70,000 NFTs total, with the same ownership model.</p>
+    <p className="nft-editions-intro">Minting helps fund the strategy. Each NFT has an ERC-6551 account with a claim on its mint’s USDG contribution. Contributions pool toward the 2,000 USDG activation threshold, then receive actual DN shares after allocation completes. Transfer the NFT and control of its account follows.</p>
     <fieldset className="nft-pricepoints"><legend>Explore a target mint price</legend><div>
       {NFT_DENOMINATIONS.map(value => <button key={value} type="button" aria-pressed={edition === value} onClick={() => setEdition(value)}>${value}</button>)}
     </div></fieldset>
@@ -22,12 +22,12 @@ export function NftEditions() {
       <dl>
         <div><dt>OpenSea mint fee · 10%</dt><dd>{usd.format(edition * 0.10)}</dd></div>
         <div><dt>Wizards mint fee · 1%</dt><dd>{usd.format(edition * 0.01)}</dd></div>
-        <div><dt>Into the DN strategy · 89%</dt><dd>{usd.format(edition * 0.89)}</dd></div>
-        <div className="nft-backing"><dt>Illustrative backing after DN entry fee</dt><dd>{usd.format(edition * 0.8633)}</dd></div>
+        <div><dt>Toward pooled USDG funding · 89%</dt><dd>{usd.format(edition * 0.89)}</dd></div>
+        <div className="nft-backing"><dt>Illustrative backing after allocation and entry fee</dt><dd>{usd.format(edition * 0.8633)}</dd></div>
       </dl>
     </div>
-    <p className="nft-fee-detail">The planned 3% strategy entry fee is split half to Wizards and half to the seven NFT collections, weighted by mint tier. This illustration assumes the new fee deployment and excludes swap costs and market changes. ETH mint prices will be quoted before launch; dollar values can move.</p>
-    <div className="nft-ownership-notes"><article><h3>The NFT controls the assets</h3><p>DN shares belong to the NFT’s account. Its owner can manage or withdraw them, so account holdings must be checked before buying an NFT.</p></article><article><h3>Royalties for Wizards</h3><p>A 10% secondary royalty is designated for the 8,010-share Homecoming fanout. Payment depends on marketplace enforcement.</p></article></div>
-    <div className="nft-launch-status"><p>Mint integration is in testing. Opening the editions requires the production DN funding adapter, final artwork, and OpenSea setup.</p><a className="inline-link" href={design} target="_blank" rel="noreferrer">Ownership, fees & launch status <ArrowUpRight size={15}/></a></div>
+    <p className="nft-fee-detail">The replacement strategy charges 3% on entry and 6% on exit, split half to Wizards and half to the four NFT collections, weighted 1/2/5/10. Entry fees apply when the pooled funds are allocated. This illustration excludes swap costs and market changes. ETH mint prices will be quoted before launch; dollar values can move.</p>
+    <div className="nft-ownership-notes"><article><h3>Your NFT controls its contribution</h3><p>Before funds enter allocation, the NFT’s account can withdraw its pending USDG. After activation, that account can claim its proportional DN shares. Paid mint fees are not refunded. Check current holdings and claims before buying an NFT.</p></article><article><h3>Royalties for Wizards</h3><p>A 10% secondary royalty is designated for the 8,010-share Homecoming fanout. Payment depends on marketplace enforcement.</p></article></div>
+    <div className="nft-launch-status"><p>All 40,000 launch assets are published and verified. The mint-funded contracts passed fork tests; NFT deployment and sale setup remain in progress. Mint proceeds build the pool, so the creator does not need to seed 2,000 USDG. Pending USDG earns no strategy fees. The $20/$50/$100 editions are saved for later and receive no share of this launch’s fee pool.</p><a className="inline-link" href={design} target="_blank" rel="noreferrer">Ownership, fees & launch status <ArrowUpRight size={15}/></a></div>
   </section>;
 }

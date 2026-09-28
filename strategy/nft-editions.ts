@@ -1,5 +1,5 @@
 /** SeaDrop prices are fixed wei per stage, not permanently fixed dollar prices. */
-export const NFT_DENOMINATIONS = [1, 2, 5, 10, 20, 50, 100] as const;
+export const NFT_DENOMINATIONS = [1, 2, 5, 10] as const;
 export type NftDenomination = typeof NFT_DENOMINATIONS[number];
 export const NFT_EDITION_SIZE = 10_000;
 export const NFT_TOTAL_SUPPLY = NFT_EDITION_SIZE * NFT_DENOMINATIONS.length;

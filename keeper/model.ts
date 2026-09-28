@@ -10,7 +10,7 @@ export type Request = {id:bigint;member:bigint;amount:bigint;minimum:bigint;dead
 export type Snapshot = MemberSnapshot & {id:bigint;enabled:boolean;bound:boolean;mappedIndex:number;confirmedAction:bigint;mark:bigint;
   observedAt:bigint;nav:bigint;position:bigint;venueAvailable:bigint;initialMarginBps:number;setup:SetupState;
   pendingWithdrawal:bigint;custodyCash:bigint;actions:Action[];requests:Request[]};
-export type Call = {target:'controller'|'vault'|'exit';address?:Address;name:string;args:readonly unknown[];member?:bigint;reason:string;expiresAt:number};
+export type Call = {target:'controller'|'vault'|'exit'|'contribution';address?:Address;name:string;args:readonly unknown[];member?:bigint;reason:string;expiresAt:number};
 export type Decision = {state:'ready';call:Call}|{state:'idle'|'blocked'|'waiting';reason:string};
 export type Policy = {maxMemberAssets:bigint;maxOrderNotional:bigint;refreshSeconds:number;cancelAfterSeconds:number};
 const digest=(value:unknown)=>keccak256(toHex(JSON.stringify(value,(_,v)=>typeof v==='bigint'?String(v):v)));

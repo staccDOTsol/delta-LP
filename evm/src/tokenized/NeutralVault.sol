@@ -31,6 +31,7 @@ contract NeutralVault is ERC20, ReentrancyGuard, IUnlockCallback {
     uint256 private constant Q128 = 1 << 128;
     uint256 public constant MAX_DEPOSITORS = 32;
     uint256 public constant MAX_DELTA_BPS = 50; // 0.5% of NAV, not gross leveraged notional
+    uint256 public constant MAX_EXECUTION_LOSS_BPS = 100; // 1% after the bound issuance fee
     int24 public constant LOWER = -887220;
     int24 public constant UPPER = 887220;
 
@@ -183,7 +184,8 @@ contract NeutralVault is ERC20, ReentrancyGuard, IUnlockCallback {
         uint256 addedValue = afterValue - beforeValue;
         uint256 receiptShares = supply == 0 ? afterValue * 1e12 : Math.mulDiv(addedValue, supply, beforeValue);
         // An incoming batch cannot be advertised as active at near-zero backing.
-        require(addedValue >= Math.mulDiv(pendingAssets, 9700, 10_000), "Execution loss limit");
+        uint256 afterEntryFee = Math.mulDiv(pendingAssets, 10_000 - controller.ENTRY_FEE_BPS(), 10_000);
+        require(addedValue >= Math.mulDiv(afterEntryFee, 10_000 - MAX_EXECUTION_LOSS_BPS, 10_000), "Execution loss limit");
         for (uint256 i; i < depositors.length; ++i) {
             Deposit memory d = deposits[depositors[i]];
             if (d.assets == 0) continue;

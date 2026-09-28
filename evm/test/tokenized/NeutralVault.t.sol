@@ -14,6 +14,12 @@ import {MemberV4Hook} from "../../src/tokenized/MemberV4Hook.sol";
 import {NeutralVault} from "../../src/tokenized/NeutralVault.sol";
 import {NeutralAllocation, NeutralExit, NeutralEscrowFactory} from "../../src/tokenized/NeutralEscrows.sol";
 import {TestUSDG, MockLighterL1} from "./MemberController.t.sol";
+import {NftContributionBatch} from "../../src/nft/NftContributionBatch.sol";
+
+contract ThreePercentControllerFixture is MemberController {
+    constructor(TestUSDG token, MockLighterL1 venue) MemberController(token,venue,msg.sender,msg.sender,msg.sender) {}
+    function ENTRY_FEE_BPS() public pure override returns(uint256){return 300;}
+}
 
 /// Real V4 and fee recipient on a local Robinhood fork; Lighter execution is simulated.
 contract NeutralVaultTest is Test {
@@ -85,6 +91,83 @@ contract NeutralVaultTest is Test {
     }
     function _active() private {
         _enter(ALICE, 100e6); _allocate(true); _hedge(); vault.activate();
+    }
+    function _threePercentBatch(uint256 lossBps) private {
+        // New fixture addresses need current RPC state; the legacy fork's
+        // archive state is no longer served for previously uncached accounts.
+        vm.createSelectFork("robinhood");
+        asset = new TestUSDG(); venue = new MockLighterL1(asset);
+        controller = new ThreePercentControllerFixture(asset, venue);
+        deployCodeTo("MemberV4Hook.sol:MemberV4Hook", abi.encode(MANAGER, controller), address(uint160(0x12540)));
+        hook = MemberV4Hook(address(uint160(0x12540)));
+        for(uint8 tier=1;tier<=2;++tier)for(uint8 side;side<2;++side){
+            uint256 id=controller.createMember(ETH,0,tier,side==1,4,2,"Fee test","FEE");
+            controller.setEnabled(id,true);venue.assign(address(controller.memberState(id).custody),uint48(2000+id));
+            controller.bindAccount(id,uint48(2000+id));_report(id,0,0);
+        }
+        vault=new NeutralVault(controller,hook,new NeutralEscrowFactory(controller),ETH,2,100e6);
+        vault.configure();vault.setEntriesOpen(true);
+        asset.mint(ALICE,100e6);
+        vm.prank(ALICE);asset.approve(address(vault),100e6);
+        _enter(ALICE,100e6);_allocate(true);_hedge();
+        for(uint256 id=1;id<=4;++id){
+            MemberController.Member memory m=controller.memberState(id);
+            _report(id,int256(m.nav*(10000-lossBps)/10000),m.position);
+        }
+        _hedge();
+    }
+    function testThreePercentEntryAllowsActualPairedLiquidityRounding() public {
+        _threePercentBatch(0);vault.activate();
+        assertApproxEqAbs(vault.balanceOf(ALICE),97e18,5e12);
+        assertEq(asset.balanceOf(controller.FEE_FANOUT()),3e6);
+    }
+    function testThreePercentEntryAllowsBoundedExecutionCostsAfterFees() public {
+        _threePercentBatch(50);vault.activate();
+        assertApproxEqAbs(vault.balanceOf(ALICE),96.515e18,5e12);
+        assertGt(vault.balanceOf(ALICE),96.03e18);
+    }
+    function testThreePercentEntryStillRejectsExcessLossAndRollsBack() public {
+        _threePercentBatch(200);vm.expectRevert("Execution loss limit");vault.activate();
+        assertEq(vault.totalSupply(),0);
+        assertGt(IERC20(controller.memberToken(1)).balanceOf(address(vault.allocation())),0);
+    }
+    function _contributionBatch() private returns(NftContributionBatch batch) {
+        // Avoid uncached historical account lookups for new test deployments.
+        vm.createSelectFork("robinhood");
+        asset=new TestUSDG();venue=new MockLighterL1(asset);
+        controller=new ThreePercentControllerFixture(asset,venue);
+        deployCodeTo("MemberV4Hook.sol:MemberV4Hook",abi.encode(MANAGER,controller),address(uint160(0x22540)));
+        hook=MemberV4Hook(address(uint160(0x22540)));
+        for(uint8 tier=1;tier<=2;++tier)for(uint8 side;side<2;++side){
+            uint256 id=controller.createMember(ETH,0,tier,side==1,4,2,"Pending","PEND");
+            controller.setEnabled(id,true);venue.assign(address(controller.memberState(id).custody),uint48(3000+id));
+            controller.bindAccount(id,uint48(3000+id));_report(id,0,0);
+        }
+        vault=new NeutralVault(controller,hook,new NeutralEscrowFactory(controller),ETH,2,100e6);
+        vault.configure();vault.setEntriesOpen(true);
+        batch=new NftContributionBatch(vault,address(this));
+        address[] memory accounts=new address[](2);accounts[0]=ALICE;accounts[1]=BOB;
+        uint256[] memory amounts=new uint256[](2);amounts[0]=40e6;amounts[1]=60e6;
+        asset.mint(address(this),100e6);asset.approve(address(batch),100e6);batch.credit(accounts,amounts);batch.queue();
+    }
+    function testNftBatchPayerReceivesRealVaultSharesOnlyAfterActivation() public {
+        NftContributionBatch batch=_contributionBatch();
+        assertEq(vault.totalSupply(),0);assertEq(vault.depositorAddresses().length,1);
+        _allocate(true);_hedge();vault.activate();uint256 shares=vault.balanceOf(address(batch));
+        batch.claim(ALICE);batch.claim(BOB);
+        assertApproxEqAbs(shares,97e18,5e12);
+        assertEq(vault.balanceOf(ALICE),shares*40/100);assertEq(vault.balanceOf(BOB),shares-vault.balanceOf(ALICE));
+        assertEq(vault.balanceOf(address(batch)),0);
+    }
+    function testNftBatchCanRecoverActualIssuedMembersAfterActivationStalls() public {
+        NftContributionBatch batch=_contributionBatch();_allocate(true);
+        vm.warp(block.timestamp+1 days);batch.recover();
+        batch.claimInKind(ALICE,0,4);batch.claimInKind(BOB,0,4);
+        for(uint256 id=1;id<=4;++id){
+            IERC20 token=IERC20(controller.memberToken(id));
+            assertEq(token.balanceOf(ALICE),9.7e18);assertEq(token.balanceOf(BOB),14.55e18);assertEq(token.balanceOf(address(batch)),0);
+        }
+        assertEq(vault.totalSupply(),0);
     }
     function _settleExit(NeutralExit exit) private {
         while (exit.queuedMembers() < exit.memberCount()) exit.queue(20);

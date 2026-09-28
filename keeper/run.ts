@@ -6,6 +6,7 @@ import {ChainIndex,verifyDeployment} from './rpc.js';
 import {observe} from './observe.js';
 import {executor} from './execute.js';
 import {errorSummary,retryableTransport} from './errors.js';
+import deployment from '../strategy/member-deployment.js';
 
 const integer=z.string().regex(/^\d+$/).transform(BigInt);
 const schema=z.object({maxMemberAssets:integer,maxOrderNotional:integer,maximumGasWei:integer,
@@ -14,7 +15,7 @@ const schema=z.object({maxMemberAssets:integer,maxOrderNotional:integer,maximumG
 const live=process.argv.includes('--execute'),once=process.argv.includes('--once');
 const configFile=process.env.DELTA_KEEPER_CONFIG??new URL('./config.example.json',import.meta.url);
 const config=schema.parse(JSON.parse(readFileSync(configFile,'utf8')));
-const dir=resolve(process.env.DELTA_KEEPER_STATE??'artifacts/keeper-v3');
+const dir=resolve(process.env.DELTA_KEEPER_STATE??`artifacts/keeper-${deployment.version}`);
 if(live&&(!process.env.DELTA_KEEPER_KEY_FILE||!process.env.DELTA_KEEPER_CONFIG||config.maxMemberAssets===0n||config.maxOrderNotional===0n||config.maximumGasWei===0n))throw new Error('Execution requires an explicit key file, configuration and positive capital/order/gas limits.');
 mkdirSync(dir,{recursive:true,mode:0o700});
 const lock=join(dir,'worker.lock');

@@ -1,6 +1,6 @@
 # deltaLP — public integration handoff
 
-> September 28 fee revision: the replacement uses **3% entry / 6% exit**, split **50% Wizards / 50% seven NFT collections**, weighted by mint tier. The pinned live v3 addresses below retain their original 2%/4% policy until replacement. See [replacement implementation and operator steps](REPLACEMENT-FEES.md).
+> September 28 fee revision: the replacement uses **3% entry / 6% exit**, split **50% Wizards / 50% four NFT collections**, weighted by mint tier. The v5 replacement receipt and all 100 members are deployed; the historical v3 addresses below retain their original 2%/4% policy. Use `4663-tokenized-v5.json` for new integrations. NFT mint proceeds now accumulate toward the pooled 2,000 USDG threshold; no creator seed inventory is required. See [replacement implementation and operator steps](REPLACEMENT-FEES.md).
 
 **Updated:** September 28, 2026
 **Network:** Robinhood Chain, chain ID **4663**
@@ -37,7 +37,7 @@ a guarantee of profit or immunity from liquidation.
 - The public snapshot at block **74631306**, September 28, 2026 at **07:50:17 UTC**,
   showed closed entries, zero pending assets and zero receipt supply. Check the
   current endpoints before enabling any integration.
-- The production native-ETH NFT funding adapter and seven NFT collections are
+- The production native-ETH NFT funding adapter and four NFT collections are
   **not deployed**. Their contract integration exists, with remaining work below.
 - Oil subscriptions remain a separate waitlist product.
 
@@ -136,7 +136,7 @@ distribution. The legacy fanout pot is not the new fee destination.
 ## NFT / SeaDrop integration
 
 The planned editions each contain 10,000 NFTs at target mint-price denominations
-of $1, $2, $5, $10, $20, $50 and $100. These are art denominations, not dollar
+of $1, $2, $5 and $10. These are art denominations, not dollar
 redemption promises. Each NFT controls an ERC-6551 account that owns its DN assets.
 
 The accepted gross mint allocation is:
@@ -147,21 +147,21 @@ The accepted gross mint allocation is:
 | Wizards mint fee | 1% |
 | DN funding route | 89% |
 
-The 2% DN entry fee applies within the 89% allocation. Before swap costs, the
-illustrative backing is therefore **87.22% of gross mint proceeds**. A separate
+The replacement 3% DN entry fee applies when the contributed USDG is allocated.
+Before swap costs, illustrative backing is **86.33% of gross mint proceeds**. A separate
 10% secondary royalty is designated to Wizards; payment depends on marketplace
 enforcement. Reselling an NFT is not itself a DN redemption.
 
-The adapter interface exposes `receiptToken()`, `ready()`, and payable
-`depositNative(receivers, assets, minShares)`. The current collection implementation
-requires actual receipt balance increases at every NFT account during the mint
-transaction. The async vault cannot directly satisfy this through a fresh deposit.
+The pending-contribution adapter swaps net ETH to real USDG and credits each
+NFT's fixed ERC-6551 account in `NftContributionBatch`. Multiple editions pool
+these contributions toward the 2,000 USDG activation minimum. The creator does
+not need to supply the capital or pre-existing receipt inventory.
 
-A production adapter therefore needs already-backed receipt inventory/liquidity
-with exact settlement, or a separately designed pending-deposit product with
-different mint, claim and refund semantics. Pending cash and order acknowledgments
-must not be presented as funded receipt backing. Small mints must aggregate into
-pooled exposure rather than independently opening 100 venue positions.
+The NFT account can withdraw its USDG before queueing. After allocation, actual
+DN receipts can be claimed to the same account. Stalled allocations have cash
+or in-kind recovery. Pending cash is not a DN position and earns no strategy
+fees. The deployed v5 vault and prepared NFT bundle passed local fork tests;
+NFT broadcasting currently awaits deployment gas. See [NFT-EDITIONS.md](NFT-EDITIONS.md).
 
 ## NFT consumers and secondary markets
 

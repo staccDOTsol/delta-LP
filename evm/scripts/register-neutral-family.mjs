@@ -38,7 +38,7 @@ async function send(key,name,functionName,args){
   if(item?.status==='success')return;
   if(!item){
     const gas=(await client.estimateGas({account:signer.address,to,data}))*120n/100n;
-    const gasPrice=(await client.getGasPrice())*2n;
+    const gasPrice=(await client.getGasPrice())*125n/100n;
     if(spent()+gas*gasPrice>6_000_000_000_000_000n)throw new Error('Registry would exceed its 0.006 ETH gas cap.');
     if(await client.getBalance({address:signer.address})<gas*gasPrice)throw new Error('Insufficient deployment gas.');
     if(!broadcast){console.log(stringify({mode:'simulation',key,maximumGasETH:formatEther(gas*gasPrice)}));return;}
@@ -55,7 +55,7 @@ async function send(key,name,functionName,args){
       const raw=readFileSync(new URL(`${key}.signed`,privateDir),'utf8');if(keccak256(raw)!==item.hash)throw new Error('Signed registry journal mismatch.');
       await client.sendRawTransaction({serializedTransaction:raw});
     }
-    receipt=await client.waitForTransactionReceipt({hash:item.hash,confirmations:2,timeout:60000});
+    receipt=await client.waitForTransactionReceipt({hash:item.hash,confirmations:2,pollingInterval:1000,timeout:60000});
   }
   if(receipt.status!=='success')throw new Error(`Registry ${key} reverted.`);
   item.status='success';item.block=String(receipt.blockNumber);item.gasCost=String(receipt.gasUsed*receipt.effectiveGasPrice);save();

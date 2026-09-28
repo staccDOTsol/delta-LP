@@ -1,63 +1,63 @@
-# NFT-owned delta-neutral accounts
+# NFT-owned contributions and delta-neutral accounts
 
-Status: collection integration implemented; not deployed, not accepting mints. The production native-ETH-to-DN receipt adapter is not implemented. Fork tests use a clearly named test adapter, so they do not establish live strategy execution or yield.
+Status: the mint-funded implementation and the exact 30-call deployment bundle passed Robinhood fork tests. The corrected v5 DN vault and 100 members are deployed. The four NFT collections are prepared, not yet deployed or open for minting. All 40,000 launch assets are published and URL-verified.
 
-## Editions and ownership
+## Mint proceeds build the pool
 
-Seven separate collections have 10,000 NFTs each: $1, $2, $5, $10, $20, $50 and $100 target mint prices. Total supply is 70,000. These are cartoon art editions, not currency or dollar redemption promises. The artwork job is separate; the existing `~/10k` collection must not be overwritten.
+The creator does **not** have to supply 2,000 USDG or donate existing DN receipts. Minting contributes toward the pooled activation threshold:
 
-Every NFT has a deterministic ERC-6551 account on Robinhood Chain (4663). That account receives the DN receipt. The holder of the NFT controls the account; the creator and fee recipients do not own its strategy shares. Transferring the NFT changes account authority without moving the receipt balances. There is no NFT burn requirement and no permanent protocol ownership of backing.
+1. A buyer pays ETH through canonical SeaDrop. OpenSea receives 10% and the Wizards router receives 1% of the gross mint.
+2. `DnPendingAdapter` swaps the remaining ETH to real USDG through the pinned Robinhood Uniswap v4 pool. A fresh bounded quote and per-NFT minimum protect this conversion; failure reverts the whole mint.
+3. `NftContributionBatch` holds the USDG and records each NFT account's contribution. Multiple editions share the same collecting batch. Pending cash is **not** a DN receipt and earns no strategy fees.
+4. Once batch contributions plus public vault deposits reach 2,000 USDG and vault entries are open, anyone may call `queue()`. The keeper plans this call when all members are idle; only explicit execution mode sends it. The whole NFT batch occupies one vault depositor slot.
+5. The operator reconciles the venue positions, settles member issuance and creates the required liquidity. Only successful vault activation issues actual DN receipts.
+6. Anyone may deliver each proportional receipt claim to its fixed NFT account. The current NFT owner controls that account.
 
-The implementation uses the canonical registry (`0x000000006551c19487814612e58FE06813775758`) and directly delegates its ERC-1167 account to Tokenbound AccountV3 (`0x41C8f39463A868d3A88af00cd0fe7102F30E44eC`). It does not introduce a second upgradeable AccountProxy or require an initialization transaction. Account ownership and execution through this composition are covered against actual deployed code in fork tests.
+The threshold is a pooled minimum allocation size, not a minimum individual mint and not a creator seed requirement. Reaching it alone does not prove trading has completed. Lighter execution remains asynchronous and requires the operating reporter/keeper.
 
-An owner can withdraw assets or approve spenders. Buying the NFT therefore does **not** guarantee that its original backing is still present. A production purchase UI must read current account balances, permissions and outstanding approvals. Binding a purchase to a minimum balance/account state requires an additional marketplace settlement check; ERC-6551 alone does not provide that. Direct transfers into an NFT's own account are rejected, but arbitrary indirect ownership cycles are not exhaustively prevented.
+## Four editions and ownership
 
-## Revised fee split
+There are 10,000 NFTs each at target mint prices of $1, $2, $5 and $10: 40,000 total. Dollar prices are targets; SeaDrop charges an ETH amount set for each stage. These are cartoon art editions, not currency or dollar redemption promises. The $20/$50/$100 source art is retained for a possible later release and receives no share of this launch's fee pool.
 
-The user accepted OpenSea's primary fee after the original 1%/99% proposal. The implemented split of **gross mint proceeds** is:
+Every NFT has a deterministic ERC-6551 account on Robinhood Chain (4663), using the canonical registry `0x000000006551c19487814612e58FE06813775758` and Tokenbound AccountV3 `0x41C8f39463A868d3A88af00cd0fe7102F30E44eC`. Ownership and execution are tested against their actual deployed code.
 
-| Destination | Gross percentage | Example: $100 target mint |
-|---|---:|---:|
-| OpenSea | 10% | $10 |
-| Wizards mint fee | 1% | $1 |
-| DN funding route | 89% | $89 |
-| DN entry fee, taken from the preceding 89% | 2.67% | $2.67 |
-| DN backing before swap costs | 86.33% | $86.33 |
+Transferring the NFT transfers control of its account, its pending contribution and any assets held there. The creator cannot sweep those contributions. Before a batch is queued, the NFT account may withdraw its own pending USDG. After activation, it may manage or withdraw its actual receipts. Already paid OpenSea and Wizards mint fees are not refunded.
 
-The replacement policy is 3% DN entry / 6% DN exit, pending deployment. Its house fees split 50/50 between Wizards and the seven NFT collections, weighted 1/2/5/10/20/50/100 by mint tier. Including the separate 1% primary fee, Wizards receive 2.335% of gross mint in this illustration; the NFT distributor receives 1.335%. The existing v3 contracts still use 2%/4% until the replacement is deployed. Actual strategy conversion, receipt units, rounding and costs must be quoted by the production adapter. NFT resale itself is not a DN redemption. Member-token transfers remain untaxed; AMMs choose their own swap fees.
+Buying an NFT does **not** guarantee its original contribution or holdings remain. The owner may already have withdrawn them or approved spenders. A purchase interface must inspect current account balances, contribution state and approvals. ERC-6551 alone does not enforce a buyer's minimum portfolio value.
 
-The secondary royalty is 10% of the sale price, designated entirely to the Wizards fee router. ERC-2981 specifies a requested royalty; it does not force every marketplace to pay. ERC-721C/Seaport enforcement and OpenSea publication are separate launch work, not claimed complete here.
+## Fees
 
-Wizards means the 8,010-share fanout at `0x1b88A6c6516FD2918905186F21Bb9F5CaA1a15c8`. Its native ETH rejection is handled by `HouseFeeRouter`, which wraps ETH into WETH. ERC-20 royalties sent to that router can be permissionlessly flushed only to the same fanout. The old 10,000-share pot is not the new fee destination.
+| Destination | Gross mint percentage | $10 target example |
+| --- | ---: | ---: |
+| OpenSea | 10% | $1.00 |
+| Wizards primary fee | 1% | $0.10 |
+| ETH converted toward pending USDG | 89% | $8.90 before swap costs |
+| Strategy entry fee when allocated | 3% of contributed USDG | $0.267 before swap costs |
+| Illustrative backing after allocation | 86.33% | $8.633 before swap costs |
 
-## Atomic mint settlement
+The replacement member controller charges 3% entry / 6% exit. These house fees split 50/50 between Homecoming's 8,010 Wizard shares and the four NFT collections. NFT tier weights are 1/2/5/10 with total weight 180,000. Unminted IDs retain reserved entitlements; early holders do not divide the entire NFT half among themselves. Member transfers are untaxed and AMMs have their own swap fees.
 
-`DnSeaDropEdition` is a public-stage SeaDrop-compatible ERC-721 with a fixed 10,000 cap, batch limit 20, fixed primary recipients and fixed royalty policy. It has no administrator mint, principal withdrawal or adapter replacement. Metadata is frozen after the first mint.
+The separate 1% primary mint fee and requested 10% secondary royalty go entirely to the existing Wizards router, which wraps native ETH to WETH for the fanout at `0x1b88A6c6516FD2918905186F21Bb9F5CaA1a15c8`. Secondary payment depends on marketplace enforcement. NFT resale is not a DN redemption.
 
-1. Configure the canonical SeaDrop contract (`0x00005EA00Ac477B1030CE78506496e8C2dE24bf5`) with 1,000 fee bps and its sole allowed recipient, OpenSea (`0x0000a26b00c1F0DF003000390027140000fAa719`). The creator payout is the collection itself.
-2. SeaDrop calls `mintSeaDrop`. The collection reserves supply, deploys the bound accounts and mints NFTs. Pending settlement blocks NFT transfers and configuration changes.
-3. SeaDrop sends its 10% fee, then sends the remaining ETH to the collection.
-4. The collection checks the exact payout against the recorded gross mint, sends 1% of gross to the Wizards router and routes the remainder through its immutable `IDnMintAdapter`.
-5. Each account must receive its own minimum number of actual receipt tokens, checked through balance changes. An expired execution quote, unavailable adapter, missing receiver funds, or failed conversion reverts the entire mint, including fees and account creation in that transaction.
+## Recovery and settlement
 
-SeaDrop rounds its fee down. The collection also rounds the Wizards mint fee down, then splits the remaining wei across accounts as evenly as possible. It leaves no ordinary mint proceeds stranded in the collection. Alternate allowlist, signed and token-gated stages are deliberately disabled because their independent fee/price parameters are not part of this accounting path.
+`NftContributionBatch` has no owner or arbitrary sweep. Claims always pay the originally credited NFT account. Once queued, the funds are subject to the vault's allocation cycle. After a one-day recovery delay, anyone can recover a stalled batch: unallocated funds return as USDG; already issued member claims recover in kind. In-kind delivery is paginated, at most 20 member tokens per call. A cash refund cannot be mislabelled as successful DN activation.
 
-The owner may pause mints, configure public-stage timing, and update future prices while paused. An execution quote has a maximum 30-minute lifetime and specifies the minimum receipt units per ETH after entry fees. A nonzero quote and an adapter reporting ready are necessary checks, not independent proof of DN solvency. The actual adapter and receipt implementation must be validated before deployment.
+The corrected v5 vault measures its activation loss bound after the 3% entry fee, allowing up to 1% additional execution loss. This fixes the old empty vault's incompatibility between a 3% entry charge and a gross 97% activation minimum. Receipt issuance still requires the position, price and delta checks.
 
-## Remaining production work
+## Deployment and activation
 
-- A pooled native-ETH DN adapter with bounded swaps, actual matched exposure, redeemable basket receipts, fee accounting and a tested unwind. Small NFTs must hold proportional pooled shares; $0.89 cannot independently open every leverage pair above venue order minimums.
-- Reconcile Lighter execution and liquidity before issuing spendable DN shares. The collection's atomic receipt delivery does not make Lighter orders synchronously fill. Use already-backed liquidity or a separately disclosed pending-deposit product; never label pending cash an executed DN position.
-- Validate the account implementation/dependency code hashes in deployment tooling; finish asset-aware NFT purchase checks, account UI, and marketplace royalty configuration.
-- Finalize all seven art folders, upload durable metadata, record provenance, and choose ETH prices and sale schedule. SeaDrop stores fixed wei per stage; USD face values are targets and move with ETH/USD until repriced. `nftEditionQuote` rejects stale quote inputs but is not an oracle.
-- Deploy seven reviewed collections with the actual immutable adapter/receipt, verify source, publish through OpenSea, and test its real mint transaction against a fork before opening sales.
+The canonical replacement receipt is `0x3D4Ee6D147AF67371073e74206D6d49e64960f9c`. It reuses the v4 controller, hook, fee router, factory and all 100 deployed members. See `evm/deployments/4663-tokenized-v5.json` and `4663-neutral-v5-registry.json`.
 
-No funded mainnet trade or NFT mint was performed for this integration. No APY, immunity to liquidation, or dollar peg is implied.
+`nft/prepare-deployment.mjs --version=v5` produces the pending-contribution bundle. `evm/scripts/deploy-nft-bundle.mjs --version=v5` independently reconstructs every allowed zero-value deployment/configuration call and compares the fork simulation hash. The broadcast option deploys paused contracts; it never mints, transfers strategy collateral, opens a sale or trades. The superseded inventory adapter is retained only as historical code and is not used by this launch.
 
-## Verification
+Before paid mints open, the operator must finish contract deployment and source verification, configure ETH stage prices/timing and wallet limits, supply fresh bounded swap quotes, and complete the marketplace checks. No prefunded receipt inventory is required. Vault entry/keeper activation is a separate operational step; the website must display pending contributions until actual allocation completes.
 
-`forge test --match-path 'test/nft/*.t.sol' -vv` exercises the actual Robinhood SeaDrop, ERC-6551 registry, Tokenbound AccountV3, WETH and Wizards fanout on a local fork. The adapter is a test double. Tests cover splits, per-account funding, transfer of ownership, old-owner rejection, failure rollback, partial receipt rejection, quote expiry, fixed fee destinations, cap, mint callback ordering, native royalties, metadata freeze, and fuzzed wei conservation.
+## Evidence and limits
 
-`node --import tsx --test tests/nft-editions.test.ts` checks the seven editions, revised split, price/batch bounds, rounding and stale ETH/USD quote rejection.
+- The complete Solidity suite passes 128 tests. The application build/runtime checks pass with 157 Node tests and 17 database integration tests skipped.
+- Focused tests cover first mint with zero receipt supply, actual SeaDrop payment, USDG conservation, multiple editions sharing a batch, NFT transfer followed by the new owner's withdrawal, and rollback on quote/slippage failure.
+- The exact prepared deployment was simulated as 30 successful calls. A second local-fork script then minted two editions through those exact contracts, checked their shared USDG escrow, and withdrew one NFT's contribution through its real ERC-6551 account.
+- Root vault/batch tests cover proportional actual receipt delivery, cash refunds, stalled allocation recovery, paginated member claims and rounding conservation. Venue fills in these tests are fixtures; these are not funded mainnet trading results.
 
-References: [ERC-6551](https://eips.ethereum.org/EIPS/eip-6551), [Tokenbound deployments](https://docs.tokenbound.org/contracts/deployments), [SeaDrop](https://docs.opensea.io/docs/seadrop), [OpenSea primary fees](https://support.opensea.io/en/articles/8867057-set-your-drop-earnings), [creator-fee enforcement](https://docs.opensea.io/docs/creator-fee-enforcement).
+No APY, dollar peg or immunity to liquidation is implied. A running keeper, available liquidity and continuous reconciliation remain necessary.

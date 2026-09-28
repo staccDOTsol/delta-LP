@@ -15,8 +15,8 @@ import {FanoutTestEdition} from "./WeightedNftFeeFanout.t.sol";
 
 contract WeightedFanoutStub {
     bool public configured = true;
-    function tokenCount() external pure returns (uint256) { return 70_000; }
-    function totalWeight() external pure returns (uint256) { return 1_880_000; }
+    function tokenCount() external pure returns (uint256) { return 40_000; }
+    function totalWeight() external pure returns (uint256) { return 180_000; }
     function harvest(address) external {}
     function setConfigured(bool value) external { configured = value; }
 }
@@ -120,10 +120,10 @@ contract SplitFeesTest is Test {
         assertEq(asset.balanceOf(address(router)),0);
     }
 
-    function testActualSevenCollectionDistributorReceivesAndPaysBothFeeLegs() public {
+    function testActualFourCollectionDistributorReceivesAndPaysBothFeeLegs() public {
         WeightedNftFeeFanout recipient=new WeightedNftFeeFanout(address(this));
-        address[7] memory editions;
-        for(uint8 i;i<7;++i){
+        address[4] memory editions;
+        for(uint8 i;i<4;++i){
             FanoutTestEdition edition=new FanoutTestEdition(recipient.weight(i),10_000);
             editions[i]=address(edition);edition.mint(ALICE,1);
         }
@@ -139,8 +139,8 @@ contract SplitFeesTest is Test {
         uint256 request=controller.requestRedeem(member,97e18,1,ALICE,uint64(block.timestamp+60));vm.stopPrank();
         _report();controller.settleRequest(request);
         router.harvest(address(asset));
-        uint8[] memory indexes=new uint8[](7);uint256[] memory ids=new uint256[](7);uint256 expected;
-        for(uint8 i;i<7;++i){indexes[i]=i;ids[i]=1;expected+=4_410000*recipient.weight(i)/1_880_000;}
+        uint8[] memory indexes=new uint8[](4);uint256[] memory ids=new uint256[](4);uint256 expected;
+        for(uint8 i;i<4;++i){indexes[i]=i;ids[i]=1;expected+=4_410000*recipient.weight(i)/180_000;}
         vm.prank(ALICE);recipient.claim(address(asset),indexes,ids);
         assertEq(asset.balanceOf(WIZARDS),4.41e6);
         assertEq(asset.balanceOf(ALICE),91.18e6+expected);

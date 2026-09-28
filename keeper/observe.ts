@@ -2,8 +2,9 @@ import {accountSchema} from '../strategy/execution.js';
 import deployment from '../strategy/member-deployment.js';
 import {memberMarketSchema} from '../strategy/member-reconciliation.js';
 import {actionEvidence,emptyAccountReport,hasOpenOrders,nextMemberAction,observedReport,type Call,type Decision,type Policy,type Report,type Snapshot} from './model.js';
-import {ChainIndex,client,controller,lighter,lighterAbi,mapLimit,marketData,readMember,readVault,venue} from './rpc.js';
+import {ChainIndex,client,controller,lighter,lighterAbi,mapLimit,marketData,readMember,readVault,vault,venue} from './rpc.js';
 import {controllerAbi} from './abi.js';
+import {observeContributionBatch} from './nft-batch.js';
 
 export type MemberResult={id:bigint;snapshot?:Snapshot;decision:Decision;report?:Report};
 export type Cycle={block:bigint;at:string;members:MemberResult[];calls:Call[];vault:Awaited<ReturnType<typeof readVault>>;reason:string};
@@ -78,7 +79,11 @@ export async function observe(index:ChainIndex,policy:Policy):Promise<Cycle>{
     else if(exit.started&&exit.queued<exit.count&&exit.deadline>block.timestamp)calls.push({target:'exit',address:exit.address,name:'queue',args:[20n],reason:'Queue the next ten matched long/short exit pairs.',expiresAt});
   }
   if(allIdle){
-    if(vaultState.entriesOpen&&vaultState.phase===0&&vaultState.pendingAssets>=vaultState.minimumBatchAssets){
+    const contribution=await observeContributionBatch(client,vault,vaultState,block.number);
+    if(contribution){
+      calls.push(contribution);
+      reason='Mint proceeds reached the pooled threshold; queue them before starting allocation.';
+    }else if(vaultState.entriesOpen&&vaultState.phase===0&&vaultState.pendingAssets>=vaultState.minimumBatchAssets){
       const perLeg=vaultState.pendingAssets/100n,net=perLeg-perLeg*BigInt(deployment.feePolicy.entryFeeBps)/10000n;
       if(members.every(m=>m.snapshot!.enabled&&m.snapshot!.nav+net<=policy.maxMemberAssets)){
         const minima=members.map(m=>{const s=m.snapshot!;const expected=s.supply===0n?net*10n**12n:s.nav===0n?0n:net*s.supply/s.nav;return expected*9990n/10000n;});

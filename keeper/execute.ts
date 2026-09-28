@@ -8,10 +8,15 @@ import {type Call} from './model.js';
 import {Journal,recover,type RecoveryPort} from './journal.js';
 import {bootstrap} from './bootstrap.js';
 import {submitPrepared} from './submission.js';
+import {contributionBatchAbi} from './nft-batch.js';
 
 const controllerCalls=new Set(['bindAccount','reconcile','reconcileVenueSetup','fundVenue','requestVenueWithdrawal','collectVenueWithdrawal','rebalance','cancelVenueOrders','settleRequest','settleBatch','markGroupChecked','configureVenueKey','setEnabled']);
 const vaultCalls=new Set(['startAllocation','activate','setEntriesOpen']);
 export function transactionFor(call:Call){
+  if(call.target==='contribution'){
+    if(!call.address||call.name!=='queue'||call.args.length!==0)throw new Error('Unrecognized contribution operation.');
+    return {to:call.address,data:encodeFunctionData({abi:contributionBatchAbi,functionName:'queue'})};
+  }
   if(call.target==='exit'){
     if(!call.address||!['queue','finish'].includes(call.name))throw new Error('Unrecognized exit operation.');
     return {to:call.address,data:encodeFunctionData({abi:exitAbi as Abi,functionName:call.name,args:call.args})};

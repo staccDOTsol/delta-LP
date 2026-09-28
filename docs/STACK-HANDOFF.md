@@ -1,6 +1,6 @@
 # deltaLP dependency handoff
 
-> September 28 fee revision: the replacement uses **3% entry / 6% exit**, split **50% Wizards / 50% seven NFT collections**, weighted by mint tier. The pinned live v3 addresses below retain their original 2%/4% policy until replacement. See [replacement implementation and operator steps](REPLACEMENT-FEES.md).
+> September 28 fee revision: the replacement uses **3% entry / 6% exit**, split **50% Wizards / 50% four NFT collections**, weighted by mint tier. The v5 replacement receipt and all 100 members are deployed; the historical v3 addresses below retain their original 2%/4% policy. Use `4663-tokenized-v5.json` for new integrations. NFT mint proceeds now accumulate toward the pooled 2,000 USDG threshold; no creator seed inventory is required. See [replacement implementation and operator steps](REPLACEMENT-FEES.md).
 
 Prepared 2026-09-28, against `codex/fuel-platform` at `3eb3fd3` in
 `/Users/stacc/delta-LP`. [PR #1](https://github.com/staccDOTsol/delta-LP/pull/1)
@@ -92,29 +92,32 @@ destination. NFT resale is not automatically a DN redemption.
 
 ## NFT / SeaDrop consumer
 
-The existing integration is in `evm/src/nft/`, `strategy/nft-editions.ts` and
-[NFT-EDITIONS.md](NFT-EDITIONS.md). The seven collections and production native
-ETH adapter are **not deployed**. The production adapter is still missing.
-Tests use a named test double and do not establish native ETH conversion into
-funded DN exposure.
+The current integration uses `DnPendingSeaDropEdition`, `DnPendingAdapter` and
+`NftContributionBatch`. The four collections and adapter are prepared and
+fork-tested but await deployment gas. They bind to the deployed v5 receipt at
+`0x3D4Ee6D147AF67371073e74206D6d49e64960f9c`.
 
-`IDnMintAdapter` requires `receiptToken()`, `ready()`, and payable
-`depositNative(receivers, assets, minShares)`. The collection requires actual
-receipt balance increases at each ERC-6551 account in the same mint transaction.
-The async vault cannot directly fulfill that interface on a fresh deposit.
-An adapter needs already-backed receipt inventory/liquidity with exact settlement,
-or a separately designed pending-deposit product with changed mint semantics.
-Do not mint unbacked receipts or treat an order acknowledgment as receipt backing.
+Each mint converts its net ETH to actual USDG and records an escrow contribution
+for the NFT's ERC-6551 account. Mint proceeds from all four collections accumulate
+toward the pooled 2,000 USDG threshold. No existing receipt inventory or creator
+seed is required. The current NFT owner can withdraw the contribution before
+queueing. After allocation, actual receipts are claimed to the same account.
+Recovery of a stalled allocation returns cash or already issued member claims.
+
+The keeper includes contribution queueing when the combined threshold is reached,
+vault entries are open and the family is idle. Observation mode never submits it.
+Receipt issuance still waits for reconciled venue positions and actual liquidity.
+See [NFT-EDITIONS.md](NFT-EDITIONS.md) for contract interfaces and evidence.
 
 The accepted NFT mint split is 10% OpenSea, 1% Wizards, 89% to the DN route;
 the DN entry fee applies inside that 89%. The 10% secondary royalty is designated
 to Wizards; marketplace enforcement is separate. NFT holders control their
 ERC-6551 accounts and can remove assets. Selling the NFT changes account control.
 
-Latest art update from the NFT task: seven local folders under `/Users/stacc/10k/`
-for 1, 2, 5, 10, 20, 50 and 100, each with 10,000 assets and metadata rows. Public
-hosting, URL validation and provenance still need verification. Preserve these
-folders. The earlier pause on publishing/mints is not lifted by this handoff.
+The four launch editions ($1/$2/$5/$10) have all 40,000 assets published and
+URL-verified. Their immutable fee weights are 1/2/5/10, total weight 180,000.
+Source art for $20/$50/$100 stays under `/Users/stacc/10k/` for later and is
+excluded from this launch's fee pool. Asset publication does not open NFT mints.
 
 ## NFT tooling / arbitrage consumer
 
