@@ -13,6 +13,7 @@ type Snapshot=Awaited<ReturnType<NeutralClient['snapshot']>>;
 type Exit=Awaited<ReturnType<NeutralClient['exitDetails']>>;
 const usd=(n:string|bigint)=>Number(formatUnits(BigInt(n),6)).toLocaleString('en',{maximumFractionDigits:6});
 const shares=(n:bigint)=>formatUnits(n,18);
+const usd2=(n:string|bigint)=>Number(formatUnits(BigInt(n),6)).toLocaleString('en',{maximumFractionDigits:2});
 export function NeutralPanel({legacy=false}:{legacy?:boolean}){
   const deployed=legacy?legacyNeutralDeployment:neutralDeployments[0];
   const [state,setState]=useState<NeutralState>(),[client,setClient]=useState<NeutralClient>(),[snapshot,setSnapshot]=useState<Snapshot>();
@@ -92,7 +93,7 @@ export function NeutralPanel({legacy=false}:{legacy?:boolean}){
     <div className="neutral-facts"><span>{state?`ETH · 1–${state.tiers}× targets`:'ETH · all supported tiers'}</span><span>{state?`Current contract: ${state.entryFeeBps/100}% entry · ${state.exitFeeBps/100}% exit`:'Reading contract fees…'}</span><span>0% transfer tax</span></div>
     <p className="trade-notice">Targets retain collateral headroom; actual leverage varies. This is a managed, leveraged LP strategy. Fees and losses affect your balance, and liquidation remains possible.</p>
     {!legacy&&<label className="neutral-amount">Deposit <span>USDG</span><input aria-label="Neutral deposit amount" inputMode="decimal" value={amount} maxLength={19} onChange={e=>setAmount(e.target.value)} disabled={!!busy}/></label>}
-    {state?<div className="account-summary"><dl><div><dt>Pending batch</dt><dd>{usd(BigInt(state.pendingAssets)+BigInt(state.nftContributions))} / {usd(state.minimumBatchAssets)} USDG{BigInt(state.nftContributions)>0n?<small> · {usd(state.pendingAssets)} deposits + {usd(state.nftContributions)} from NFT mints</small>:null}</dd></div><div><dt>Receipt supply</dt><dd>{shares(BigInt(state.totalSupply))}</dd></div><div><dt>Pool state</dt><dd>{!state.configured?'Configuring all tiers':!state.entriesOpen?'Entries closed':state.phase===0?'Collecting':state.phase===1?'Building positions':'Refunds available'}</dd></div></dl></div>:<p role="status">{deployed?'Reading pool state…':'Preparing the receipt deployment.'}</p>}
+    {state?<BatchMeter state={state}/>:<div className="batch-meter is-loading" role="status"><span className="batch-meter-label">Pool</span><strong>{deployed?'Reading pool state…':'Preparing the receipt deployment.'}</strong><i className="batch-meter-bar" aria-hidden><i/></i></div>}
     {!client?<button type="button" className="wl-button" disabled={!!busy||!deployed} onClick={()=>void connect()}><Wallet size={18}/>Connect wallet<ArrowRight size={17}/></button>:<>
       <p className="trade-notice" role="status">{client.address.slice(0,6)}…{client.address.slice(-4)} · {walletCash?.address===client.address&&walletCash.balance!==undefined?`${usd(walletCash.balance)} USDG in wallet`:walletCash?.address===client.address&&walletCash.error?<>{walletCash.error} <button className="inline-link" onClick={()=>setBalanceRetry(n=>n+1)}>Retry balance</button></>:'Loading USDG balance…'}</p>
       {!legacy&&state?.configured&&!state.entriesOpen&&coordinator===client.address.toLowerCase()?<section className="neutral-position"><h3>Coordinator controls</h3><p>Enable refundable USDG deposits while the pool builds toward 2,000 USDG. This action does not start allocation or trading.</p><button className="secondary-button" disabled={!!busy||!!pending} onClick={()=>void run('Confirm enabling deposits in your wallet…',()=>client.openEntries())}>Enable deposits</button></section>:null}
@@ -114,6 +115,22 @@ export function NeutralPanel({legacy=false}:{legacy?:boolean}){
     {!legacy&&state&&!state.entriesOpen?<p className="trade-notice">The coordinator must enable deposits on-chain. The 2,000 USDG minimum starts allocation; it is not a minimum individual deposit.</p>:null}
     <button className="inline-link" disabled={!!busy} onClick={()=>void run('Refreshing on-chain state…',async()=>{await refresh();return 'On-chain state refreshed.';})}>Refresh <RefreshCw size={13}/></button>
     {busy?<p role="status">{busy}</p>:null}{notice?<p className="execution-status" role="status">{notice}</p>:null}{error?<p className="wl-error" role="alert">{error}</p>:null}
+  </div>;
+}
+/** The pool's one live number, as a meter: what is in, what the line is, and who put it there. */
+function BatchMeter({state}:{state:NeutralState}){
+  const collected=BigInt(state.pendingAssets)+BigInt(state.nftContributions),minimum=BigInt(state.minimumBatchAssets),nft=BigInt(state.nftContributions);
+  const pct=minimum>0n?Number(collected*10_000n/minimum)/100:0;
+  const label=!state.configured?'Configuring all tiers':!state.entriesOpen?'Entries closed':state.phase===0?'Collecting':state.phase===1?'Building positions':'Refunds available';
+  return <div className="batch-meter" title={`${usd(collected)} / ${usd(minimum)} USDG`}>
+    <div className="batch-meter-head"><span className="batch-meter-label">Pool</span><span className={`state-pill ${state.phase===0&&state.entriesOpen?'is-live':''}`}>{label}</span></div>
+    <div className="batch-meter-figure"><strong>{usd2(collected)}</strong><span>/ {usd2(minimum)} USDG</span><b>{pct<0.01&&collected>0n?'<0.01':pct.toLocaleString('en',{maximumFractionDigits:2})}%</b></div>
+    <i className="batch-meter-bar" aria-hidden><i style={{width:`${Math.min(100,Math.max(collected>0n?1.5:0,pct))}%`}}/></i>
+    <dl>
+      <div><dt>USDG deposits</dt><dd>{usd2(state.pendingAssets)}</dd></div>
+      <div><dt>From NFT mints</dt><dd>{usd2(nft)}</dd></div>
+      <div><dt>Receipt supply</dt><dd>{shares(BigInt(state.totalSupply))} dlpDN</dd></div>
+    </dl>
   </div>;
 }
 function ExitCard({exit,disabled,finish,lower,progress}:{exit:Exit;disabled:boolean;finish:(inKind:boolean)=>void;lower:(text:string)=>void;progress:(extend:boolean)=>void}){
