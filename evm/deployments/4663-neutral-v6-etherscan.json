@@ -1,0 +1,1202 @@
+{
+  "1-MemberToken": {
+    "address": "0x6698610A735C2ADB48EF77344EF1928065889974",
+    "status": "pending",
+    "guid": "zpvrnxe3yr58tj3zigdiqlnzsdyetrnjlddluccye3ndtukile",
+    "submittedAt": "2026-09-28T10:29:46.425Z"
+  },
+  "1-LighterSeriesAccount": {
+    "address": "0x5328B498c22B85D4910E03914461c832F3B1736f",
+    "status": "pending",
+    "guid": "mvm3ae1xzay1b7dknfvh5v5ewmqa6ytqsdvsxidzkwe21etfby",
+    "submittedAt": "2026-09-28T10:29:47.063Z"
+  },
+  "2-MemberToken": {
+    "address": "0x7CCd2202deEd58e4668B82D5A7d8aCB09ff4C711",
+    "status": "pending",
+    "guid": "66eq9t3hx2ypjikfht9txkjxkzudkddphn9nvjpzlvr2fc5s4x",
+    "submittedAt": "2026-09-28T10:29:47.703Z"
+  },
+  "2-LighterSeriesAccount": {
+    "address": "0x08111d584ca0920BB24ca7fd32557aCf4Cd32F40",
+    "status": "pending",
+    "guid": "cduikmlg5aqqnkqayx9x9ywbgckhhzvbzp1zuy2n3pfe9my5dv",
+    "submittedAt": "2026-09-28T10:29:48.334Z"
+  },
+  "3-MemberToken": {
+    "address": "0x19A57f3FBe524989a7471AeA9366c78D7A9d7F81",
+    "status": "pending",
+    "guid": "e7jyn48jdj2uqxenrzjqgavkwktfsj4ffmuns2txrbkimaq81m",
+    "submittedAt": "2026-09-28T10:29:48.964Z"
+  },
+  "3-LighterSeriesAccount": {
+    "address": "0x240edDDEdF7d4ef936fd0891b1e02553cd7c876a",
+    "status": "pending",
+    "guid": "lmvaqgtpgzrzp86rdmwbgn5nptrgaaybzy98ffg8b6lzy4fqjm",
+    "submittedAt": "2026-09-28T10:29:49.605Z"
+  },
+  "4-MemberToken": {
+    "address": "0xfD54fA1C7e744d8F08a71921F5E2cFb776C08510",
+    "status": "pending",
+    "guid": "kuy2kqihlxqdn6afzhyyay7mrbb5qln1mee4eynkryuiixhfqi",
+    "submittedAt": "2026-09-28T10:29:50.259Z"
+  },
+  "4-LighterSeriesAccount": {
+    "address": "0xD555CFc89BC798fC01DE2A6De92d90e4d2375424",
+    "status": "pending",
+    "guid": "wpsmcnnbcands1apsasx2buezc4q4utvfxgr9z3sgtmewmguzw",
+    "submittedAt": "2026-09-28T10:29:50.905Z"
+  },
+  "5-MemberToken": {
+    "address": "0xe4F2187406F625fAdDD117f6D15eA8B1E1daC7C8",
+    "status": "pending",
+    "guid": "svuqekvfxcryeeg9qnh4cxbpjquexdbskr5lcw1jqy3f4d7zvr",
+    "submittedAt": "2026-09-28T10:29:51.567Z"
+  },
+  "5-LighterSeriesAccount": {
+    "address": "0xb8fb72cB7Ba303e20D86C68Fb269A346CA158496",
+    "status": "pending",
+    "guid": "pmannd9ndieek3d9yzlwkb5meah5spe2hexaz3la3kaxisc9qq",
+    "submittedAt": "2026-09-28T10:29:52.216Z"
+  },
+  "6-MemberToken": {
+    "address": "0xE151219Ce7dfca7570a91bd3D936D89ea45e70DB",
+    "status": "pending",
+    "guid": "zthlcvkegprgii1zedzvyunxfevxlxjmigfhjypasxfbiiqje4",
+    "submittedAt": "2026-09-28T10:29:52.922Z"
+  },
+  "6-LighterSeriesAccount": {
+    "address": "0x3d67a322E03e5505279A1E01DA80105714637E30",
+    "status": "pending",
+    "guid": "sraehvb3hx8ddmuw92dpvcgr1zvahtqefzimnndcrxntfcimhn",
+    "submittedAt": "2026-09-28T10:32:09.263Z"
+  },
+  "7-MemberToken": {
+    "address": "0x746B3d5273097456BDbF71088B1d22e9E364ab69",
+    "status": "pending",
+    "guid": "ytz1j56k7xznsa65y3ejggqp5aecexpctiyqminaczsrbd556e",
+    "submittedAt": "2026-09-28T10:29:54.495Z"
+  },
+  "7-LighterSeriesAccount": {
+    "address": "0x0583a4CBcDDCb420BFC7460dae10ea0282a09C0a",
+    "status": "pending",
+    "guid": "mqujyfajdhbckphuxe388lp2yzqdbqhzhuyrjvsebdjvbelrll",
+    "submittedAt": "2026-09-28T10:32:10.590Z"
+  },
+  "8-MemberToken": {
+    "address": "0x5735b9e19f3CB6fB54E219FDE12594E9d326B904",
+    "status": "pending",
+    "guid": "vwav2dqucczitukfvawbmbussuij1irxcspjrwn7pkwcqxppy9",
+    "submittedAt": "2026-09-28T10:32:11.825Z"
+  },
+  "8-LighterSeriesAccount": {
+    "address": "0x9Ff4A95f098892a8BbD5135dEE9E6b40563f13D6",
+    "status": "pending",
+    "guid": "kn5kmiucvjru699mvadfjff5hgpzcsw9vrd17zvqnkmdj8uiip",
+    "submittedAt": "2026-09-28T10:29:56.585Z"
+  },
+  "9-MemberToken": {
+    "address": "0xA09069b8F2AeEa7a98Cb414DF8054D251Bb94f67",
+    "status": "pending",
+    "guid": "hvtrvw81dxjvqwfhygw8gnemtzt2manfqnjahfuit6wqvskip2",
+    "submittedAt": "2026-09-28T10:29:57.286Z"
+  },
+  "9-LighterSeriesAccount": {
+    "address": "0x0006e33CA448e2A5078A4dBfc461E90d8810eDCf",
+    "status": "pending",
+    "guid": "admbikhfyx26f39f6bkf1ildeasphseaejrasf6qt2hphmstgq",
+    "submittedAt": "2026-09-28T10:29:57.991Z"
+  },
+  "10-MemberToken": {
+    "address": "0xd97E063ca7Fa61Dd7aEe8e5C5ce57970D9cf1161",
+    "status": "pending",
+    "guid": "mjzi2rtam9uspxsstmdzmrvkmycnxt8yzs6vbvhzhitww1eaxp",
+    "submittedAt": "2026-09-28T10:29:58.674Z"
+  },
+  "10-LighterSeriesAccount": {
+    "address": "0xF02cea99FEbE8f7642F60BbE0924bB4A6D1c5e41",
+    "status": "pending",
+    "guid": "j6gg4vddv3e54t1miwsxgy44hwxzqmktrh93hhpahnzfjcezw9",
+    "submittedAt": "2026-09-28T10:29:59.372Z"
+  },
+  "11-MemberToken": {
+    "address": "0x5CBcDD5332b9955E6d96FDD2FbF473f734b9D561",
+    "status": "pending",
+    "guid": "ihizym3czzyfp9imemkx52zrguynkfgxdh4djhan15ip22zqxy",
+    "submittedAt": "2026-09-28T10:30:00.011Z"
+  },
+  "11-LighterSeriesAccount": {
+    "address": "0xf466f91273A7bdd3fb2caDA2f68dec3eb12f8D70",
+    "status": "pending",
+    "guid": "psfy4h9sieeetjib3g564wcnxzijpeuihdhphednuszv9mdyvs",
+    "submittedAt": "2026-09-28T10:30:00.643Z"
+  },
+  "12-MemberToken": {
+    "address": "0x7eAFaEb843A5944a0dA66C98c7068e3A0EcC7445",
+    "status": "pending",
+    "guid": "zjkswtgs24yq35kxxf3vtp3icbxgebnjepeaxqipiqdzq4pvld",
+    "submittedAt": "2026-09-28T10:30:01.271Z"
+  },
+  "12-LighterSeriesAccount": {
+    "address": "0x53FF2ca3d6699796FA613a39CfBe51eaEAB51f43",
+    "status": "pending",
+    "guid": "qnwaycg3qivzerhebeqaz7xdd4lujym2ucmzneqdju1rjiblsa",
+    "submittedAt": "2026-09-28T10:30:01.895Z"
+  },
+  "13-MemberToken": {
+    "address": "0xe0e58DF7FB669e6F55fE907C907AbE8906C1cf92",
+    "status": "pending",
+    "guid": "tb5c4irjnwqnjhwu52wisxpcre76twszc9fbwizd85gmnvbiwr",
+    "submittedAt": "2026-09-28T10:30:02.528Z"
+  },
+  "13-LighterSeriesAccount": {
+    "address": "0x72B005d68E89B3bFc6133a1a9BF0F4ace24e4441",
+    "status": "pending",
+    "guid": "eahajmmslqbkqtcqbadkxmuranguqkuqc3qiisriq5xa3nenjx",
+    "submittedAt": "2026-09-28T10:30:03.179Z"
+  },
+  "14-MemberToken": {
+    "address": "0x18000f209F8f63D0Bba8B356152ABC6fda4e3805",
+    "status": "pending",
+    "guid": "jc5jjrgran6tuswc9n4t7k9kvtfjpc8tjt1sjsiy2is4cwc6eq",
+    "submittedAt": "2026-09-28T10:30:03.817Z"
+  },
+  "14-LighterSeriesAccount": {
+    "address": "0x433B345197F018b0592e6c7A654Dd691f822BE92",
+    "status": "pending",
+    "guid": "k1ckg1eyggaid6axvkhjnrxe1xw1wzantaeiq6cswa6dqw58fg",
+    "submittedAt": "2026-09-28T10:30:04.454Z"
+  },
+  "15-MemberToken": {
+    "address": "0x7e62c8A822c007C5d0F670bbB11C9fd146477F8E",
+    "status": "pending",
+    "guid": "k836iw3yj95duh7mqdss8q9ffdkkpvtnkepslnskfsn3nggqx4",
+    "submittedAt": "2026-09-28T10:30:05.093Z"
+  },
+  "15-LighterSeriesAccount": {
+    "address": "0x8d1304CFB471cebfA2a05077A423F72fBC9a5367",
+    "status": "pending",
+    "guid": "esgp8vznrvki9dhgtftfaul8dht7syxknlr2xn6utyvmzxh9k7",
+    "submittedAt": "2026-09-28T10:30:05.733Z"
+  },
+  "16-MemberToken": {
+    "address": "0xd61280cEBd0490d7eC30359a483fF2A9F55DF3C5",
+    "status": "pending",
+    "guid": "ctmgmhhyesdf2f288bitay7ginvwxeak2xvxy5qtnghru6mwdj",
+    "submittedAt": "2026-09-28T10:30:06.366Z"
+  },
+  "16-LighterSeriesAccount": {
+    "address": "0x75E709Bdf7406C6095856fe343Ec6E478260c7AF",
+    "status": "pending",
+    "guid": "ssvw1dl7nzcm21isewavb3lf5ighcd2zsdcirxxskrirf1fg8b",
+    "submittedAt": "2026-09-28T10:30:06.991Z"
+  },
+  "17-MemberToken": {
+    "address": "0xD2d7f3599383E189Ae960274c235B27BB6148290",
+    "status": "pending",
+    "guid": "6sty8atwny4jekeyvhpnrbj1yhb9n5emupzcw2ubhipxkt7mbn",
+    "submittedAt": "2026-09-28T10:30:07.618Z"
+  },
+  "17-LighterSeriesAccount": {
+    "address": "0x71D44AB2E07a2a8eE11fd945f9Cd6ADF4f5547A8",
+    "status": "pending",
+    "guid": "aejelv8tasak7huhpgm3bupexynnf5bnx1vq3fd5uwt2bxc63t",
+    "submittedAt": "2026-09-28T10:30:08.784Z"
+  },
+  "18-MemberToken": {
+    "address": "0xb3736f0B27e647F426AB37d129104A2F117dC5FD",
+    "status": "pending",
+    "guid": "k6izewcaaffd39srsrt7qyt8whtfjrq3cdfgykzyydezamuzxx",
+    "submittedAt": "2026-09-28T10:30:09.454Z"
+  },
+  "18-LighterSeriesAccount": {
+    "address": "0x859D4c701Dd5Bd55034E78Ea250502a8640B0C00",
+    "status": "pending",
+    "guid": "gsv5rlcb4w3xqjpc2qtcsgrvzcjjy8nuinayyymu4pgdwbnwjx",
+    "submittedAt": "2026-09-28T10:30:10.098Z"
+  },
+  "19-MemberToken": {
+    "address": "0x0A20A237498393e4b0ACb162048fCE2108F61701",
+    "status": "pending",
+    "guid": "k56v6a1ave3t4wzaf3ar5w4rz4zerypeaaninmhzxx2yrajk4v",
+    "submittedAt": "2026-09-28T10:30:10.734Z"
+  },
+  "19-LighterSeriesAccount": {
+    "address": "0x8d98cc38f5e29360cE0edFfCaaE743DC905DADc1",
+    "status": "pending",
+    "guid": "mkkttq2gn3am9yrniu8gctkat8uvzpjfavcuuhhyhhrfqbnw8d",
+    "submittedAt": "2026-09-28T10:30:11.364Z"
+  },
+  "20-MemberToken": {
+    "address": "0xa65cEaf87265F402B6F03d74469F406c89d6bbf9",
+    "status": "pending",
+    "guid": "srdmjtzazknvgyikcevwuclazv3glhkypmxtcpljukhxbl1sn4",
+    "submittedAt": "2026-09-28T10:30:11.998Z"
+  },
+  "20-LighterSeriesAccount": {
+    "address": "0xA9eb62d4b78bd3b2DdCC72EF73746BB24535E27d",
+    "status": "pending",
+    "guid": "dgzwkkgnhzkfubjf1haeyvgbcaekjjpvimapcnmmv3v5wzfznd",
+    "submittedAt": "2026-09-28T10:30:12.642Z"
+  },
+  "21-MemberToken": {
+    "address": "0x6FD0151B13BBf12De2dF4500f015e9c65613d288",
+    "status": "pending",
+    "guid": "9efifiznjlhv4pkpxy1vdemnivrce4jfxgbbg16spp3a61z7j7",
+    "submittedAt": "2026-09-28T10:30:13.273Z"
+  },
+  "21-LighterSeriesAccount": {
+    "address": "0xc20EE5E55bb68883a53E80194872c01dCc566d8A",
+    "status": "pending",
+    "guid": "ccukzefqmbuvcgpz6snrkkhxgawfzfzpfchjpyzpmrswmpmkpa",
+    "submittedAt": "2026-09-28T10:30:13.903Z"
+  },
+  "22-MemberToken": {
+    "address": "0x332f7Cc0Ba9107FFfd29f6b070eCD1023af25B61",
+    "status": "pending",
+    "guid": "mnygksup4phbg7d5rry4bytyvwtdjipbhzjlrpsqr1ua8laksi",
+    "submittedAt": "2026-09-28T10:30:14.534Z"
+  },
+  "22-LighterSeriesAccount": {
+    "address": "0xBfb365A41794b13b94413CDD031C0C107f9d7Caa",
+    "status": "pending",
+    "guid": "xmmjznvzlfzgel16ihnreuy9ea5irjv8m2m2fyzvqrdcrjnia2",
+    "submittedAt": "2026-09-28T10:30:15.160Z"
+  },
+  "23-MemberToken": {
+    "address": "0x27D5C9DB92043ffFB84bddEC0ad0d77cAD8D5B51",
+    "status": "pending",
+    "guid": "thw1u4pcfqic82krkczyrjhi2nrmiudnzqgdcmyie3ibmeibr1",
+    "submittedAt": "2026-09-28T10:30:15.787Z"
+  },
+  "23-LighterSeriesAccount": {
+    "address": "0x0C17C5FD9C0911D3632F2EDe3fd2897A2AD014dD",
+    "status": "pending",
+    "guid": "1rr9mrfurn8i9ctxgbfhhgec46cdkhfth4neqmx5nbvi1mqlzy",
+    "submittedAt": "2026-09-28T10:30:16.453Z"
+  },
+  "24-MemberToken": {
+    "address": "0x7939771b7534b660789dd94164c3ddbafF8129B1",
+    "status": "pending",
+    "guid": "nyiijkle6fn3iahf25edztebtxkkcigrecv8azjdtahhgltwbk",
+    "submittedAt": "2026-09-28T10:30:17.121Z"
+  },
+  "24-LighterSeriesAccount": {
+    "address": "0x33A733a36fc61600a9CD4D8B36979Bcf76d213E5",
+    "status": "pending",
+    "guid": "jjxmyut8pc1rcnzxpvezvtlckqcxu74nkhpnkrdte3j7c2zj8j",
+    "submittedAt": "2026-09-28T10:30:17.745Z"
+  },
+  "25-MemberToken": {
+    "address": "0x854a696C65C2fC5A08F64cfd0EcF3110b7270FcF",
+    "status": "pending",
+    "guid": "nwh3pszu3agwdh9cgjzcdyickujeziqtqbk8viuxnrpdcip2yr",
+    "submittedAt": "2026-09-28T10:30:18.376Z"
+  },
+  "25-LighterSeriesAccount": {
+    "address": "0x0F52701BF2E7Dc75402a80FF816552534a7AA0c1",
+    "status": "pending",
+    "guid": "mejvhqe6hk8vvkjn7dx2hyruqcif13fhfamczutuur18pswwup",
+    "submittedAt": "2026-09-28T10:30:19.007Z"
+  },
+  "26-MemberToken": {
+    "address": "0xdFfe67f83151b1f94B67e602dF53b06554E05c83",
+    "status": "pending",
+    "guid": "bb4xjnnrvw8z6fgsgky8pcj4ygyi6xhelcrudhrzeipqmukktw",
+    "submittedAt": "2026-09-28T10:30:19.686Z"
+  },
+  "26-LighterSeriesAccount": {
+    "address": "0xd932473ebc0531dC47EBb757A14A9ffF6a020439",
+    "status": "pending",
+    "guid": "cavl1ys1qtpelzmteupcnzwyt7pkh5wdg9vyizbs2dhqcbwqdt",
+    "submittedAt": "2026-09-28T10:30:20.354Z"
+  },
+  "27-MemberToken": {
+    "address": "0xd382e7950aC174c4EEEdc307b4aD74D384C84886",
+    "status": "pending",
+    "guid": "esxg94gytta7jkxkpd5ebfiwaag6niaripqv7zzrsb6iivuwtr",
+    "submittedAt": "2026-09-28T10:30:21.083Z"
+  },
+  "27-LighterSeriesAccount": {
+    "address": "0xb0A4123dd7f0c862b9fC863D5D520F55aec7B29F",
+    "status": "pending",
+    "guid": "cikpizjb6ymaabjkqkv2epddmz9qdfgjdx6r5jfqlvu25h1vzy",
+    "submittedAt": "2026-09-28T10:30:21.925Z"
+  },
+  "28-MemberToken": {
+    "address": "0xD4945469aEb3BAC84A708E3193a2Be4a3187FF73",
+    "status": "pending",
+    "guid": "vzsscng72iqjnritnewsf5fff8wc85zerfjhtmjibyhx1t94jd",
+    "submittedAt": "2026-09-28T10:30:22.611Z"
+  },
+  "28-LighterSeriesAccount": {
+    "address": "0x88576A056A967CE28cE800cb7Cd34f886c12ea11",
+    "status": "pending",
+    "guid": "um2hirulc4j4zxicu871z2kbghmifmzsivaed9win7jfz8zken",
+    "submittedAt": "2026-09-28T10:30:23.456Z"
+  },
+  "29-MemberToken": {
+    "address": "0x7E142775d077D5888538c6fAF0514b3Eb389d5D1",
+    "status": "pending",
+    "guid": "yxc312wc51amkuhmenvtw6bvg4vdcxzc9tdpmpjpxkvqyjyv6s",
+    "submittedAt": "2026-09-28T10:30:24.091Z"
+  },
+  "29-LighterSeriesAccount": {
+    "address": "0x3E96a52D8BDC7bFa49d093f29BB2491aE8850468",
+    "status": "pending",
+    "guid": "z1wi4t2q2cdc7q4skun5ajbndti5cziturnyv1thdm8kfc1ub7",
+    "submittedAt": "2026-09-28T10:30:24.721Z"
+  },
+  "30-MemberToken": {
+    "address": "0x99f00631e2077100558587f12b5C625b422898F5",
+    "status": "pending",
+    "guid": "nvxaefq85cawdtubig25nk2xtmcr8csqt5ccvjc99nvrhg9frw",
+    "submittedAt": "2026-09-28T10:30:25.401Z"
+  },
+  "30-LighterSeriesAccount": {
+    "address": "0x507DC99Bf52c6E2dCcAA933CCE320644520074ae",
+    "status": "pending",
+    "guid": "tks7kcw1httyzuab4zgifpetwzqbpldxseihxmkaivc9gaptgx",
+    "submittedAt": "2026-09-28T10:30:26.087Z"
+  },
+  "31-MemberToken": {
+    "address": "0x767489624fc4e2eEf74fD71256dbc77078f15B09",
+    "status": "pending",
+    "guid": "cbpifv6zakmjbvqvymktehdh1jlvdlcpwia29iqdcycbmpkgik",
+    "submittedAt": "2026-09-28T10:30:26.720Z"
+  },
+  "31-LighterSeriesAccount": {
+    "address": "0x7A4dED0637B0b26E2460511dA36ED1426Bee6e24",
+    "status": "pending",
+    "guid": "c2hdtknhivjblq8qpslpmqxyr6fduca5cu9aggqqes1uu1mdtp",
+    "submittedAt": "2026-09-28T10:30:27.354Z"
+  },
+  "32-MemberToken": {
+    "address": "0x1ad5995271f4b60733AEf8fD3099A1cC6BFB03A9",
+    "status": "pending",
+    "guid": "asvwxm59nmfkm7mfpifyiztwampu5qjtax2haivmvxudaueu8n",
+    "submittedAt": "2026-09-28T10:30:27.988Z"
+  },
+  "32-LighterSeriesAccount": {
+    "address": "0x82237B4cBcEB97bE316d5Fbe994FFBD2B40a03AB",
+    "status": "pending",
+    "guid": "duyvf2qyjcyc5xudag5ewgmt3bfqlfhvmgdrwfs1ibpuputn9x",
+    "submittedAt": "2026-09-28T10:30:28.616Z"
+  },
+  "33-MemberToken": {
+    "address": "0x609803Dd7ac6948046d48821c29d294351954D4A",
+    "status": "pending",
+    "guid": "kppujxg5tunzd4u3fnjdikq4kjhtv8jhhnvj6sxgaqmpejyj1k",
+    "submittedAt": "2026-09-28T10:30:29.240Z"
+  },
+  "33-LighterSeriesAccount": {
+    "address": "0xaaf408CB0eF32119fA248182404677568e9803C7",
+    "status": "pending",
+    "guid": "ef3xe1zl91fnakk5sq9bxpr4tjy1rckxtaw4eazvjkjxbnqbea",
+    "submittedAt": "2026-09-28T10:30:29.885Z"
+  },
+  "34-MemberToken": {
+    "address": "0x7754C35048ac09C2b5b269980d44b6a6C9f83D73",
+    "status": "pending",
+    "guid": "sabqpgpz4v2ymxfhuqggqhqegcftt6wnmqklmumdff7etkzcht",
+    "submittedAt": "2026-09-28T10:30:30.523Z"
+  },
+  "34-LighterSeriesAccount": {
+    "address": "0x488779Ef6BE95677C4747C1Fa746BDF17A29cd22",
+    "status": "pending",
+    "guid": "trkxjajx9lcvxysfdvmuvsc3rabbmvdtbad43p6a2pj2ckj8dd",
+    "submittedAt": "2026-09-28T10:30:31.211Z"
+  },
+  "35-MemberToken": {
+    "address": "0x98DC597e376a4eD8112383869eC9eF6EBfa215bD",
+    "status": "pending",
+    "guid": "iwqpx2phyazzce89jxmnceqds78ar6ruy8c94dccekrw2ud6tu",
+    "submittedAt": "2026-09-28T10:30:31.846Z"
+  },
+  "35-LighterSeriesAccount": {
+    "address": "0x90B02B5a5CAd7b7B95Ab01A950AF054D778C4022",
+    "status": "pending",
+    "guid": "1mmqcw5cvrterti6aw2z67kj8snubqt2gx55g8vh5rhki1uqdw",
+    "submittedAt": "2026-09-28T10:30:32.484Z"
+  },
+  "36-MemberToken": {
+    "address": "0x046ef3b9B4D658386e393Ea82f82555c85B7E526",
+    "status": "pending",
+    "guid": "tj4unus3hk8c17ysyuneqtyjvfqa28xxqfxaymaaderlatqbmr",
+    "submittedAt": "2026-09-28T10:30:33.117Z"
+  },
+  "36-LighterSeriesAccount": {
+    "address": "0xf41213B028f3F16667E41Ba369a8D604E0592c52",
+    "status": "pending",
+    "guid": "t12pyskjz8ws2amallbpuljcck2cktqpmafxvsi6qentglcrzq",
+    "submittedAt": "2026-09-28T10:30:33.755Z"
+  },
+  "37-MemberToken": {
+    "address": "0x87A4aAD17338F2a7292495210E4a5471e37f9bE3",
+    "status": "pending",
+    "guid": "h51yxhgqmmqzzxjg5rupfj3wqgysxr9adkkkppdyg6fwgqegi1",
+    "submittedAt": "2026-09-28T10:30:34.388Z"
+  },
+  "37-LighterSeriesAccount": {
+    "address": "0xd4052BFB577dd533f8bf07017f16c6af91Db5861",
+    "status": "pending",
+    "guid": "gkxaap2vzhjpivdememqrgevy9e7pasi9xapd3bnijfwesnjis",
+    "submittedAt": "2026-09-28T10:30:35.016Z"
+  },
+  "38-MemberToken": {
+    "address": "0x48A712c90e6a007deB89EE1543aA5C6ff604E5f7",
+    "status": "pending",
+    "guid": "l1y5rb85dbqrkxfp8jvznrq1xrtiljvkbwkkwjxti9cmkrrtwp",
+    "submittedAt": "2026-09-28T10:30:35.644Z"
+  },
+  "38-LighterSeriesAccount": {
+    "address": "0x2EF3ecf2cDaD7C8C91904271911504eFF0C768BC",
+    "status": "pending",
+    "guid": "fik6qucy7aipjwgfprbktqm2hefdf6zzpwwcqw5sixcpbuq76g",
+    "submittedAt": "2026-09-28T10:30:36.277Z"
+  },
+  "39-MemberToken": {
+    "address": "0xb659EF9D3c3FC3e9d612375B683cD0495d6595cF",
+    "status": "pending",
+    "guid": "3zhawqxjpkezi1aizp14fjmkcvmysnp9xy41hfzef6fjmifcpi",
+    "submittedAt": "2026-09-28T10:30:36.909Z"
+  },
+  "39-LighterSeriesAccount": {
+    "address": "0x13eC49f0c0F4f4A483444a82234B8E41e4CF4c16",
+    "status": "pending",
+    "guid": "us72sidxy24zstwvujxa1kpnq9ftyugb99tn2wykmk7xafednh",
+    "submittedAt": "2026-09-28T10:30:37.549Z"
+  },
+  "40-MemberToken": {
+    "address": "0xa59439668c9ab015b9A3E4eE6d6F8F9073CAd338",
+    "status": "pending",
+    "guid": "fkefha3kdh4lyeltqj1zuymcmfdsmjvt5gevxurtjhsfh2much",
+    "submittedAt": "2026-09-28T10:30:38.181Z"
+  },
+  "40-LighterSeriesAccount": {
+    "address": "0x5010d7548237D1D97a663A59D35ac979e729c310",
+    "status": "pending",
+    "guid": "qwcppgy3tdmcxtncgizqmwt7eb7xklike6usfgspnwtdxikztg",
+    "submittedAt": "2026-09-28T10:30:38.808Z"
+  },
+  "41-MemberToken": {
+    "address": "0xa767915fa25746eBb3A7Cf51B0C36632fBaFB264",
+    "status": "pending",
+    "guid": "k4umktb6ad92hgjbnsyvmqrbtswfaxr8dfrfgtk1qahffmmluw",
+    "submittedAt": "2026-09-28T10:30:39.456Z"
+  },
+  "41-LighterSeriesAccount": {
+    "address": "0x7C0E82005D70c853D23b3a74Bea99aA18f552c1f",
+    "status": "pending",
+    "guid": "kt1xjwdtttqwv3l2q3f5kw7x6cibm76ilecp7fmwcpzhbteeud",
+    "submittedAt": "2026-09-28T10:30:40.100Z"
+  },
+  "42-MemberToken": {
+    "address": "0x8a7d777423f71600a1426b32603B4fdf4c38C4ee",
+    "status": "pending",
+    "guid": "xjvqbqm4s7dsxmngbrqnvjhktxwpmcy4i8amdv4m33nehardvu",
+    "submittedAt": "2026-09-28T10:30:40.728Z"
+  },
+  "42-LighterSeriesAccount": {
+    "address": "0x0A019B174f75d02b1e3580e500c0aF1817779e30",
+    "status": "pending",
+    "guid": "inn6id3knemxhfz9jpc1ufnwjsvtuh7huswkfcqwjtzr1xm9g8",
+    "submittedAt": "2026-09-28T10:30:41.371Z"
+  },
+  "43-MemberToken": {
+    "address": "0x11F5C98D3823D0A8eb21b55819eF6Cb4C8f7628a",
+    "status": "pending",
+    "guid": "stbusu1jmrhbh6y4dfant8zgh2hnunxmlkqehz12kwqrejbutx",
+    "submittedAt": "2026-09-28T10:30:42.021Z"
+  },
+  "43-LighterSeriesAccount": {
+    "address": "0x067e9275D8A769FE1d5a44aeC4E37724eC28551B",
+    "status": "pending",
+    "guid": "u6ysejuvdqmdryuvpwftmdf94xh82xrdwxurnu7xkmlcf75sv9",
+    "submittedAt": "2026-09-28T10:30:42.718Z"
+  },
+  "44-MemberToken": {
+    "address": "0x9357F837c6D8aF35017c05Fe3BC7564073C33c1B",
+    "status": "pending",
+    "guid": "veezbgrqng2ltfzz8j4uhvqi9arduxsrcs3czvweay6qwytx4g",
+    "submittedAt": "2026-09-28T10:30:43.581Z"
+  },
+  "44-LighterSeriesAccount": {
+    "address": "0x656aFd74880d6AA74a8a7b96a8Da7aA05bF6B515",
+    "status": "pending",
+    "guid": "yln3tzqvr1qdwrpb92dwzdpruiqzdagkady7dar3dwevem3esu",
+    "submittedAt": "2026-09-28T10:30:44.280Z"
+  },
+  "45-MemberToken": {
+    "address": "0xa70c14f0d89f56251a9E485BF0dCA3Af53E25Fe6",
+    "status": "pending",
+    "guid": "fbdfltmbllzpue1pevshqryt28mzutpv2qatifsigznqc4sert",
+    "submittedAt": "2026-09-28T10:30:44.922Z"
+  },
+  "45-LighterSeriesAccount": {
+    "address": "0xa87759e961cD53D91c65064b402F2B27676ce5a4",
+    "status": "pending",
+    "guid": "gekjmaqi76mwvhnyffz2yiiiqbzpwx6yf7g2nneiwlpeqmrjsd",
+    "submittedAt": "2026-09-28T10:30:45.552Z"
+  },
+  "46-MemberToken": {
+    "address": "0x6a2ae6431A6A3C76D9C6509eAa9B95ce795EbDCC",
+    "status": "pending",
+    "guid": "nevtayw3wc21ma1ppq1kcsrh5du4j3kexj9t3dwi5kjdhvqeeb",
+    "submittedAt": "2026-09-28T10:30:46.257Z"
+  },
+  "46-LighterSeriesAccount": {
+    "address": "0xaf9E6273B5727cAa4e2E9816A0F746fc835f81ea",
+    "status": "pending",
+    "guid": "y2jxcwddnw4sjsrmwd1ylbuhfhyna9pgqj5jvz8deprzfcbtlu",
+    "submittedAt": "2026-09-28T10:30:47.275Z"
+  },
+  "47-MemberToken": {
+    "address": "0xB3CCdf186DD6F15c23c9B155ad7576909F4BA691",
+    "status": "pending",
+    "guid": "slegpny2gkprdd8n21m8rwvnixkuc3gf2gi3tauhbtjnppbdsi",
+    "submittedAt": "2026-09-28T10:30:48.050Z"
+  },
+  "47-LighterSeriesAccount": {
+    "address": "0x59eE4bBEEa5ce37D8E43ea2d86260C48092Db2b1",
+    "status": "pending",
+    "guid": "rd8nnivsh6bast6vu6kab2kjit53arwfzu4yznwaaggybcbuxz",
+    "submittedAt": "2026-09-28T10:30:48.819Z"
+  },
+  "48-MemberToken": {
+    "address": "0xfB87710374CA49d22f67aF11f5eea55954e4bc26",
+    "status": "pending",
+    "guid": "dnazwqtqwwethrcw1xqyxfal1jkn86ib61d75zqefbjsk7zqwf",
+    "submittedAt": "2026-09-28T10:30:49.517Z"
+  },
+  "48-LighterSeriesAccount": {
+    "address": "0xA20c8483aD3C61Cd9098F76A0Ea706AF48202062",
+    "status": "pending",
+    "guid": "khcsnawuy8cwygrzdmuxxgjpbbbuaiaru98djrgkic8qdqhjn3",
+    "submittedAt": "2026-09-28T10:30:50.225Z"
+  },
+  "49-MemberToken": {
+    "address": "0xFa72E4a79da6c6BaEa070a6f6d1e3994e238e49D",
+    "status": "pending",
+    "guid": "mzthk4pnqcz2jfyc2qzeem6jfkzwlcuryyw2ybp4fxb4bhttir",
+    "submittedAt": "2026-09-28T10:30:50.921Z"
+  },
+  "49-LighterSeriesAccount": {
+    "address": "0x05c8f4C59242fC031F0b73884F76887Ed02A76F1",
+    "status": "pending",
+    "guid": "psb8nztidavu2d9iuliveq2wzic3zpsgbkpbgqkpafzezkwxvu",
+    "submittedAt": "2026-09-28T10:30:51.623Z"
+  },
+  "50-MemberToken": {
+    "address": "0x1FcA68c249047267FC0DBc3E9903B7bC84b9dA5B",
+    "status": "pending",
+    "guid": "psi78mpp8jaqhgk4dithyzcai5ytbygbzjkp2t5djfthtncxba",
+    "submittedAt": "2026-09-28T10:30:52.329Z"
+  },
+  "50-LighterSeriesAccount": {
+    "address": "0x4ee920F9b772C5B77679D8DB2373c2BCDaDfBaAA",
+    "status": "pending",
+    "guid": "ijm9vgf9q4nvca3arxmv3adfzj7vgvs2s1qmfqq5zt42gn3sej",
+    "submittedAt": "2026-09-28T10:30:53.026Z"
+  },
+  "51-MemberToken": {
+    "address": "0x30668D21c9334c87c009800BAa0206091dd10921",
+    "status": "pending",
+    "guid": "xec58yg6bc9ksucm3bkgjtzgwa7czkgfgxxdqnthf9ncwd1aqu",
+    "submittedAt": "2026-09-28T10:30:53.683Z"
+  },
+  "51-LighterSeriesAccount": {
+    "address": "0x3daC28F014dE41eba5583504286C2DD3312D8cD4",
+    "status": "pending",
+    "guid": "jv1vlk1h48jxuum36bxbqzmnmtesuuvulszwvg7diisfmssuqn",
+    "submittedAt": "2026-09-28T10:32:13.063Z"
+  },
+  "52-MemberToken": {
+    "address": "0xC24e031187B11f519929Ff701D53965CD01d4827",
+    "status": "pending",
+    "guid": "sniwia8d8jv9eacqk3uhxpwtt8gxav1l27uibqzqms9m8auidx",
+    "submittedAt": "2026-09-28T10:32:14.298Z"
+  },
+  "52-LighterSeriesAccount": {
+    "address": "0xc549379d3BEaedb3D2263c8a96f11d840BEC0EA1",
+    "status": "pending",
+    "guid": "955gyxzewnri1qpvi2rimlx4ctzpdr9ghja5tv7teunace3g6u",
+    "submittedAt": "2026-09-28T10:30:55.568Z"
+  },
+  "53-MemberToken": {
+    "address": "0xA36243f0F168320e0926b0F971094bfAfD57e9eB",
+    "status": "pending",
+    "guid": "h16xfp82f5xa1vfbchpkumuquipmtxqhii89aj4cwsr2w4tsvr",
+    "submittedAt": "2026-09-28T10:30:56.229Z"
+  },
+  "53-LighterSeriesAccount": {
+    "address": "0x69586b68C9FC30d34b16b714fFd86a65f49aFF0f",
+    "status": "pending",
+    "guid": "3mtmsv6huw1mahffshnxbsdcn3vtuqrvh2vwqxhd3tg8cbsamq",
+    "submittedAt": "2026-09-28T10:30:56.856Z"
+  },
+  "54-MemberToken": {
+    "address": "0x8801631A171BbB33a5aD1C6c0bF3Eb96576Dd189",
+    "status": "pending",
+    "guid": "cawzqaiqypadn46w4ylkqu1juicvrdbl64dg1hbllzrt3q5c3h",
+    "submittedAt": "2026-09-28T10:30:57.485Z"
+  },
+  "54-LighterSeriesAccount": {
+    "address": "0x5C694dcb4cEe19053ab40356aE78Fcce8DA2a1f6",
+    "status": "pending",
+    "guid": "xjp3zhalv8ydqjdp7jrqwmn1yqw8hedrtjhsn45vxfm4dza6fe",
+    "submittedAt": "2026-09-28T10:30:58.121Z"
+  },
+  "55-MemberToken": {
+    "address": "0xa6C276BbF9F3d28f6B3c35F6498705b6e34b40Db",
+    "status": "pending",
+    "guid": "nuujmfgrlykdbdtqacwb4wagrt4jmp36khdmv8ghcd3ychpn3j",
+    "submittedAt": "2026-09-28T10:30:58.752Z"
+  },
+  "55-LighterSeriesAccount": {
+    "address": "0x58C04657E411AfdF67Ef609110CF8954472483fd",
+    "status": "pending",
+    "guid": "qunvguejncx7jkfvgbvuyxfevkcayuse2wkcjamzpmz4nwpw6k",
+    "submittedAt": "2026-09-28T10:30:59.396Z"
+  },
+  "56-MemberToken": {
+    "address": "0xe3844EDcAc46b94652D03Eb99fE4DaFAad58Ee35",
+    "status": "pending",
+    "guid": "qqk81sd8bvg4kuaj6n1eb6nvekycsrxhwev2utwspcasjltet4",
+    "submittedAt": "2026-09-28T10:31:00.021Z"
+  },
+  "56-LighterSeriesAccount": {
+    "address": "0x54d89B791fcF89EA1Ffd3ED16292764D5A886b1D",
+    "status": "pending",
+    "guid": "pswt9ibqwfu2hapza7q8gds8fqxvbsijjn35c25csepgxnvrwa",
+    "submittedAt": "2026-09-28T10:31:00.646Z"
+  },
+  "57-MemberToken": {
+    "address": "0xc17989886d9DCEBa1D40Af51dF84D58dfb6dd6A0",
+    "status": "pending",
+    "guid": "ckeknb1mdkmgecxbhk8jmy3dhcplbsu6s2gx5azr5rpkqk1ljn",
+    "submittedAt": "2026-09-28T10:31:01.288Z"
+  },
+  "57-LighterSeriesAccount": {
+    "address": "0x6649E6083dd7a942D1B7C5d99B9F0A188c29aa8B",
+    "status": "pending",
+    "guid": "vpqjryp2wiubd6bjdn86tyqtksbrlqrgc5sddixfkmku93qslb",
+    "submittedAt": "2026-09-28T10:31:01.925Z"
+  },
+  "58-MemberToken": {
+    "address": "0x9697aA1ab89338dEA5d087f15D8966145B996CC4",
+    "status": "pending",
+    "guid": "dimpqyywprwyfxteq9fp7uruk7evkhcafbmyunetfguyinxntv",
+    "submittedAt": "2026-09-28T10:31:02.550Z"
+  },
+  "58-LighterSeriesAccount": {
+    "address": "0x671a1DD01d01c780428C271dc1fB32F7BbFAD2c0",
+    "status": "pending",
+    "guid": "eglp5itsejuuc6nmjekujbul8q1tlpaq3fdvphx4f2avzl4njv",
+    "submittedAt": "2026-09-28T10:31:03.179Z"
+  },
+  "59-MemberToken": {
+    "address": "0x44Cdfe1d9E8ca177c13c7e692735992CB33E6D8F",
+    "status": "pending",
+    "guid": "4s4zl4mzfeiz7f95rwttp38gehrqmnlc9qkilwua9p3hmfuvmv",
+    "submittedAt": "2026-09-28T10:31:03.817Z"
+  },
+  "59-LighterSeriesAccount": {
+    "address": "0x887bd12FA2e7a4d227414a543AF092281daC4585",
+    "status": "pending",
+    "guid": "pdzvcqes7y1u4kh9jmrpfyzcuwl4yxpq2wkaw8fdzqbli5js7l",
+    "submittedAt": "2026-09-28T10:31:04.451Z"
+  },
+  "60-MemberToken": {
+    "address": "0x790578553E2d956dB4Bb4C38755C48A27D4e3878",
+    "status": "pending",
+    "guid": "sqi1bgdptgdbu9jataz8ec6epfneipckwcvyy1jux7gazqw228",
+    "submittedAt": "2026-09-28T10:31:05.154Z"
+  },
+  "60-LighterSeriesAccount": {
+    "address": "0x39B9b65681D1d4BeC77Ac2670935d303be8172f8",
+    "status": "pending",
+    "guid": "cksz7fk5cwuq644iehdkdsfvbyvxeqjkcacsux5getppa81dvh",
+    "submittedAt": "2026-09-28T10:31:06.005Z"
+  },
+  "61-MemberToken": {
+    "address": "0xE36d3409562946B1351F2AB59e46d794F5e9aa53",
+    "status": "pending",
+    "guid": "v6ljh5t2ljgczu2rdi9xchfypr7hrvz27vzs7hgzdv9mclyfuf",
+    "submittedAt": "2026-09-28T10:31:06.641Z"
+  },
+  "61-LighterSeriesAccount": {
+    "address": "0x660a20Fa8BC5d0BCa75c105e37E54cBa8511ADd5",
+    "status": "pending",
+    "guid": "mjtnqdqnvrykaflev5kbkx3bkh9um3tsdcjf9ixwcjbqbtlubp",
+    "submittedAt": "2026-09-28T10:31:07.273Z"
+  },
+  "62-MemberToken": {
+    "address": "0x08c11Ba4Ef514DCE77b69a2830140c545fc2e4E5",
+    "status": "pending",
+    "guid": "gujtvghh4hwwsuqxxyxx5czqyrkd1hwejyly7khtxrepsfsiz4",
+    "submittedAt": "2026-09-28T10:31:07.914Z"
+  },
+  "62-LighterSeriesAccount": {
+    "address": "0x77F44F8540d245B8F30EbBc323933EAA23fa68E5",
+    "status": "pending",
+    "guid": "2p28dj7iv57cwawj1mqdppn1gdltyefwhmiabvie2zjbaafrrd",
+    "submittedAt": "2026-09-28T10:31:08.606Z"
+  },
+  "63-MemberToken": {
+    "address": "0xe8B0CFdaFFEAD6dFE9afE33036D951b1329Ad28f",
+    "status": "pending",
+    "guid": "jd4rndb2tqxdlgrdvahliw3lbpedr6yu2jvssgzfaz4tgpmuax",
+    "submittedAt": "2026-09-28T10:31:09.242Z"
+  },
+  "63-LighterSeriesAccount": {
+    "address": "0xF7df343Ac6eBD0576A14f1690004D2E307d21f87",
+    "status": "pending",
+    "guid": "e6a6vpbipyynbms4btkzcebdc9s96m2b4utskwp6f8t1gcyhtd",
+    "submittedAt": "2026-09-28T10:31:09.869Z"
+  },
+  "64-MemberToken": {
+    "address": "0xFE7151c2fb24Af1a6244491e92F91614A55fb94E",
+    "status": "pending",
+    "guid": "dk8blzvwtmp3d3wni8uzieefj4cawzbjht9h4titxp4tidvr4t",
+    "submittedAt": "2026-09-28T10:31:10.511Z"
+  },
+  "64-LighterSeriesAccount": {
+    "address": "0xFA2375589F8933a348A43D7f1DDD855d32477362",
+    "status": "pending",
+    "guid": "tqntuqhsshnk1taemktfjrrsckbbxv8m646mwnzk1bs1fcpah4",
+    "submittedAt": "2026-09-28T10:31:11.157Z"
+  },
+  "65-MemberToken": {
+    "address": "0xf18fBfd06f67B0Bdaa7C1c6Ed25e493cC101C8AC",
+    "status": "pending",
+    "guid": "sbxpauqmhadvmva1fwmpiyb9fyyrlqw1utewghudwaxzxvqxrf",
+    "submittedAt": "2026-09-28T10:31:11.793Z"
+  },
+  "65-LighterSeriesAccount": {
+    "address": "0x32BbcCCcF43f368B3Ac58F47e4b32f7e68Dc62DE",
+    "status": "pending",
+    "guid": "ytnumk1padwzasddcthdkn3at81bckhtz7rwdr7ivthh8wzfni",
+    "submittedAt": "2026-09-28T10:31:12.437Z"
+  },
+  "66-MemberToken": {
+    "address": "0xf279229726A49B5E29036547397C8d27905EdF12",
+    "status": "pending",
+    "guid": "uwemuardadjplqv21u18abmyisfk2w9mpjqkecdh5rrtz77sm7",
+    "submittedAt": "2026-09-28T10:31:13.066Z"
+  },
+  "66-LighterSeriesAccount": {
+    "address": "0x815A2024C88f517C1390FCca9720514c103Ed435",
+    "status": "pending",
+    "guid": "vxeejiag53vfbd5y1tzbnpgj4ajtzbknqv2dhba8ay7abredp1",
+    "submittedAt": "2026-09-28T10:31:13.695Z"
+  },
+  "67-MemberToken": {
+    "address": "0x31F758F8506086E8E61dE8F3EdCbEd9664Fb329A",
+    "status": "pending",
+    "guid": "7ftbi7gkaaqhgwhhggctgqssbqi68ev75yw5udcvmmr1iihdsu",
+    "submittedAt": "2026-09-28T10:31:14.322Z"
+  },
+  "67-LighterSeriesAccount": {
+    "address": "0x6AeC7EcaBFa075EBeA9a2272e1714049479e9596",
+    "status": "pending",
+    "guid": "axbnjhn1bupadxehcizdn3fh6uyr9h96deuxxiengud8xc9tns",
+    "submittedAt": "2026-09-28T10:31:14.965Z"
+  },
+  "68-MemberToken": {
+    "address": "0x8E0b05945C32675A8d0f29cDE4D4b10ccb3531a9",
+    "status": "pending",
+    "guid": "6pdfg7iugqiwsikixz3gkw5cwtrxbtl5whbktzxnfdsq5k2jne",
+    "submittedAt": "2026-09-28T10:31:15.676Z"
+  },
+  "68-LighterSeriesAccount": {
+    "address": "0x26c88158bcfEe9c84c8fd5D776eb045b803e7483",
+    "status": "pending",
+    "guid": "x1bsffzmc9wkk1n2mxp5qtturp2xcggdkkarssarnxwgendhfs",
+    "submittedAt": "2026-09-28T10:31:16.354Z"
+  },
+  "69-MemberToken": {
+    "address": "0x080f14f48C9c28a99B9A01EA95f1Db43d2e0035a",
+    "status": "pending",
+    "guid": "gaeii4ygsqe3awssqrrwbunqijqmf4cjilzhy2c7tkzjbjxznm",
+    "submittedAt": "2026-09-28T10:31:16.998Z"
+  },
+  "69-LighterSeriesAccount": {
+    "address": "0xdd266e1A4249C59c1cb6bAD4E14920aFe1A43444",
+    "status": "pending",
+    "guid": "z9ccsbp6e1sh2d2qkwhesutkeawbiwvinypednbvbnbvkfiebc",
+    "submittedAt": "2026-09-28T10:31:17.628Z"
+  },
+  "70-MemberToken": {
+    "address": "0x7E0182046e15Ad64ec86C747200E3c68B17B2Fc8",
+    "status": "pending",
+    "guid": "fbrggcjsimhljp4dta7aqqcg284g8cs6jweaep1as2qaftu4ks",
+    "submittedAt": "2026-09-28T10:31:18.266Z"
+  },
+  "70-LighterSeriesAccount": {
+    "address": "0x43Ce1586C8F64060618FfF08daacc211FD348945",
+    "status": "pending",
+    "guid": "4rwlppveer5r4tn9qetfax5s4ymlrhj8dq7qhs14lhvvwnmpin",
+    "submittedAt": "2026-09-28T10:32:15.542Z"
+  },
+  "71-MemberToken": {
+    "address": "0xf3006f89E0bF12ef6C9206a51F064403B6Ba43Ad",
+    "status": "pending",
+    "guid": "nu8cixmciq2kpygwdfmysyequsb9nfbp33kp1b7a3fia22jpez",
+    "submittedAt": "2026-09-28T10:32:16.771Z"
+  },
+  "71-LighterSeriesAccount": {
+    "address": "0xEcCEc5BfB359cED3b1466800c1A11499d26502A6",
+    "status": "pending",
+    "guid": "trcdprzafzyei7vc3mjuqday9pzs18e1kgj1txznb59t3niif4",
+    "submittedAt": "2026-09-28T10:31:20.150Z"
+  },
+  "72-MemberToken": {
+    "address": "0x24e43F9Bb62DCBDa8CF826201471d87C3920A3e7",
+    "status": "pending",
+    "guid": "r8js3fhf4ahyaxjxidpuivdvikuhvm6rcxg7guewjdtzxdud8v",
+    "submittedAt": "2026-09-28T10:31:20.790Z"
+  },
+  "72-LighterSeriesAccount": {
+    "address": "0x1E53A185a98a8cdb996c427e02A47361e9c9bBB4",
+    "status": "pending",
+    "guid": "w6kkkkuqiilzaiurmdgdqqzubw4dp6rrzzs1xrcvchbvij4kv7",
+    "submittedAt": "2026-09-28T10:31:21.433Z"
+  },
+  "73-MemberToken": {
+    "address": "0xc5367EC4712603623Fc3787a2a5Ab09Ce5163c45",
+    "status": "pending",
+    "guid": "ghmvg67skqhh1diusaruuwbk2zd4bgsjhhpivejlu67ldwgzdp",
+    "submittedAt": "2026-09-28T10:31:22.061Z"
+  },
+  "73-LighterSeriesAccount": {
+    "address": "0x5d0B0f0692C9EefA9cd7cEabfeDE22E988989B3b",
+    "status": "pending",
+    "guid": "tuu3cm71u8t3fwqyzjpaqnq5appqhxhermnxrf52cwkctrqdmf",
+    "submittedAt": "2026-09-28T10:31:22.702Z"
+  },
+  "74-MemberToken": {
+    "address": "0x0713d6F78BC7E67Be798Dbfe3601Cfff8D1d65C7",
+    "status": "pending",
+    "guid": "vyk3r64ptppginqect7tzkemyv3ebjylu32jupwhubcgekbnmf",
+    "submittedAt": "2026-09-28T10:31:23.339Z"
+  },
+  "74-LighterSeriesAccount": {
+    "address": "0x10b5b1e33D621C9f9F7AC2925D167C1e5A274F0f",
+    "status": "pending",
+    "guid": "ewvu7buy5w3rdjrdmgm6kexpqx8x8djghxw3f1wrqvjsf4xtg1",
+    "submittedAt": "2026-09-28T10:31:23.967Z"
+  },
+  "75-MemberToken": {
+    "address": "0x5B632D884c6319DB4C10185Ed37bE00E974811e8",
+    "status": "pending",
+    "guid": "t2pch6y1p3vggpislbx9rkprqbsvbjjvjchpmcji7fcqtlb5ex",
+    "submittedAt": "2026-09-28T10:31:24.641Z"
+  },
+  "75-LighterSeriesAccount": {
+    "address": "0x83be58230e0eBf39cB2274b684B0f7Ffe764Bf22",
+    "status": "pending",
+    "guid": "ke52yydpm7dtp6jax47u5arf3cizyeznrfy5rhfklxpdwfqxfs",
+    "submittedAt": "2026-09-28T10:31:25.292Z"
+  },
+  "76-MemberToken": {
+    "address": "0x729df2e63B615C9e6a5038174ea9692Df58e468B",
+    "status": "pending",
+    "guid": "4fq198icbjga5bxdkiigbuwkyhm6s2zeigjhmiyi9dxu7xximh",
+    "submittedAt": "2026-09-28T10:31:25.932Z"
+  },
+  "76-LighterSeriesAccount": {
+    "address": "0xE24b9d58af4C9B3248C3EEd0FA4eb0028e6F5068",
+    "status": "pending",
+    "guid": "mgpfuajf3sldbakctpggr2ja7px2dskejafigtdky7fxwx2w9w",
+    "submittedAt": "2026-09-28T10:31:26.583Z"
+  },
+  "77-MemberToken": {
+    "address": "0x75b4dBb3480355B30518f4E2a830070Bd3277C71",
+    "status": "pending",
+    "guid": "5zt6rkwn95dh2ch8t1jsmzaxhjlnebm1t9mbcejwntj98g6eqn",
+    "submittedAt": "2026-09-28T10:31:27.218Z"
+  },
+  "77-LighterSeriesAccount": {
+    "address": "0x4987F81BC4ecE57FFB3481f069f67a178629A6D2",
+    "status": "pending",
+    "guid": "d2dh96pvngy9ayicptfvwfgq5tf2q1e8yrxkpb1gngq4veimsv",
+    "submittedAt": "2026-09-28T10:31:27.864Z"
+  },
+  "78-MemberToken": {
+    "address": "0x71739b5276Ee3CDD51b24B111D3EF3441A4E339A",
+    "status": "pending",
+    "guid": "4zc4injrbbyxumexmdea8vjzmd688ivmcfmchybk9i4nb48l7j",
+    "submittedAt": "2026-09-28T10:31:28.494Z"
+  },
+  "78-LighterSeriesAccount": {
+    "address": "0xF9577b570895159ff2192380f0B77cb09a299D35",
+    "status": "pending",
+    "guid": "e7psxyfcggibhigdjnz3qf2usqtxqjwk2penxl9ewwhv3x1kxy",
+    "submittedAt": "2026-09-28T10:31:29.134Z"
+  },
+  "79-MemberToken": {
+    "address": "0xb94155E5B1Ed194317F63C8B883BA5bE63aad21C",
+    "status": "pending",
+    "guid": "py64sbe2x7syvvsp8nxzqb8qkvldbhfdmlfhcwypxx1enjegbl",
+    "submittedAt": "2026-09-28T10:31:29.768Z"
+  },
+  "79-LighterSeriesAccount": {
+    "address": "0x60F691B82e92E38Aac01993389094B8Ee7Bf59a3",
+    "status": "pending",
+    "guid": "giekqdrhjwqssftecaqalcqhujatb1gvdpcmycv2svcbr66mma",
+    "submittedAt": "2026-09-28T10:31:30.400Z"
+  },
+  "80-MemberToken": {
+    "address": "0xF7E187e10E49d6E593cB80675063e87B6b8E778b",
+    "status": "pending",
+    "guid": "75r1zwuxhxux6igupc46f1epiraehndp72tc5cp8ttkqzkqikv",
+    "submittedAt": "2026-09-28T10:31:31.050Z"
+  },
+  "80-LighterSeriesAccount": {
+    "address": "0xD71b0a02bcf2d1c5488626aD703940ba5456e571",
+    "status": "pending",
+    "guid": "vlthg6hmwyrzmu7cnwpz91pdrnr7habfinugpb613av9mm6szc",
+    "submittedAt": "2026-09-28T10:31:31.682Z"
+  },
+  "81-MemberToken": {
+    "address": "0xdAFd805EAFF74dbbd658A02017c1f51C3176D66B",
+    "status": "pending",
+    "guid": "ficzkupgqiebfvwahzrrebqnvy5eg5gry6jteaczt8kmltv1db",
+    "submittedAt": "2026-09-28T10:31:32.318Z"
+  },
+  "81-LighterSeriesAccount": {
+    "address": "0x457A6d0F9742f9F28ebc370b36acb6CCedCA7639",
+    "status": "pending",
+    "guid": "v71hn5jn3mp9zl2p3zb4x7psy7qc33u526zaqqjfaq8pjj9akx",
+    "submittedAt": "2026-09-28T10:31:32.953Z"
+  },
+  "82-MemberToken": {
+    "address": "0x5Fdd595D2c186Fcb10D97295971727a9D7C0641e",
+    "status": "pending",
+    "guid": "yu2fj1zh493wqslm86fppmkvgquvam1fg86pf2cu3zwnnt6tgt",
+    "submittedAt": "2026-09-28T10:31:33.585Z"
+  },
+  "82-LighterSeriesAccount": {
+    "address": "0x13E25c19032091877eaa9Bb324650557265EC4e8",
+    "status": "pending",
+    "guid": "vsdtdkaxzv6u7i9pfhmwh7tlkpryhni2phs9tnvkf83hpzsdfr",
+    "submittedAt": "2026-09-28T10:31:34.219Z"
+  },
+  "83-MemberToken": {
+    "address": "0xC97d80A13D3dE5f29088a11516A45DA3D1Fe3e06",
+    "status": "pending",
+    "guid": "dpykbpysznu3pdc4frhzvtc1ha5cplpdshjvw5vca1fircjrfj",
+    "submittedAt": "2026-09-28T10:31:34.885Z"
+  },
+  "83-LighterSeriesAccount": {
+    "address": "0xdb52de11B972376C1b23E2B4d010Ee9bcA38F1Ae",
+    "status": "pending",
+    "guid": "u2wfwbcx4ckm3mrgaythaaufpvdwawffx5rmhdmziy2uspxtia",
+    "submittedAt": "2026-09-28T10:31:35.526Z"
+  },
+  "84-MemberToken": {
+    "address": "0x75f6C55f0B1fE4A6934b97174DA2AF2Dda2Caae2",
+    "status": "pending",
+    "guid": "3mxxjk8gqaxiwzm6qyv4zwkkycyzn1xkcrtt8zkxerpdb12tyl",
+    "submittedAt": "2026-09-28T10:31:36.173Z"
+  },
+  "84-LighterSeriesAccount": {
+    "address": "0xA66FdB2a5a6a6e7BE0E9e90BA4e9664A03A05EeC",
+    "status": "pending",
+    "guid": "rzyeb63cy8m8upccvx7txqdqq9zxjya5s2bydxpmrw1dj6xzbq",
+    "submittedAt": "2026-09-28T10:31:36.808Z"
+  },
+  "85-MemberToken": {
+    "address": "0x058f76dBEDab70CC71Ae10A75722070f5cbDacF2",
+    "status": "pending",
+    "guid": "wwmfp1n9qtyvu1yhhseeyziku2qqfjbzwju6jmdac5ympvtzg3",
+    "submittedAt": "2026-09-28T10:31:37.438Z"
+  },
+  "85-LighterSeriesAccount": {
+    "address": "0x960c89f2D50616Ee67558D4c0946256c06C37397",
+    "status": "pending",
+    "guid": "qvjxrwmbcmcxufhyz9ytyuef3t1mwyzqjdkfgzuxi8brxect5h",
+    "submittedAt": "2026-09-28T10:31:38.069Z"
+  },
+  "86-MemberToken": {
+    "address": "0xaA91090C04f1EEd497243854E1a64c354f9711b6",
+    "status": "pending",
+    "guid": "mjte4whfuxvsfedderkcrae19qjnhph8hecfxwzrp25ncsuwck",
+    "submittedAt": "2026-09-28T10:31:38.695Z"
+  },
+  "86-LighterSeriesAccount": {
+    "address": "0x11063F9aD2AB53a73891307340e95a936AD4e381",
+    "status": "pending",
+    "guid": "rkzurl5s5eauxxfna1tygjiudqvsqhmpcwyyaneravrkgv4z8p",
+    "submittedAt": "2026-09-28T10:31:39.334Z"
+  },
+  "87-MemberToken": {
+    "address": "0xbafE88f3B854B806B7D2023154421632Be694BfB",
+    "status": "pending",
+    "guid": "aqmb1depkuhn1ivfysx9tmczewh1dkxxu8zugcgkyhzl19zfde",
+    "submittedAt": "2026-09-28T10:31:39.965Z"
+  },
+  "87-LighterSeriesAccount": {
+    "address": "0xD83c1704Ecaf1408A84fcF308BB337051A101420",
+    "status": "pending",
+    "guid": "iuwewht5gagd2msms1zidmm2pkiynhmwkbatuptg6vye9xwdtu",
+    "submittedAt": "2026-09-28T10:31:40.609Z"
+  },
+  "88-MemberToken": {
+    "address": "0x24a500BE37bC707B4f63931D4bE8E09462037131",
+    "status": "pending",
+    "guid": "431rbmgtrkpugymjtsdyswzhcin8srfgvtekwk1dctxhtcearq",
+    "submittedAt": "2026-09-28T10:31:41.253Z"
+  },
+  "88-LighterSeriesAccount": {
+    "address": "0xf7A716736146D6e794Aed1A3fc68aC98102D8b3a",
+    "status": "pending",
+    "guid": "v3ru3auinszzazwiypj3n7szlrxrp1weg3mdf2rfgdy8fesqdb",
+    "submittedAt": "2026-09-28T10:31:41.946Z"
+  },
+  "89-MemberToken": {
+    "address": "0xA270bF5F78725aAb662AefBF08E251FD38F8DDb7",
+    "status": "pending",
+    "guid": "eqrptpcsic4dkmnjhxdhtwy5maaij8y7ecmeptbybpjecetkkk",
+    "submittedAt": "2026-09-28T10:31:42.582Z"
+  },
+  "89-LighterSeriesAccount": {
+    "address": "0x69912E713aBCbA67754Fe46f76251329c6e308AF",
+    "status": "pending",
+    "guid": "nmcvjhil2inj7b4wz9riwpwegediu9gqyzkcviufmcrhbhijaf",
+    "submittedAt": "2026-09-28T10:31:43.207Z"
+  },
+  "90-MemberToken": {
+    "address": "0x6621e557382F63885EFe3F199e6902f85AE0d851",
+    "status": "pending",
+    "guid": "suyrdr13hhefxdklhgneklhji1uhnrfq5wjt7phgbrssgnjwrs",
+    "submittedAt": "2026-09-28T10:31:43.860Z"
+  },
+  "90-LighterSeriesAccount": {
+    "address": "0x2287CeF50132a747709DA18e5fDDD5316F9E25C3",
+    "status": "pending",
+    "guid": "jycnc9ahpi9bwgriirpahpdgiear75mzzq8b1ycwj5vpmydlqw",
+    "submittedAt": "2026-09-28T10:32:18.011Z"
+  },
+  "91-MemberToken": {
+    "address": "0xc45E8F279E222585Ecf0b67216fC7dD5cEB27197",
+    "status": "pending",
+    "guid": "y1sk7vkvepaiajw935ygikdsqdtpua1n2byl8dhdq6tpn2ultd",
+    "submittedAt": "2026-09-28T10:32:19.247Z"
+  },
+  "91-LighterSeriesAccount": {
+    "address": "0x227d159b6770c7fa577AEcc76B22B43C0b6EF6EC",
+    "status": "pending",
+    "guid": "ekj2qyrxf65zit2xl8qs1gglnkpe4qvt8nwxxvacmytnaniygd",
+    "submittedAt": "2026-09-28T10:31:45.733Z"
+  },
+  "92-MemberToken": {
+    "address": "0xE4dD060D5d4DFAa575dD2Dd1658524fFf638e561",
+    "status": "pending",
+    "guid": "vbtifp4yf59lurabrvqwsgyd63nicz2rprtk1q97tyqv414cdq",
+    "submittedAt": "2026-09-28T10:31:46.374Z"
+  },
+  "92-LighterSeriesAccount": {
+    "address": "0xb9ff161De4C82E8aE76aaAC9D2fc6Db77F350d76",
+    "status": "pending",
+    "guid": "xn8llf3gdcalmg3ip3ypb2ni2ur2a5yc5mueic5dhkcxxgdatk",
+    "submittedAt": "2026-09-28T10:31:47.002Z"
+  },
+  "93-MemberToken": {
+    "address": "0x889274d8526817EDf3F9a0271FF3cbbD7Ce05D88",
+    "status": "pending",
+    "guid": "lj3relvwbvmwdcwquiws3k4fkcwwnatbrbawwria6pfbrkpd8w",
+    "submittedAt": "2026-09-28T10:31:47.649Z"
+  },
+  "93-LighterSeriesAccount": {
+    "address": "0xe0338dCD3C672E5AAaa10686671f2eC0e428c030",
+    "status": "pending",
+    "guid": "c1eqdwsqjiq2g8dnhzcpalymxrqqlkrgzptxzfaymstmmg4wta",
+    "submittedAt": "2026-09-28T10:31:48.320Z"
+  },
+  "94-MemberToken": {
+    "address": "0xedB8599A8FEC3478D7A873e823CAeb4cE7037c5A",
+    "status": "pending",
+    "guid": "z4xdbq3ism6b5ptatsfgp2ze2htczfnvxbmmiwedvfnmtcmwkd",
+    "submittedAt": "2026-09-28T10:31:48.963Z"
+  },
+  "94-LighterSeriesAccount": {
+    "address": "0x2358550670bf026922C2E04CA703418d93F6a7f8",
+    "status": "pending",
+    "guid": "pcpdky4jcuxrkdrbdu3fgxd3lzedkquqsksa6jgpiakag4vami",
+    "submittedAt": "2026-09-28T10:31:49.593Z"
+  },
+  "95-MemberToken": {
+    "address": "0x2C1c6ADf6e83d9BF79345BAa41336Cc4258f9753",
+    "status": "pending",
+    "guid": "zjtfxiymtljrplzyzqcg5udewgc3nh44scgbwcn8bihvesbzc8",
+    "submittedAt": "2026-09-28T10:31:50.238Z"
+  },
+  "95-LighterSeriesAccount": {
+    "address": "0xB64D8FAd68D271b2a769dCBd7f1E7b93c285bc51",
+    "status": "pending",
+    "guid": "57y6df7nih7wrkifylvxcm345lchz4wesfdw6mybw8u62ftxny",
+    "submittedAt": "2026-09-28T10:31:51.335Z"
+  },
+  "96-MemberToken": {
+    "address": "0x47d464e5B0EEc0B53346eE794Da3f9D2ACe1Ee79",
+    "status": "pending",
+    "guid": "tq3evh4u1r4qpfnuwa8lacnvtujx3pt5u2b5bmjktbl8x6jphz",
+    "submittedAt": "2026-09-28T10:31:52.156Z"
+  },
+  "96-LighterSeriesAccount": {
+    "address": "0x32850344351aEb576621283262a25BB31daadecA",
+    "status": "pending",
+    "guid": "kiq2phc7c3y7sbyzwmuisisntqrfpn9wfw5agsdutubhnlib9y",
+    "submittedAt": "2026-09-28T10:31:52.852Z"
+  },
+  "97-MemberToken": {
+    "address": "0x147cAe9a6649487EE00B3519cC6C515c1525EE45",
+    "status": "pending",
+    "guid": "bxkag3hb9zgxjptutp7pidazgp8kr77qxrlca5n2s5iedvklnu",
+    "submittedAt": "2026-09-28T10:31:53.482Z"
+  },
+  "97-LighterSeriesAccount": {
+    "address": "0x4d676FB7c8B4b4d80e13c9e0912e6dAf9e84E3eB",
+    "status": "pending",
+    "guid": "iuukfymkjhvyb2srrs4gina5weuxmkdmwxpcncbnfplx7kuglm",
+    "submittedAt": "2026-09-28T10:31:54.117Z"
+  },
+  "98-MemberToken": {
+    "address": "0x45d9076D7bD35598E4cC8576A12F6A4A0F7187b1",
+    "status": "pending",
+    "guid": "6tixbwkpp24qzzfzcfdf4egf1wc4yckdlzfkeqvssynajrgcrz",
+    "submittedAt": "2026-09-28T10:31:54.761Z"
+  },
+  "98-LighterSeriesAccount": {
+    "address": "0x70d6AF2Bac474ef6cc1756cCF2F513D2383944E0",
+    "status": "pending",
+    "guid": "jet6irctx7jgrmgr4zuuvckkn6rhxbdqcrt6kfgn9btnzbz2ut",
+    "submittedAt": "2026-09-28T10:31:55.401Z"
+  },
+  "99-MemberToken": {
+    "address": "0x2CA12EBF2F70CF84778b4080E05C50aBdAC107e8",
+    "status": "pending",
+    "guid": "yz7imxqccudzk6628ihnppdyzt2eixwm2afyiwrg7u3s83ihym",
+    "submittedAt": "2026-09-28T10:31:56.034Z"
+  },
+  "99-LighterSeriesAccount": {
+    "address": "0x08Bc42f0F2DD51DB9A54BA9953FaA587dF25f82a",
+    "status": "pending",
+    "guid": "7xfypikzikwkugrsybr7idsrgummqxaj7mqx6wkwejbxkmrmsg",
+    "submittedAt": "2026-09-28T10:31:56.666Z"
+  },
+  "100-MemberToken": {
+    "address": "0xCBb2E79b7bee7426884FD2bF406223a43f664523",
+    "status": "pending",
+    "guid": "v8rrdwvpgvwyambde7hul4qwuzsv6uurv9s2sgjv1gdr1fapm7",
+    "submittedAt": "2026-09-28T10:31:57.299Z"
+  },
+  "100-LighterSeriesAccount": {
+    "address": "0x1508FC5Dff3DE863b5838e93af19aC1f7594D9E7",
+    "status": "pending",
+    "guid": "ii5yvtinwe3bjmsv41u9kxpmtwqruprdaycamnezjvj6tryryw",
+    "submittedAt": "2026-09-28T10:31:57.947Z"
+  }
+}

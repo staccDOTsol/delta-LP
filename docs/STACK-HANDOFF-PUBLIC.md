@@ -1,6 +1,6 @@
 # deltaLP — public integration handoff
 
-> Current deployment is **v6**: 3% entry / 6% exit, 50% Wizards / 50% four NFT collections weighted 1/2/5/10. Use [the current v6 addresses and operator record](V6-REPLACEMENT.md) and `4663-tokenized-v6.json` for integrations. The older addresses and snapshots below are historical, not current bindings.
+> Current deployment is **v6**: 3% entry / 6% exit, 50% Wizards / 50% four NFT collections weighted 1/2/5/10. Use [the current v6 addresses and operator record](V6-REPLACEMENT.md) and `4663-tokenized-v6.json` for integrations. Live NFT-sale activation and mint simulations were checked at 10:35 UTC on September 28; funded trading remains separate.
 
 **Updated:** September 28, 2026
 **Network:** Robinhood Chain, chain ID **4663**
@@ -28,21 +28,14 @@ a guarantee of profit or immunity from liquidation.
 
 ## Readiness
 
-- The v3 contracts and all 100 member tokens/custodies are deployed. The receipt
-  family is configured for all 50 matched tiers.
-- The website and public status endpoints are deployed.
-- A funded deposit → venue execution → receipt activation → cash redemption
-  lifecycle has **not yet been validated end to end**. Stable keeper operation
-  remains a launch dependency.
-- The public snapshot at block **74631306**, September 28, 2026 at **07:50:17 UTC**,
-  showed closed entries, zero pending assets and zero receipt supply. Check the
-  current endpoints before enabling any integration.
-- The production native-ETH NFT funding adapter and four NFT collections are
-  **not deployed**. Their contract integration exists, with remaining work below.
+- The v6 contracts and all 100 member tokens/custodies are deployed, configured for 50 matched tiers. The website and public status endpoints use v6.
+- The user activated the NFT sale worker on Fly. At 10:35 UTC on September 28, all four collections and the contribution adapter were unpaused, quotes were fresh, and one read-only mint simulation per edition passed. Simulations used a synthetic funded payer; no real paid mint was broadcast.
+- DN entries are open. At block **74729779**, the vault held **0.93 / 2,000 USDG** pending and had zero receipts.
+- A funded deposit → venue execution → receipt activation → cash redemption lifecycle has **not yet been validated end to end**. The current `nft-sale` worker does not run funded Lighter strategies.
+- All four collections are indexed by OpenSea. Its drop API still returned 404 at the snapshot, so OpenSea checkout publication is not confirmed. Direct SeaDrop minting is available on the site.
 - Oil subscriptions remain a separate waitlist product.
 
-Deployment and configuration are available integration milestones. They do not
-establish funded trading readiness or proven investment performance.
+See `evm/deployments/4663-nft-v6-activation.json` for timestamped evidence. Recheck the live endpoints before integrating; activation does not establish investment performance.
 
 ## Canonical contract addresses
 
@@ -50,12 +43,13 @@ All addresses below are on Robinhood Chain, **4663**.
 
 | Component | Address |
 | --- | --- |
-| DN receipt / NeutralVault | `0xe9AE3aEb63680960995978ee6c33E68B57c00688` |
-| MemberController | `0xB8B04378E9291a735E9552f7a8a5593Bca6529FD` |
-| MemberFactory | `0xe740806027CD13c0fA2c5181654b8FD5384b363B` |
-| MemberV4Hook | `0x9715Cf2ec10ab69a40381550Bf58793FcD416540` |
-| NeutralEscrowFactory | `0x5D021517AAD69E90a112a5987a59E54E0af87416` |
-| HouseFeeRouter | `0xBfac70063f04e116F5a509cC746BEeb2F053467D` |
+| DN receipt / NeutralVault | `0x19Bc982b4387c21e0D146b365e033dF5F14f6C85` |
+| MemberController | `0xA79017035c9Fe045c797581321b6F36f554c55b2` |
+| MemberFactory | `0x7cC2c4F5E3626D136D4Caa1476996F20E45E186b` |
+| MemberV4Hook | `0xcA196659d69DA75F7ccDEBe5A913be1ae5D8e540` |
+| NeutralEscrowFactory | `0x6Cd0FCA62Cd246dce867424214cd1EbDcb851EB6` |
+| SplitHouseFeeRouter | `0x28E833384b720Ad0A428935cAe8d5b49fa62A1c0` |
+| WeightedNftFeeFanout | `0x0D06A5981107629Fadf2e8104c9979afF78E9Dc6` |
 | Wizards 8,010-share fanout | `0x1b88A6c6516FD2918905186F21Bb9F5CaA1a15c8` |
 | USDG — 6 decimals | `0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168` |
 | Lighter L1 entry point | `0x94bAB9693Ba2f6358507eFfcbd372b0660AFfF9d` |
@@ -66,16 +60,17 @@ Lighter API: `https://api.rh.lighter.xyz`
 Lighter signing domain: **466324**, distinct from the EVM chain ID.
 
 Use the deployment manifests and recorded runtime hashes to check contract
-identity. The six core contracts and 200 token/custody children have matching
-creation/runtime source on Sourcify. Etherscan submissions were still pending at
-the last verification check.
+identity. All 200 child source-verification submissions have been accepted by
+Etherscan and remain queued at this snapshot. Sourcify confirmed 17 child matches
+before intermittent service failures. Source status is recorded separately from
+confirmed deployment receipts; queued does not mean verified.
 
 ## Source and read interfaces
 
 Relevant repository paths:
 
-- `evm/deployments/4663-tokenized-v3.json`
-- `evm/deployments/4663-neutral-v3-registry.json`
+- `evm/deployments/4663-tokenized-v6.json`
+- `evm/deployments/4663-neutral-v6-registry.json`
 - `strategy/member-deployment.ts` and `strategy/neutral-deployment.ts`
 - `strategy/neutral-abi.ts` for receipt, allocation and exit interfaces
 - `keeper/abi.ts` for controller interfaces
@@ -160,8 +155,9 @@ not need to supply the capital or pre-existing receipt inventory.
 The NFT account can withdraw its USDG before queueing. After allocation, actual
 DN receipts can be claimed to the same account. Stalled allocations have cash
 or in-kind recovery. Pending cash is not a DN position and earns no strategy
-fees. The deployed v5 vault and prepared NFT bundle passed local fork tests;
-All 30 NFT deployment/configuration calls are confirmed; mints remain paused. See [NFT-EDITIONS.md](NFT-EDITIONS.md).
+fees. The v6 vault and NFT bundle passed local fork tests; all 30 NFT
+deployment/configuration calls are confirmed. The user subsequently activated
+the NFT sale worker. See [NFT-EDITIONS.md](NFT-EDITIONS.md).
 
 ## NFT consumers and secondary markets
 

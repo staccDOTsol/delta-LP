@@ -1,6 +1,6 @@
 # NFT-owned contributions and delta-neutral accounts
 
-Status: the mint-funded implementation and the exact 30-call deployment bundle passed Robinhood fork tests. The v6 DN vault and 100 members are deployed. All four NFT collections and their contribution adapter are deployed and configured, with mints paused. All 40,000 launch assets are published and URL-verified.
+Status: the mint-funded implementation and the exact 30-call deployment bundle passed Robinhood fork tests. The v6 DN vault and 100 members are deployed. All four NFT collections and their contribution adapter are deployed and configured. At 10:35 UTC on September 28, the user-activated NFT sale worker was healthy, all four mints were open, and read-only live mint simulations passed. DN deposits were open with 0.93 USDG pending and zero receipts. All 40,000 launch assets are published and URL-verified.
 
 ## Mint proceeds build the pool
 
@@ -57,11 +57,11 @@ All 30 deployment/configuration transactions succeeded, using 0.000525854666942 
 | $5 collection | `0xa6D443b39fE77B8e1013482d300994cA84B5635C` |
 | $10 collection | `0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131` |
 
-All four v6 collections are indexed on OpenSea. Studio recognizes their 10,000 supply and the replacement supports the actual `multiConfigure` transaction. Paid sale activation and Studio publication remain separate owner actions. Source verification requests and confirmed matches are recorded in the deployment reports. See [the v6 replacement record](V6-REPLACEMENT.md) for canonical addresses, tests and operator steps.
+All four v6 collections are indexed on OpenSea. Studio recognizes their 10,000 supply and the replacement supports the actual `multiConfigure` transaction. Paid sale activation is complete; OpenSea marketplace drop publication remains unconfirmed and separate. The site offers direct SeaDrop minting. Source verification requests and confirmed matches are recorded in the deployment reports. See [the v6 replacement record](V6-REPLACEMENT.md) for canonical addresses, tests and operator steps.
 
 Actual transaction/runtime hashes are in `evm/deployments/4663-nft-v6.json`; core and all 100 member pairs are in `4663-tokenized-v6.json` and `4663-neutral-v6-registry.json`. The old v5 vault retains its refundable 3 USDG user deposit; the site exposes its recovery controls.
 
-Before paid mints open, the operator must configure ETH stage prices/timing and wallet limits, supply fresh bounded swap quotes, and complete the marketplace checks. No prefunded receipt inventory is required. Vault entry/keeper activation is a separate operational step; the website must display pending contributions until actual allocation completes.
+The operator configured ETH stage prices/timing and wallet limits and activated fresh bounded swap quotes. The keeper must keep those quotes fresh; minting fails closed when they expire. Marketplace publication checks remain separate. No prefunded receipt inventory is required. Vault entry/keeper activation is a separate operational step; the website must display pending contributions until actual allocation completes.
 
 ## Evidence and limits
 

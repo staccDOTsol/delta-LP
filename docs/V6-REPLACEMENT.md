@@ -8,7 +8,7 @@ The v6 deployment replaces the immutable v5 NFT and fee stack. The v5 NFTs lacke
 - Member fees: 3% mint / 6% redeem, no transfer tax.
 - House fees: 50% Wizards, 50% four NFT editions, weights 1/2/5/10; 40,000 IDs and total weight 180,000.
 - NFT primary mint: 10% OpenSea, 1% Wizards, 89% swaps into pooled USDG. Mint contributions build toward the collective 2,000 USDG threshold; no creator seed is required.
-- Replacement contracts are configured but initially paused/closed. Deployment does not activate a sale or trading.
+- Deployed initially paused/closed. The user subsequently activated the NFT sale worker and enabled DN deposits; current status is recorded below. Funded strategy execution remains separate.
 
 | Component | Address |
 | --- | --- |
@@ -21,6 +21,14 @@ The v6 deployment replaces the immutable v5 NFT and fee stack. The v5 NFTs lacke
 | $2 edition | [0xd301a76601F27c682F64062b4A254fd7aed601Ea](https://opensea.io/collection/money-doubler-2-658160246) |
 | $5 edition | [0xa6D443b39fE77B8e1013482d300994cA84B5635C](https://opensea.io/collection/money-doubler-5-638625887) |
 | $10 edition | [0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131](https://opensea.io/collection/money-doubler-10-411012397) |
+
+## Activation snapshot — September 28, 2026, 10:35 UTC
+
+The user completed `npm run nft:fly-launch`. Fly machine `807d42cee2d348` is healthy in `execution` / `nft-sale` mode, maintaining fresh swap quotes. All four editions and the contribution adapter are unpaused. The production site shows **Mint open**; read-only `eth_call` simulations of one mint in each edition passed with a synthetic payer balance override. No paid mint was broadcast by these checks.
+
+DN entries are also open: block `74729779` shows 0.93 / 2,000 USDG pending and zero receipts. This worker runs the NFT sale only; funded Lighter execution and receipt activation remain separate. OpenSea indexes all four collections, but its drop API still returns 404, so marketplace checkout publication is not confirmed. Direct minting is available at [deltalp.fun/#nft-editions](https://deltalp.fun/#nft-editions).
+
+Public evidence: `evm/deployments/4663-nft-v6-activation.json`. The initial deployment manifests retain their original paused/empty snapshot labels; they are not live status feeds.
 
 ## Verification
 
@@ -37,6 +45,16 @@ The user's 3 USDG stays in v5 vault `0x3D4Ee6D147AF67371073e74206D6d49e64960f9c`
 
 The worker uses `/data/keeper-v6`; the v5 journal remains preserved. The former worker stopped because another confirmed transaction advanced its owner nonce outside its journal. Never run the deployment signer and execution worker concurrently. Observation mode does not sign and may run during inspection. Reusing an old journal without reconciling transactions is not a nonce repair.
 
-To activate paid mints, run `npm run nft:fly-launch` interactively from the updated repository. It verifies the v6 addresses/hashes, presents current fixed-ETH prices and swap bounds, and asks the operator to accept a lifetime gas budget. It starts only the NFT quote/sale service, not funded Lighter strategy execution. The wallet can enable refundable v6 deposits separately through the site's coordinator control. Use the new OpenSea collection pages above; old Studio drafts belong to v5. Studio payout must remain each new NFT contract itself.
+The user activated paid mints with `npm run nft:fly-launch` from the updated repository. No repeat launch is needed while the worker is healthy. For a future operator restart, the same interactive launcher is available. It verifies the v6 addresses/hashes, presents current fixed-ETH prices and swap bounds, and asks the operator to accept a lifetime gas budget. It starts only the NFT quote/sale service, not funded Lighter strategy execution. The wallet can enable refundable v6 deposits separately through the site's coordinator control. Use the new OpenSea collection pages above; old Studio drafts belong to v5. Studio payout must remain each new NFT contract itself.
 
 Canonical manifests: `evm/deployments/4663-tokenized-v6.json`, `4663-neutral-v6-registry.json`, `4663-nft-v6.json`. Current application bindings and NFT runtime pins are generated together by `evm/scripts/publish-stack-bindings.mjs --version=v6` after chain checks. Do not run this initial-promotion tool again after accepting funds; it intentionally requires the new vault to be closed and empty.
+
+## Source-verification retries
+
+Sourcify returned 500/503, timeouts and rate limits during this deployment. Successful matches and accepted jobs are preserved in `4663-neutral-v6-sourcify.json`; partial failures do not invalidate confirmed on-chain receipts. The Etherscan fallback validates each recorded creation argument and live runtime hash before submission:
+
+```sh
+node --env-file=.env.explorer.local evm/scripts/verify-neutral-members-explorer.mjs --version=v6 --submit-only
+```
+
+`--submit-only` preserves accepted jobs and retries only missing/failed submissions. Omit it to check accepted jobs. `pending` means queued, never verified. API credentials stay in the ignored environment file.

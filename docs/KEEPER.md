@@ -1,6 +1,6 @@
 # Run the v6 operator
 
-Current: v6 is deployed on Fly in observation mode with 100 members and passing health checks. The previous v5 journal remains at `/data/keeper-v5`. [Current addresses and NFT activation steps](V6-REPLACEMENT.md). Historical deployment snapshots below do not replace current bindings.
+Current snapshot (September 28, 2026, 10:35 UTC): the user activated the v6 Fly worker in `execution` / `nft-sale` mode. Health passes and all four NFT editions are unpaused. This mode maintains NFT sale quotes; it does not fund or trade the 100 Lighter members. DN deposits are open, with 0.93 USDG pending and zero receipts at block 74729779. The previous v5 journal remains at `/data/keeper-v5`. [Current addresses and NFT activation steps](V6-REPLACEMENT.md). Historical deployment snapshots below do not replace current bindings.
 
 The keeper is a separate long-running Node process. Vercel serves the website;
 it does not keep this process alive. The deployed controller assigns both keeper
