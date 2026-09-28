@@ -527,4 +527,29 @@ contract MemberControllerTest is Test {
         vm.expectRevert();
         factory.create(999, 0, "Foreign", "NO");
     }
+
+    function testNeutralBatchIncludesAllFiftyTiersAtTheFamilyLimit() public {
+        for (uint8 leverage = 1; leverage <= 50; ++leverage) {
+            if (leverage == 3) continue; // setUp registered this pair
+            _member(leverage, false);
+            _member(leverage, true);
+        }
+        assertEq(controller.family(ETH).length, 100);
+        uint256[] memory minima = new uint256[](100);
+        for (uint256 i; i < 100; ++i) {
+            minima[i] = 1;
+        }
+        asset.mint(alice, 1000e6);
+        vm.prank(alice);
+        (uint256 first, uint256 count, uint256 allocated) =
+            controller.requestNeutral(ETH, 2000e6, minima, alice, uint64(block.timestamp + 600));
+        assertEq(count, 100);
+        assertEq(allocated, 2000e6);
+        controller.settleBatch(first);
+        assertEq(controller.escrowAssets(), 0);
+        for (uint256 id = 1; id <= 100; ++id) {
+            assertEq(MemberToken(controller.memberToken(id)).balanceOf(alice), 19.6e18);
+        }
+        assertEq(asset.balanceOf(controller.FEE_FANOUT()), 40e6);
+    }
 }

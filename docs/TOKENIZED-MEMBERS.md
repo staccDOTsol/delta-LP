@@ -167,6 +167,13 @@ Unit/fuzz tests cover accounting conservation, fees, unauthorized calls, partial
 reconciliation, stale state and losses. Fork tests exercise real V4 swaps (including
 ERC-6909-only settlement), WETH quotes, Lighter's L1 queue and the real Wizards fanout.
 They do not prove live matching-engine execution or economic profitability.
+The combined lifecycle test runs neutral claim issuance, actual V4 liquidity and a
+swap, a simulated price move and venue rebalances, liquidity removal, position closes,
+withdrawal reconciliation, redemption, and real fanout harvesting. It accounts for
+V4's residual share dust rather than assuming every LP share can be recovered exactly.
+Lighter fills in that test remain a model; it is not a live execution or persistent
+delta-neutrality proof. A separate boundary case allocates and settles all 100 members
+across 50 paired integer leverage tiers without omission.
 
 Run from the repository root:
 
