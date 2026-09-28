@@ -3,6 +3,7 @@ import {ArrowRight,ArrowUpRight,ExternalLink} from 'lucide-react';
 import type {Market} from '../strategy/lighter.ts';
 import type {TokenizedStatus} from '../strategy/tokenized.ts';
 import {pairedLeverageIllustration} from '../strategy/member-pairs.ts';
+import {NftEditions} from './NftEditions.tsx';
 const TradingPanel=lazy(()=>import('./trading/TradingPanel.js').then(module=>({default:module.TradingPanel})));
 
 const source='https://github.com/staccDOTsol/delta-LP';
@@ -44,6 +45,7 @@ export function Strategies(){
         <LeverageHypothesis/>
         <div className="economics-note"><h3>Fee income, with an explicit hedge.</h3><p>Delta neutrality aims to reduce directional exposure. Equal opposing perpetual positions also offset their funding; they do not create free yield. Swap fees must exceed inventory losses, execution costs, and hedge costs. No APY has been established, and leveraged positions can still be liquidated.</p></div>
       </section>
+      <NftEditions/>
       <section className="oil-banner"><div><span className="wl-kicker">OIL & GAS SUBSCRIPTIONS</span><h2>Plan the next winter.</h2><p>Heating oil, propane, or natural gas. Tell us your region and join the subscription waitlist.</p></div><a className="wl-button" href="/oil">Join the oil waitlist <ArrowRight size={18}/></a></section>
     </main><footer className="wl-footer wrap"><p>Independent project. Not affiliated with Robinhood or Lighter.</p><a href="/oil">Oil subscription waitlist</a></footer></div>;
 }
