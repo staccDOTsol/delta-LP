@@ -1,12 +1,12 @@
-import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
+import {writeFileSync,mkdirSync} from 'node:fs';
 import {createPublicClient,encodeFunctionData,http,keccak256,parseAbi,toHex,type Address} from 'viem';
 import {memberMarketSchema} from '../../strategy/member-reconciliation.js';
 import {exactUnits} from '../../strategy/execution.js';
+import deployment from '../../strategy/member-deployment.js';
 
 // Produces unsigned registry calls for EVERY supported integer tier. No private keys,
 // approvals, deposits, orders, or network writes. Quotes are not executable guarantees.
-const manifest=JSON.parse(readFileSync(new URL('../deployments/4663-tokenized-v1.json',import.meta.url),'utf8'));
-const controller=manifest.steps.MemberController.address as Address;
+const controller=deployment.contracts.MemberController.address as Address;
 const client=createPublicClient({transport:http('https://rpc.mainnet.chain.robinhood.com')});
 if(await client.getChainId()!==4663)throw new Error('Wrong chain.');
 const response=await fetch('https://api.rh.lighter.xyz/api/v1/orderBookDetails',{signal:AbortSignal.timeout(10_000)});

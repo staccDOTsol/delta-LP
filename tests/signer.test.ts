@@ -30,3 +30,19 @@ test('real WASM signer encodes orders, margin and USDG withdrawals without netwo
   `;
   execFileSync(process.execPath,['--input-type=module','-e',script],{cwd:new URL('..',import.meta.url),timeout:10000,stdio:'pipe'});
 });
+test('keeper bootstrap recovers the wallet-derived member key and signs only the requested margin setup',()=>{
+  const script=`
+    import assert from 'node:assert/strict';
+    import {privateKeyToAccount} from 'viem/accounts';
+    import {setupSigner} from './keeper/setup-signer.ts';
+    globalThis.fetch=async()=>{throw new Error('Network access is forbidden in this signer test.');};
+    const owner=privateKeyToAccount('0x'+'11'.repeat(32));
+    const member={id:1n,custody:'0x0000000000000000000000000000000000000010',accountIndex:100000,market:0};
+    const a=await setupSigner(owner,member,1n),b=await setupSigner(owner,member,2n);assert.notEqual(a.publicKey,b.publicKey);
+    const recovered=await setupSigner(owner,member,1n);assert.equal(a.publicKey,recovered.publicKey);
+    const signed=await recovered.margin(200,7),tx=JSON.parse(signed.info);
+    assert.equal(tx.AccountIndex,100000);assert.equal(tx.ApiKeyIndex,42);assert.equal(tx.InitialMarginFraction,200);assert.equal(tx.MarginMode,0);assert.equal(tx.Nonce,7);assert.ok(tx.Sig);assert.ok(signed.hash);
+    process.exit(0);
+  `;
+  execFileSync(process.execPath,['--import','tsx','--input-type=module','-e',script],{cwd:new URL('..',import.meta.url),timeout:10000,stdio:'pipe'});
+});

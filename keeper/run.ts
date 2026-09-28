@@ -1,0 +1,53 @@
+import {mkdirSync,readFileSync,writeFileSync,renameSync,rmSync} from 'node:fs';
+import {resolve,join} from 'node:path';
+import {setTimeout as delay} from 'node:timers/promises';
+import {z} from 'zod';
+import {ChainIndex,verifyDeployment} from './rpc.js';
+import {observe} from './observe.js';
+import {executor} from './execute.js';
+
+const integer=z.string().regex(/^\d+$/).transform(BigInt);
+const schema=z.object({maxMemberAssets:integer,maxOrderNotional:integer,maximumGasWei:integer,
+  refreshSeconds:z.number().int().min(5).max(20),cancelAfterSeconds:z.number().int().min(2).max(60),
+  pollSeconds:z.number().int().min(2).max(30),ownerBootstrap:z.boolean()}).strict();
+const live=process.argv.includes('--execute'),once=process.argv.includes('--once');
+const configFile=process.env.DELTA_KEEPER_CONFIG??new URL('./config.example.json',import.meta.url);
+const config=schema.parse(JSON.parse(readFileSync(configFile,'utf8')));
+const dir=resolve(process.env.DELTA_KEEPER_STATE??'artifacts/keeper-v3');
+if(live&&(!process.env.DELTA_KEEPER_KEY_FILE||!process.env.DELTA_KEEPER_CONFIG||config.maxMemberAssets===0n||config.maxOrderNotional===0n||config.maximumGasWei===0n))throw new Error('Execution requires an explicit key file, configuration and positive capital/order/gas limits.');
+mkdirSync(dir,{recursive:true,mode:0o700});
+const lock=join(dir,'worker.lock');
+try{mkdirSync(lock,{mode:0o700});writeFileSync(join(lock,'pid'),String(process.pid),{mode:0o600});}
+catch{throw new Error('Another keeper holds this state-directory lock. After a crash, inspect pending transactions before removing worker.lock.');}
+let stopping=false;for(const signal of ['SIGINT','SIGTERM'] as const)process.on(signal,()=>{stopping=true;});
+const json=(v:unknown)=>JSON.stringify(v,(_,x)=>typeof x==='bigint'?String(x):x,2);
+try{
+  await verifyDeployment();
+  const writer=live?await executor(process.env.DELTA_KEEPER_KEY_FILE!,dir,config.maximumGasWei,config.ownerBootstrap):undefined;
+  const index=new ChainIndex();
+  do{
+    try{
+      if(writer&&await writer.reconcile()){console.log('Waiting for recorded keeper transactions.');}
+      else{
+        const cycle=await observe(index,config);
+        const publicStatus={mode:live?'execution':'observation',at:cycle.at,block:cycle.block,vault:cycle.vault,
+          reason:cycle.reason,members:cycle.members.map(m=>({id:m.id,decision:m.decision})),plannedCalls:cycle.calls.length};
+        const temp=join(dir,'status.json.tmp');writeFileSync(temp,json(publicStatus)+'\n',{mode:0o600});renameSync(temp,join(dir,'status.json'));
+        const counts=cycle.members.reduce((r,m)=>{r[m.decision.state]=(r[m.decision.state]??0)+1;return r;},{} as Record<string,number>);
+        console.log(json({mode:publicStatus.mode,block:cycle.block,members:counts,entriesOpen:cycle.vault.entriesOpen,plannedCalls:cycle.calls.length}));
+        if(writer){
+          const setup=await writer.bootstrap(cycle);
+          for(const note of setup.notes)console.log(note);
+          const calls=[...setup.calls,...cycle.calls.filter(call=>call.member===undefined||!setup.busy.has(call.member))];
+          console.log(json(await writer.submit(calls)));
+        }
+      }
+    }catch(error){
+      // Provider diagnostics can contain request material. Expose only a compact
+      // top-level message; signed transaction journals remain private on disk.
+      console.error((error as {shortMessage?:string;message:string}).shortMessage??(error as Error).message);
+      if(live||once)throw new Error('Keeper cycle stopped. Inspect status and the transaction journal.');
+    }
+    if(!once&&!stopping)await delay(config.pollSeconds*1000);
+  }while(!once&&!stopping);
+}finally{rmSync(lock,{recursive:true,force:true});}

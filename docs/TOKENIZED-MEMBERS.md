@@ -1,24 +1,30 @@
 # Tokenized Lighter members and V4 markets
 
-Status: experimental core contracts deployed on Robinhood mainnet; **tokenized trading is not live**.
-Deployment: [transaction and bytecode manifest](../evm/deployments/4663-tokenized-v2.json).
-The controller has zero registered members and no funded accounts.
-The site reads `/api/strategies/tokenized` to verify the four deployed runtime-code hashes.
-All four have matching creation and runtime source on Sourcify; see the
-[verification record](../evm/deployments/4663-tokenized-v2-sourcify.json).
-Etherscan's separate verification submissions remain pending.
+Status: version 3 core and neutral receipt contracts are deployed on Robinhood mainnet;
+**funded tokenized trading is not live**. See the
+[deployment manifest](../evm/deployments/4663-tokenized-v3.json),
+[ETH 1–50x member registry](../evm/deployments/4663-neutral-v3-registry.json), and
+[receipt lifecycle, gas benchmarks and recovery guide](NEUTRAL-RECEIPT.md).
+The site checks the deployed runtime hashes and reads the vault's actual entry flag.
+No strategy collateral was funded and no venue orders were placed during deployment.
 
 | Contract | Robinhood mainnet address |
 | --- | --- |
-| Controller | `0x934ceF5C005529a90F45Bd59BA78c7D697672a28` |
-| Member factory | `0xb8BD90e3538d5a1f7147e05C067B4745592a40F1` |
-| V4 activity hook | `0xc5fAA1076716a01Cad3D885AE9850492D7076540` |
-| Wizards fee router | `0x83B7a36d9BB5bB20D23b26b8A57E1571B6587224` |
+| Controller | `0xB8B04378E9291a735E9552f7a8a5593Bca6529FD` |
+| Member factory | `0xe740806027CD13c0fA2c5181654b8FD5384b363B` |
+| V4 activity hook | `0x9715Cf2ec10ab69a40381550Bf58793FcD416540` |
+| Wizards fee router | `0xBfac70063f04e116F5a509cC746BEeb2F053467D` |
+| Neutral receipt vault | `0xe9AE3aEb63680960995978ee6c33E68B57c00688` |
+| Allocation / exit factory | `0x5D021517AAD69E90a112a5987a59E54E0af87416` |
 
-Version 2 adds contract-owned key setup and recovery. The immutable [v1 deployment](../evm/deployments/4663-tokenized-v1.json) remains archived and unchanged.
+Version 3 adds the managed V4 receipt, recoverable pooled epochs and maximum-tier
+collateral headroom. Earlier immutable v1/v2 deployments remain archived and unchanged.
+[Source-verification results](../evm/deployments/4663-tokenized-v3-sourcify.json)
+record independently checked creation/runtime matches separately from submissions.
 
-These contracts do not upgrade the deployed NVDA/Morpho vault. The public trading UI
-still accesses the visitor's own Lighter account and does not mint these tokens.
+These contracts do not upgrade the earlier NVDA/Morpho vault. The site's Long/Short
+route still trades the visitor's own Lighter account; the neutral panel uses the new
+receipt vault and its wallet-driven pending-deposit, exit and recovery controls.
 
 ## Product and fee policy
 
@@ -30,8 +36,8 @@ netting away at the venue. Tokens expose the opposite-direction members of their
 Neutral allocation divides a deposit equally between long and short at every enabled,
 matched tier. It does not silently drop a tier when the deposit is too small. This is
 an allocation queue whose member claims now settle or cancel as one transaction. A failed
-leg rolls back all issuance and fees. This does **not** make venue fills atomic or create
-a neutral LP receipt.
+leg rolls back all issuance and fees. This core queue does **not** make venue fills atomic. The separate `NeutralVault`
+issues its receipt only after confirmed exposure and actual paired V4 liquidity.
 Registry configuration must match actual venue leverage, precision and order-size limits;
 the Solidity bounds alone are not a venue capability check.
 
@@ -191,22 +197,25 @@ No APY target, market-beating comparison, or no-liquidation claim has been estab
 - Proportional rebasing of every balance and supply leaves proportional backing and
   external delta unchanged. A supply-adjustment rule needs explicit value-conservation,
   dilution and AMM-inventory accounting before implementation.
-- Operate the reporter/keeper, including persistent action evidence, retry recovery and
-  freshness monitoring. `strategy/member-reconciliation.ts` validates unsigned report
-  candidates against account identity, exact amounts, priority execution, pending orders,
-  market settings and an evidence watermark. It does not run a signing service.
+- Start and validate the implemented [reporter/keeper service](KEEPER.md) under funded
+  load. It reconstructs action history, checks venue execution/account watermarks,
+  reports actual positions, journals signed transactions and processes entries/exits.
+  Its live signing mode has not been run during this build. The read-only mode has
+  observed all 100 deployed members; mocked lifecycle and real WASM signing tests pass.
 - Run account bootstrap with user-signed funding and verified reporter evidence. Version 2
-  now supports key registration/rotation and browser margin configuration, but no member
-  account is currently registered or funded. The reporter/keeper is not operating live.
-- Resolve maximum-tier collateral sizing: an exact 50x target at the venue minimum
-  200 bps cannot also satisfy the controller’s 1% opening headroom. It stays blocked;
-  the application must not silently label a lower exposure as an exact 50x strategy.
+  supports key registration/rotation and browser margin configuration. Version 3
+  registers the full ETH contract family, but its venue accounts are not funded.
+  The reporter/keeper is not operating live.
+- The maximum-tier target now reserves collateral headroom with a bounded haircut;
+  the app labels target leverage and does not promise exact realized exposure.
 - Complete independent mark validation, liquidity constraints and an emergency unwind
   policy. Integer sizing, order minimums and opening-margin headroom now have tests. Frequent rebalancing cannot guarantee
   that a venue position avoids liquidation during gaps or outages.
-- Complete coordinated pending-leg recovery, neutral LP ownership/NAV/redemption, the
-  supply-clearing rule, and production wallet/router integration. Atomic claim issuance
-  and full-batch cancellation are implemented; matching-engine atomicity is not.
+- The receipt now implements pending-leg recovery, actual V4 LP ownership,
+  inventory/fee NAV accounting, exits, bounded redemption queues and wallet controls.
+  Validate that combined flow against actual funded matching-engine execution.
+  A separate arbitrary-supply-clearing design remains unimplemented; no rebasing is
+  presented as an external hedge.
 - Stress-test net returns under actual volume, spread, funding, adverse selection,
   price paths and execution delays. Validate with a reviewed, bounded funded round trip.
 

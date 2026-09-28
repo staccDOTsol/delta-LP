@@ -75,7 +75,10 @@ export function memberPlan(member:MemberSnapshot, report:ReturnType<typeof membe
   if(member.leverage<1||member.leverage>50||member.redeemShares>member.supply)throw new Error('Invalid member accounting.');
   const total=member.cash+report.venueEquity, nav=total>0n?total:0n;
   const backing=member.supply===0n?0n:nav*(member.supply-member.redeemShares)/member.supply;
-  const base=backing*BigInt(member.leverage)*10n**BigInt(member.sizeDecimals)/report.mark;
+  let base=backing*BigInt(member.leverage)*10n**BigInt(member.sizeDecimals)/report.mark;
+  const budget=report.venueEquity>0n?report.venueEquity*9900n/10000n:0n;
+  const capacity=budget>1n?(budget-1n)*10000n/BigInt(report.initialMarginBps)*10n**BigInt(member.sizeDecimals)/report.mark:0n;
+  if(capacity<base&&capacity>=(base*9800n+9999n)/10000n)base=capacity;
   const desired=member.short?-base:base, delta=desired-report.position, size=delta<0n?-delta:delta;
   const needed=size!==0n&&(base===0n||size*10_000n>base*100n);
   if(!needed)return {state:'balanced' as const,desired,delta};

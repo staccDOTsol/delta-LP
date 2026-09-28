@@ -10,6 +10,7 @@ const record=existsSync(path)?JSON.parse(readFileSync(path,'utf8')):{};
 const entries={...manifest.steps,MemberFactory:{...manifest.factory,transactionHash:manifest.steps.MemberController.transactionHash}};
 const endpoint='https://sourcify.dev/server/v2';
 for(const [name,entry] of Object.entries(entries)){
+  const file=name==='NeutralEscrowFactory'?'NeutralEscrows':name;
   const lookup=await fetch(`${endpoint}/contract/4663/${entry.address}`,{signal:AbortSignal.timeout(20000)});
   if(lookup.ok){
     const verified=await lookup.json();
@@ -27,10 +28,10 @@ for(const [name,entry] of Object.entries(entries)){
     // the public record limited to identity, job ID, and independently checked matches.
     continue;
   }
-  const artifact=JSON.parse(readFileSync(new URL(`../out/${name}.sol/${name}.json`,import.meta.url),'utf8'));
-  const source=execFileSync(`${homedir()}/.foundry/bin/forge`,['verify-contract',entry.address,`src/tokenized/${name}.sol:${name}`,'--chain','4663','--show-standard-json-input'],{cwd:new URL('../',import.meta.url),encoding:'utf8',stdio:['ignore','pipe','pipe'],maxBuffer:8*1024*1024});
+  const artifact=JSON.parse(readFileSync(new URL(`../out/${file}.sol/${name}.json`,import.meta.url),'utf8'));
+  const source=execFileSync(`${homedir()}/.foundry/bin/forge`,['verify-contract',entry.address,`src/tokenized/${file}.sol:${name}`,'--chain','4663','--show-standard-json-input'],{cwd:new URL('../',import.meta.url),encoding:'utf8',stdio:['ignore','pipe','pipe'],maxBuffer:8*1024*1024});
   const response=await fetch(`${endpoint}/verify/4663/${entry.address}`,{method:'POST',headers:{'content-type':'application/json'},signal:AbortSignal.timeout(30000),body:JSON.stringify({
-    stdJsonInput:JSON.parse(source),compilerVersion:artifact.metadata.compiler.version,contractIdentifier:`src/tokenized/${name}.sol:${name}`,creationTransactionHash:entry.transactionHash,
+    stdJsonInput:JSON.parse(source),compilerVersion:artifact.metadata.compiler.version,contractIdentifier:`src/tokenized/${file}.sol:${name}`,creationTransactionHash:entry.transactionHash,
   })});
   if(!response.ok)throw new Error(`${name}: Sourcify submission HTTP ${response.status}`);
   const result=await response.json();

@@ -530,6 +530,15 @@ contract MemberController is ITransferRebalance, Ownable2Step, ReentrancyGuard {
         uint256 supply = m.token.totalSupply();
         uint256 backing = supply == 0 ? 0 : Math.mulDiv(m.nav, supply - m.redeemShares, supply);
         uint256 raw = Math.mulDiv(backing * m.leverage, 10 ** m.sizeDecimals, m.mark);
+        // At the venue's maximum leverage the nominal target leaves no collateral
+        // buffer. Permit at most a 2% target haircut; a wrong margin setting or a
+        // materially underfunded account must still fail the opening-margin check.
+        uint256 venueEquity = m.nav > m.cash ? m.nav - m.cash : 0;
+        uint256 budget = Math.mulDiv(venueEquity, BPS - REBALANCE_BPS, BPS);
+        uint256 capacity = budget > 1
+            ? Math.mulDiv(Math.mulDiv(budget - 1, BPS, m.initialMarginBps), 10 ** m.sizeDecimals, m.mark)
+            : 0;
+        if (capacity < raw && capacity >= Math.mulDiv(raw, 9800, BPS, Math.Rounding.Ceil)) raw = capacity;
         require(raw <= type(uint48).max);
         desired = m.short ? -int256(raw) : int256(raw);
         delta = desired - m.position;

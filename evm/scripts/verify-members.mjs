@@ -13,6 +13,7 @@ const path=new URL(`../deployments/4663-tokenized-${version}-verification.json`,
 const record=existsSync(path)?JSON.parse(readFileSync(path,'utf8')):{};
 const entries={...manifest.steps,MemberFactory:{...manifest.factory,constructorArgs:[manifest.dependencies.usdg,manifest.dependencies.lighter]}};
 for(const [name,entry] of Object.entries(entries)){
+  const file=name==='NeutralEscrowFactory'?'NeutralEscrows':name;
   await wait(500); // This account's explorer API permits three requests per second.
   const endpoint=new URL('https://api.etherscan.io/v2/api');
   endpoint.search=new URLSearchParams({chainid:'4663',apikey:key,module:'contract',action:record[name]?.guid?'checkverifystatus':'verifysourcecode'});
@@ -22,14 +23,14 @@ for(const [name,entry] of Object.entries(entries)){
     endpoint.searchParams.set('guid',record[name].guid);
     response=await fetch(endpoint,{signal:AbortSignal.timeout(20_000)});
   }else{
-    const artifact=JSON.parse(readFileSync(new URL(`../out/${name}.sol/${name}.json`,import.meta.url),'utf8'));
-    const source=execFileSync(`${homedir()}/.foundry/bin/forge`,['verify-contract',entry.address,`src/tokenized/${name}.sol:${name}`,'--chain','4663','--show-standard-json-input'],{cwd:new URL('../',import.meta.url),encoding:'utf8',stdio:['ignore','pipe','pipe'],maxBuffer:8*1024*1024});
+    const artifact=JSON.parse(readFileSync(new URL(`../out/${file}.sol/${name}.json`,import.meta.url),'utf8'));
+    const source=execFileSync(`${homedir()}/.foundry/bin/forge`,['verify-contract',entry.address,`src/tokenized/${file}.sol:${name}`,'--chain','4663','--show-standard-json-input'],{cwd:new URL('../',import.meta.url),encoding:'utf8',stdio:['ignore','pipe','pipe'],maxBuffer:8*1024*1024});
     JSON.parse(source); // Never send compiler logs or malformed source.
     const constructor=artifact.abi.find(item=>item.type==='constructor');
     const args=constructor?.inputs.length?encodeAbiParameters(constructor.inputs,entry.constructorArgs).slice(2):'';
     response=await fetch(endpoint,{method:'POST',signal:AbortSignal.timeout(30_000),body:new URLSearchParams({
       contractaddress:entry.address,sourceCode:source,codeformat:'solidity-standard-json-input',
-      contractname:`src/tokenized/${name}.sol:${name}`,compilerversion:`v${artifact.metadata.compiler.version}`,
+      contractname:`src/tokenized/${file}.sol:${name}`,compilerversion:`v${artifact.metadata.compiler.version}`,
       optimizationUsed:'1',runs:'200',constructorArguements:args,licenseType:'3',
     })});
   }

@@ -18,6 +18,9 @@
     "test:runtime": "tsc -p tsconfig.server.json && node --input-type=module -e \"await import('./artifacts/server-runtime/api/index.js'); console.log('Server ESM startup passed.');\"",
     "check": "npm run build && npm run test:runtime && npm test",
     "simulate": "tsx platform/simulate.ts",
+    "keeper:observe": "tsx keeper/run.ts",
+    "keeper:run": "tsx keeper/run.ts --execute",
+    "keeper:launch": "tsx keeper/launch.ts",
     "test:solana": "cd solana && cargo test -p dlp-math",
     "test:evm": "cd evm && forge test -vv"
   },

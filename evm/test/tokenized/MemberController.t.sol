@@ -165,6 +165,23 @@ contract MemberControllerTest is Test {
         token = MemberToken(controller.memberToken(id));
     }
 
+    function testMaximumTierKeepsMarginHeadroomForBothDirections() public {
+        for (uint8 side; side < 2; ++side) {
+            uint256 id = _member(50, side == 1);
+            _deposit(id, 98e6);
+            controller.fundVenue(id, 98e6);
+            _report(id, 98e6, 0);
+            (int256 desired,, bool needed) = controller.target(id);
+            uint256 magnitude = uint256(desired < 0 ? -desired : desired);
+            assertTrue(needed);
+            assertLt(magnitude, 19600); assertGe(magnitude, 19208);
+            controller.rebalance(id, 250000);
+            assertEq(venue.lastSize(), magnitude);
+            _report(id, 98e6, desired);
+            (,, needed) = controller.target(id); assertFalse(needed);
+        }
+    }
+
     function _setupReport(uint16 margin) internal view returns (MemberController.Report memory) {
         MemberController.Member memory m = controller.memberState(long3);
         return MemberController.Report(

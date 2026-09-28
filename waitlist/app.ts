@@ -6,6 +6,7 @@ import { preferenceSchema } from './preferences.js';
 import { markets, sizeOrder } from '../strategy/lighter.js';
 import { vaultState } from '../strategy/vault.js';
 import { tokenizedState } from '../strategy/tokenized.js';
+import { neutralState } from '../strategy/neutral.js';
 
 export type Mailer = (email: string, token: string) => Promise<void>;
 export function resendMailer(origin: string): Mailer {
@@ -46,6 +47,10 @@ export function createWaitlistApp(store: WaitlistStore, options: { origin: strin
   });
   app.get('/api/strategies/tokenized',async(_req,res)=>{
     try {res.json(await tokenizedState());}catch {res.status(503).json({error:'Tokenized contract status is temporarily unavailable.'});}
+  });
+  app.get('/api/strategies/neutral',async(_req,res)=>{
+    try {res.json({chainId:4663,vaults:await neutralState()});}
+    catch {res.status(503).json({error:'Neutral pool state is temporarily unavailable. No balance is estimated.'});}
   });
   app.post('/api/strategies/estimate', async (req,res) => {
     try {

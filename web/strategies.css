@@ -11,3 +11,24 @@
 .member-pairs{display:grid;gap:9px;margin-block:23px}.member-pairs>div{display:grid;grid-template-columns:1fr 32px 1fr;align-items:center;text-align:center;gap:8px}.member-pairs>div>span:first-child,.member-pairs>div>span:last-child{padding:12px 9px;background:#edf2e5;border:1px solid #d5ddce;border-radius:8px;font-size:15px;font-weight:600}.member-pairs>div>span:last-child{background:#f3ede3;border-color:#e3d9c9}.member-pairs>small{font-size:11px;color:#687762;line-height:1.7;margin-top:4px}.neutral-panel>.inline-link{font-size:12px;margin-top:20px;min-height:44px}.legacy-vault{margin-top:18px;border-top:1px solid #d5ddce;padding-top:12px}.legacy-vault>summary{cursor:pointer;font-size:12px;min-height:44px;padding-top:14px;color:#687762}.legacy-vault .readiness-box{margin-top:8px}.direct-route-note{font-size:12px;line-height:1.7;color:#687762;margin-bottom:20px}
 .member-economics{margin-top:48px;padding-block:10px 8px}.economics-heading{display:flex;justify-content:space-between;align-items:end;gap:20px}.economics-heading h2{font-size:32px;line-height:1.25;letter-spacing:-1px;margin-top:12px}.economics-heading>.state-pill{flex-shrink:0;white-space:normal}.participant-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:26px}.participant-grid article{border-top:1px solid #cdd7c3;padding:22px 0 10px;min-width:0}.participant-number{font-size:11px;color:#708266;letter-spacing:1px}.participant-grid h3{font-size:20px;margin-top:13px;letter-spacing:-.5px}.participant-grid p{font-size:13px;line-height:1.8;color:#62775e;margin-top:12px}.participant-grid .inline-link{font-size:12px;min-height:44px;margin-top:6px}.fee-policy{display:grid;grid-template-columns:repeat(3,100px) 1fr;gap:18px;align-items:center;border:1px solid #cdd7c3;background:#edf2e5;padding:24px;border-radius:13px;margin-top:26px}.fee-tile strong{display:block;font-size:35px;letter-spacing:-1px}.fee-tile span{display:block;font-size:11px;color:#62775e;margin-top:5px}.fee-example{border-left:1px solid #cdd7c3;padding-left:22px}.fee-example>strong{font-size:14px}.fee-example p,.economics-note p{font-size:12px;line-height:1.8;color:#62775e;margin-top:8px}.economics-note{max-width:900px;margin-top:23px}.economics-note h3{font-size:15px}
 @media(max-width:850px){.strategy-intro h1{font-size:clamp(34px,7.7vw,48px);letter-spacing:-1.8px}.development-label{font-size:11px}.economics-heading{display:block}.economics-heading h2{font-size:27px}.economics-heading>.state-pill{display:inline-block;margin-top:14px}.participant-grid{grid-template-columns:1fr;gap:5px;margin-top:20px}.participant-grid article{padding-top:18px}.participant-grid h3{margin-top:8px}.participant-grid p{margin-top:9px}.fee-policy{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 10px;padding:20px}.fee-example{grid-column:1/-1;border-left:0;border-top:1px solid #cdd7c3;padding-left:0;padding-top:18px}.fee-tile strong{font-size:31px}.fee-tile span{font-size:11px}.member-economics{margin-top:32px}.economics-note p{font-size:12px}.member-pairs>small{font-size:12px}}
+
+/* The neutral position flow remains usable inside a narrow mobile wallet. */
+.neutral-entry { min-width: 0; }
+.neutral-entry .neutral-facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0; }
+.neutral-facts span { padding: 7px 10px; border-radius: 6px; background: #edf2e8; color: #274a3f; font-size: 12px; }
+.neutral-entry label { display: block; font-size: 13px; font-weight: 600; margin: 16px 0 10px; }
+.neutral-entry label > span { float: right; color: #68756b; }
+.neutral-entry input { display: block; width: 100%; min-width: 0; box-sizing: border-box; padding: 14px; margin-top: 8px; border: 1px solid #cfd8cc; border-radius: 8px; background: #fff; color: #183d36; font-size: 16px; }
+.neutral-entry .wl-button { width: 100%; min-height: 48px; margin-top: 14px; }
+.neutral-entry .secondary-button { min-height: 44px; white-space: normal; }
+.neutral-entry .inline-link { min-height: 44px; }
+.neutral-position { padding: 18px; margin: 20px 0; border: 1px solid #cdd7c9; border-radius: 12px; background: #f7f9f2; overflow-wrap: anywhere; }
+.neutral-position h3 { margin: 0 0 10px; }
+.neutral-position details { margin-top: 16px; }
+.neutral-position summary { cursor: pointer; padding: 8px 0; }
+.neutral-entry .account-summary dd { overflow-wrap: anywhere; }
+@media (max-width: 480px) {
+  .neutral-entry .funding-actions { display: grid; grid-template-columns: 1fr; }
+  .neutral-entry .account-summary dl > div { gap: 8px; flex-wrap: wrap; }
+  .neutral-position { padding: 14px; }
+}

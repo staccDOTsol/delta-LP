@@ -21,7 +21,7 @@ const manifest=existsSync(path)?JSON.parse(readFileSync(path,'utf8')):{chainId:4
 if(manifest.chainId!==4663||manifest.authority.toLowerCase()!==account.address.toLowerCase())throw new Error('Deployment journal identity mismatch.');
 if(await client.getChainId()!==4663)throw new Error('Unexpected chain.');
 for(const [name,address] of Object.entries(dependencies))if(!(await client.getCode({address})))throw new Error(`Missing dependency: ${name}`);
-const art=name=>JSON.parse(readFileSync(new URL(`../out/${name}.sol/${name}.json`,import.meta.url),'utf8'));
+const art=name=>JSON.parse(readFileSync(new URL(`../out/${name==='NeutralEscrowFactory'?'NeutralEscrows':name}.sol/${name}.json`,import.meta.url),'utf8'));
 function save(){mkdirSync(new URL('../deployments/',import.meta.url),{recursive:true});const temp=new URL(`${path.pathname}.tmp`,'file:');writeFileSync(temp,stringify(manifest)+'\n');renameSync(temp,path);}
 const read=(address,name,fn,args=[])=>client.readContract({address,abi:art(name).abi,functionName:fn,args});
 function spent(){return Object.values(manifest.steps).reduce((sum,step)=>sum+BigInt(step.actualGasCostWei??0),0n);}
@@ -102,5 +102,15 @@ const router=await deploy('HouseFeeRouter',[]);
 if((await read(router,'HouseFeeRouter','FANOUT')).toLowerCase()!==dependencies.fanout.toLowerCase())throw new Error('Fanout mismatch.');
 const hook=await deploy('MemberV4Hook',[dependencies.poolManager,controller],true);
 if((await read(hook,'MemberV4Hook','controller')).toLowerCase()!==controller.toLowerCase()||(await read(hook,'MemberV4Hook','manager')).toLowerCase()!==dependencies.poolManager.toLowerCase())throw new Error('Hook wiring mismatch.');
+if(process.argv.includes('--neutral')){
+  const response=await fetch('https://api.rh.lighter.xyz/api/v1/orderBookDetails?market_id=0',{signal:AbortSignal.timeout(10000)});
+  const body=await response.json();
+  const market=body.order_book_details?.find(m=>m.market_id===0&&m.symbol==='ETH');
+  if(!response.ok||body.code!==200||!market||market.status!=='active'||Math.floor(10000/market.min_initial_margin_fraction)!==50)throw new Error('ETH all-tier registry changed; review deployment configuration.');
+  const escrows=await deploy('NeutralEscrowFactory',[controller]);
+  const neutral=await deploy('NeutralVault',[controller,hook,escrows,keccak256(toHex('ETH')),50,2000_000000n]);
+  if(await read(neutral,'NeutralVault','entriesOpen')||await read(neutral,'NeutralVault','totalSupply')!==0n)throw new Error('Expected a closed empty neutral vault.');
+  manifest.neutral={symbol:'ETH',tiers:50,minimumBatchAssets:'2000000000',address:neutral};
+}
 manifest.status='deployed-empty';manifest.verifiedAt=new Date().toISOString();manifest.totalGasCostETH=formatEther(spent());save();
 console.log(stringify({status:manifest.status,controller,factory,router,hook,totalGasCostETH:manifest.totalGasCostETH}));

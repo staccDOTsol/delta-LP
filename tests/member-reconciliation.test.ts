@@ -58,6 +58,16 @@ test('queued exits target an actual reduction and full exit targets zero',()=>{
   assert.equal(full.delta,-1200n);
   assert.equal(full.state,'requires-order-review');
 });
+test('maximum tier retains collateral headroom without accepting materially underleveraged accounts',()=>{
+  const report=memberReport(member,{...account,positions:[{...position,position:'0.0000',sign:0}]},market,observation);
+  for(const short of [false,true]){
+    const plan=memberPlan({...member,leverage:50,short},report,market);
+    assert.equal(plan.state,'requires-order-review');
+    assert.equal(plan.desired,short?-19799n:19799n);
+    const insufficient=memberPlan({...member,leverage:50,short},{...report,initialMarginBps:5000},market);
+    assert.equal(insufficient.state,'blocked');
+  }
+});
 test('reduction remains possible with a bad opening margin setting; dust is explicit',()=>{
   const report=memberReport(member,{...account,positions:[{...position,initial_margin_fraction:'50.00'}]},market,observation);
   assert.equal(memberPlan({...member,redeemShares:member.supply},report,market).state,'requires-order-review');

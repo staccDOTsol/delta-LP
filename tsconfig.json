@@ -6,5 +6,5 @@
     "skipLibCheck": true, "resolveJsonModule": true,
     "allowImportingTsExtensions": true, "types": ["node", "vite/client"]
   },
-  "include": ["platform", "waitlist", "api", "web", "tests", "vite.config.ts"]
+  "include": ["platform", "waitlist", "api", "web", "tests", "keeper", "vite.config.ts"]
 }
