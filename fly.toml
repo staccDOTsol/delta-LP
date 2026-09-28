@@ -1,0 +1,50 @@
+app = "delta-lp-keeper"
+primary_region = "yyz"
+kill_signal = "SIGTERM"
+kill_timeout = 120
+
+[build]
+  dockerfile = "Dockerfile.keeper"
+  ignorefile = ".dockerignore.keeper"
+
+[env]
+  NODE_ENV = "production"
+  DELTA_KEEPER_MODE = "observe"
+  DELTA_KEEPER_STATE = "/data/keeper-v6"
+  DELTA_KEEPER_HEALTH_PORT = "8080"
+
+[processes]
+  keeper = "node --import tsx keeper/cloud.ts"
+
+[deploy]
+  strategy = "rolling"
+  max_unavailable = 1
+
+[[mounts]]
+  source = "keeper_data"
+  destination = "/data"
+  processes = ["keeper"]
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory = "512mb"
+  processes = ["keeper"]
+
+[[restart]]
+  policy = "always"
+  processes = ["keeper"]
+
+[checks]
+  [checks.observer]
+    type = "http"
+    port = 8080
+    method = "get"
+    path = "/healthz"
+    interval = "30s"
+    timeout = "5s"
+    grace_period = "120s"
+    processes = ["keeper"]
+
+# No public services or public IPs. Exactly one Machine mounts keeper_data.
+# Deploy with: flyctl deploy --ha=false --no-public-ips

@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "status": "incomplete-unsigned-input-template",
+  "chainId": 4663,
+  "deploymentManifest": "evm/deployments/4663-nft-v6.json",
+  "owner": "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158",
+  "adapter": "0xE454667569852d99BeB0C19c7275fAbCc2874104",
+  "seaDrop": "0x00005EA00Ac477B1030CE78506496e8C2dE24bf5",
+  "readme": "nft/SALE-SETUP.md",
+  "instructions": "Replace every null with reviewed explicit values. Use decimal strings for integer inputs. This file contains no executable transaction or signature and cannot open a sale.",
+  "adapterQuote": {
+    "minimumUSDG6PerETH": null,
+    "nativeCapWei": null,
+    "expiresAt": null
+  },
+  "publicDrops": [
+    {
+      "denomination": 1,
+      "address": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41",
+      "mintPriceWei": null,
+      "startTime": null,
+      "endTime": null,
+      "maxTotalMintableByWallet": null,
+      "feeBps": 1000,
+      "restrictFeeRecipients": true
+    },
+    {
+      "denomination": 2,
+      "address": "0xd301a76601F27c682F64062b4A254fd7aed601Ea",
+      "mintPriceWei": null,
+      "startTime": null,
+      "endTime": null,
+      "maxTotalMintableByWallet": null,
+      "feeBps": 1000,
+      "restrictFeeRecipients": true
+    },
+    {
+      "denomination": 5,
+      "address": "0xa6D443b39fE77B8e1013482d300994cA84B5635C",
+      "mintPriceWei": null,
+      "startTime": null,
+      "endTime": null,
+      "maxTotalMintableByWallet": null,
+      "feeBps": 1000,
+      "restrictFeeRecipients": true
+    },
+    {
+      "denomination": 10,
+      "address": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131",
+      "mintPriceWei": null,
+      "startTime": null,
+      "endTime": null,
+      "maxTotalMintableByWallet": null,
+      "feeBps": 1000,
+      "restrictFeeRecipients": true
+    }
+  ],
+  "collectionQuotes": [
+    {
+      "denomination": 1,
+      "address": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41",
+      "minimumUSDG6PerETH": null,
+      "expiresAt": null
+    },
+    {
+      "denomination": 2,
+      "address": "0xd301a76601F27c682F64062b4A254fd7aed601Ea",
+      "minimumUSDG6PerETH": null,
+      "expiresAt": null
+    },
+    {
+      "denomination": 5,
+      "address": "0xa6D443b39fE77B8e1013482d300994cA84B5635C",
+      "minimumUSDG6PerETH": null,
+      "expiresAt": null
+    },
+    {
+      "denomination": 10,
+      "address": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131",
+      "minimumUSDG6PerETH": null,
+      "expiresAt": null
+    }
+  ],
+  "activation": {
+    "separateOwnerAction": true,
+    "callOrder": [
+      "updatePublicDrop for each paused edition",
+      "setQuote on adapter and setFundingQuote on each edition",
+      "setPaused(false) on adapter, then each edition"
+    ],
+    "transactionValueWei": "0",
+    "creatorSeedFundingRequired": false
+  },
+  "ongoingRequirement": "Quotes expire and nativeCap can exhaust. Owner quote refresh and separate funded DN execution are not supplied by this template."
+}

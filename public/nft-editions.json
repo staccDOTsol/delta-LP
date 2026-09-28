@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "chainId": 4663,
+  "denominations": [
+    1,
+    2,
+    5,
+    10
+  ],
+  "supplyPerEdition": 10000,
+  "totalNFTs": 40000,
+  "totalWeight": 180000,
+  "editions": [
+    {
+      "denomination": 1,
+      "count": 10000,
+      "sourceHash": "67b222d1aa4a4f513515ca4bcf360d123fe4dc614dc81c187af29d9e1b929445",
+      "provenanceHash": "0xfa879a7acc264cccf5f05e0b037483dfc064b1d327897127553b41a77ae098e0",
+      "baseURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/1/67b222d1aa4a4f513515ca4bcf360d123fe4dc614dc81c187af29d9e1b929445/metadata/",
+      "contractURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/1/67b222d1aa4a4f513515ca4bcf360d123fe4dc614dc81c187af29d9e1b929445/collection.json",
+      "preview": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/1/67b222d1aa4a4f513515ca4bcf360d123fe4dc614dc81c187af29d9e1b929445/images/1.png",
+      "manifest": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/1/67b222d1aa4a4f513515ca4bcf360d123fe4dc614dc81c187af29d9e1b929445/manifest.json",
+      "verifiedAt": "2026-09-28T08:06:35.460Z",
+      "verification": "All metadata GET/hash + all image HEAD/size; 11 image GET/hash samples per edition"
+    },
+    {
+      "denomination": 2,
+      "count": 10000,
+      "sourceHash": "483cb9583e8dc808e16ae27e091d3c0829f0c8ffc461de02be4e84bc249c6d96",
+      "provenanceHash": "0x63a9390c3cf4256cf0c403aff2ca42c28728958584e80ea2d53495e397d63312",
+      "baseURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/2/483cb9583e8dc808e16ae27e091d3c0829f0c8ffc461de02be4e84bc249c6d96/metadata/",
+      "contractURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/2/483cb9583e8dc808e16ae27e091d3c0829f0c8ffc461de02be4e84bc249c6d96/collection.json",
+      "preview": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/2/483cb9583e8dc808e16ae27e091d3c0829f0c8ffc461de02be4e84bc249c6d96/images/1.png",
+      "manifest": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/2/483cb9583e8dc808e16ae27e091d3c0829f0c8ffc461de02be4e84bc249c6d96/manifest.json",
+      "verifiedAt": "2026-09-28T08:11:52.716Z",
+      "verification": "All metadata GET/hash + all image HEAD/size; 11 image GET/hash samples per edition"
+    },
+    {
+      "denomination": 5,
+      "count": 10000,
+      "sourceHash": "2a5060dafde9802cedebaec481ac94d6e9ce92e4f0e15cb458e9f824fd8e9c93",
+      "provenanceHash": "0x0475c2f9fada2a6641abb752ca6271bb2fa5c2a4d1c786232cf71ec52fcbd052",
+      "baseURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/5/2a5060dafde9802cedebaec481ac94d6e9ce92e4f0e15cb458e9f824fd8e9c93/metadata/",
+      "contractURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/5/2a5060dafde9802cedebaec481ac94d6e9ce92e4f0e15cb458e9f824fd8e9c93/collection.json",
+      "preview": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/5/2a5060dafde9802cedebaec481ac94d6e9ce92e4f0e15cb458e9f824fd8e9c93/images/1.png",
+      "manifest": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/5/2a5060dafde9802cedebaec481ac94d6e9ce92e4f0e15cb458e9f824fd8e9c93/manifest.json",
+      "verifiedAt": "2026-09-28T08:17:16.829Z",
+      "verification": "All metadata GET/hash + all image HEAD/size; 11 image GET/hash samples per edition"
+    },
+    {
+      "denomination": 10,
+      "count": 10000,
+      "sourceHash": "d753926317deb4dd0deaa06c055b6f8b4f0b59e8e384c8b24a75a34e1cfe0afc",
+      "provenanceHash": "0x9d20c2d91c474d2d2071419efd681ff6337d28cdb247bf373fe356feb172e711",
+      "baseURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/10/d753926317deb4dd0deaa06c055b6f8b4f0b59e8e384c8b24a75a34e1cfe0afc/metadata/",
+      "contractURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/10/d753926317deb4dd0deaa06c055b6f8b4f0b59e8e384c8b24a75a34e1cfe0afc/collection.json",
+      "preview": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/10/d753926317deb4dd0deaa06c055b6f8b4f0b59e8e384c8b24a75a34e1cfe0afc/images/1.png",
+      "manifest": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/10/d753926317deb4dd0deaa06c055b6f8b4f0b59e8e384c8b24a75a34e1cfe0afc/manifest.json",
+      "verifiedAt": "2026-09-28T08:21:58.313Z",
+      "verification": "All metadata GET/hash + all image HEAD/size; 11 image GET/hash samples per edition"
+    }
+  ],
+  "deferredDenominations": [
+    20,
+    50,
+    100
+  ],
+  "scope": "Published artwork and metadata only; deployment and funded readiness are separate.",
+  "catalogURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/launches/four-editions/0873a6ae84a4280c051ed057ef056c377f48433c46bef3550a8cd5951b733269/catalog.json"
+}

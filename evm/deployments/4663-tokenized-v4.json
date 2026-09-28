@@ -1,0 +1,145 @@
+{
+  "chainId": 4663,
+  "authority": "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158",
+  "version": "v4",
+  "controllerName": "SplitFeeMemberController",
+  "feePolicy": {
+    "entryFeeBps": 300,
+    "exitFeeBps": 600,
+    "wizardsBps": 5000,
+    "nftsBps": 5000
+  },
+  "status": "deployed-empty",
+  "dependencies": {
+    "usdg": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
+    "lighter": "0x94bAB9693Ba2f6358507eFfcbd372b0660AFfF9d",
+    "poolManager": "0x8366a39CC670B4001A1121B8F6A443A643e40951",
+    "fanout": "0x1b88A6c6516FD2918905186F21Bb9F5CaA1a15c8",
+    "create2": "0x4e59b44847b379578588920cA78FbF26c0B4956C"
+  },
+  "steps": {
+    "WeightedNftFeeFanout": {
+      "status": "deployed",
+      "address": "0x5D38705D0c40c814CF2Eeb67d9ECD885cd9708FC",
+      "nonce": 49312,
+      "transactionHash": "0x554fea39512ccfde3389345c2614d5506ff0b64fc3f8439117578584bcb4b4f0",
+      "creationCodeHash": "0x5ff3ed35e2ed103ee264188b386762757cba40e52c87559cb6f86ceffeac3e8f",
+      "constructorArgs": [
+        "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158"
+      ],
+      "gasLimit": "1124036",
+      "maxGasCostWei": "45743769056000",
+      "blockNumber": "74655399",
+      "runtimeCodeHash": "0x32033799123487bd165178898a45ce0380ae907cda19a2a44c6047f67d26faa9",
+      "actualGasCostWei": "18558155322000",
+      "gasUsed": "926333"
+    },
+    "SplitHouseFeeRouter": {
+      "status": "deployed",
+      "address": "0x0264C6739483f80285B4e6ebd342B22b3785A9F0",
+      "nonce": 49313,
+      "transactionHash": "0x6d92f34ecd8ccf76e582c7781e3715b1b32cecc030b7e36cfd92b8d0290e7737",
+      "creationCodeHash": "0xa563ffce80c4ea16e431e9227ce501f5049f56c79827edea35f87e2d52b3a8b2",
+      "constructorArgs": [
+        "0x5D38705D0c40c814CF2Eeb67d9ECD885cd9708FC"
+      ],
+      "gasLimit": "1111969",
+      "maxGasCostWei": "44927995476000",
+      "blockNumber": "74655448",
+      "runtimeCodeHash": "0x8282dcd9c44e5f90b2b56cdab4785a54394e59fa651346c152a073a4aaf5b328",
+      "actualGasCostWei": "18393631200000",
+      "gasUsed": "916200"
+    },
+    "SplitFeeMemberController": {
+      "status": "deployed",
+      "address": "0xae3600b13a2F894f81F6565DD207492601B2Ce3E",
+      "nonce": 49314,
+      "transactionHash": "0x79668288d8e9199e0261042b156d886079082f651f061f3ebf53e6e27ca1499b",
+      "creationCodeHash": "0x54b0218ddaa1587d8dbf8cfb091cd4da0bc8538671695bb8b61062acbd33abc5",
+      "constructorArgs": [
+        "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
+        "0x94bAB9693Ba2f6358507eFfcbd372b0660AFfF9d",
+        "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158",
+        "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158",
+        "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158",
+        "0x0264C6739483f80285B4e6ebd342B22b3785A9F0"
+      ],
+      "gasLimit": "8219545",
+      "maxGasCostWei": "333384745200000",
+      "blockNumber": "74655498",
+      "runtimeCodeHash": "0x3be4509eeaf2d11acd30bc31b51f8ff717640dc748202131618de9e939328bb4",
+      "actualGasCostWei": "136110965760000",
+      "gasUsed": "6783840"
+    },
+    "MemberV4Hook": {
+      "status": "deployed",
+      "address": "0xAC6faA03b0dB4bB8b4dB9989653A68fd5112e540",
+      "nonce": 49315,
+      "transactionHash": "0xfd1e2b72162d08a402507850d0e509dc7e5e6c8e843b69695464f03358a20a28",
+      "creationCodeHash": "0x7e0cb9e39da35035ecace62ee630c9cbe36cadb1618f0eeb3a8962a124144756",
+      "constructorArgs": [
+        "0x8366a39CC670B4001A1121B8F6A443A643e40951",
+        "0xae3600b13a2F894f81F6565DD207492601B2Ce3E"
+      ],
+      "salt": "0x0000000000000000000000000000000000000000000000000000000000000fac",
+      "gasLimit": "1223443",
+      "maxGasCostWei": "48981763948000",
+      "blockNumber": "74655550",
+      "runtimeCodeHash": "0x377bc1b180cf4272d487aba89d84e34ffeeb90064464e20a868dcbf92bb59351",
+      "actualGasCostWei": "20166964410000",
+      "gasUsed": "999255"
+    },
+    "NeutralEscrowFactory": {
+      "status": "deployed",
+      "address": "0x1C194B26fE68A4b4801a21E4a36a89A5803aDb71",
+      "nonce": 49316,
+      "transactionHash": "0x6e1ea187c95ef8f1bb8a70ef2f776ac217ee7fc734094c120f2ffc71e44738bd",
+      "creationCodeHash": "0xa57a54bb3e014f7e9388ef8e4b94502e1cadbb1825822f448ba01f23976a2864",
+      "constructorArgs": [
+        "0xae3600b13a2F894f81F6565DD207492601B2Ce3E"
+      ],
+      "gasLimit": "2911279",
+      "maxGasCostWei": "117208092540000",
+      "blockNumber": "74655601",
+      "runtimeCodeHash": "0x9bd7a862fdccc54b1b4836156d4a5c15490d86ea60d7c687d01aada5963be225",
+      "actualGasCostWei": "48504978300000",
+      "gasUsed": "2401950"
+    },
+    "NeutralVault": {
+      "status": "deployed",
+      "address": "0x385d37788a63a205df8044cf7cF6a59CC740159A",
+      "nonce": 49317,
+      "transactionHash": "0x6a256abe572f3babf895286cc60ea5b00ef74bc232fc7659b518ccd1f282e4cb",
+      "creationCodeHash": "0xf0303b7b2301a070ae1cf96bf3e2d0cc5cf6e76ff0156260dd9152e4a1202c70",
+      "constructorArgs": [
+        "0xae3600b13a2F894f81F6565DD207492601B2Ce3E",
+        "0xAC6faA03b0dB4bB8b4dB9989653A68fd5112e540",
+        "0x1C194B26fE68A4b4801a21E4a36a89A5803aDb71",
+        "0xaaaebeba3810b1e6b70781f14b2d72c1cb89c0b2b320c43bb67ff79f562f5ff4",
+        50,
+        "2000000000"
+      ],
+      "gasLimit": "6488732",
+      "maxGasCostWei": "262819600928000",
+      "blockNumber": "74655651",
+      "runtimeCodeHash": "0x16197655d8a49d5b93f8de052050948cae93b3cb1a4155d719bf8164bec940cd",
+      "actualGasCostWei": "108986960160000",
+      "gasUsed": "5353520"
+    }
+  },
+  "depositsEnabled": false,
+  "liveTrading": false,
+  "nftFanout": "0x5D38705D0c40c814CF2Eeb67d9ECD885cd9708FC",
+  "factory": {
+    "address": "0x4E7782e66dD5e0F5D820676F6FAe1bfC2509fa54",
+    "runtimeCodeHash": "0xcfd6ad6842a1d665d770629899c84ed1edc2242e58b4b73a0ee1094415a47f29"
+  },
+  "neutral": {
+    "symbol": "ETH",
+    "tiers": 50,
+    "minimumBatchAssets": "2000000000",
+    "address": "0x385d37788a63a205df8044cf7cF6a59CC740159A"
+  },
+  "verifiedAt": "2026-09-28T08:31:08.471Z",
+  "totalGasCostETH": "0.000350721655152"
+}

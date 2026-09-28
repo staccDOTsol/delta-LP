@@ -1,0 +1,199 @@
+{
+  "2-MemberToken": {
+    "address": "0x7CCd2202deEd58e4668B82D5A7d8aCB09ff4C711",
+    "verificationId": "aec2113e-0ac8-4e3f-b031-8248471ed581",
+    "submittedAt": "2026-09-28T10:22:09.169Z"
+  },
+  "2-LighterSeriesAccount": {
+    "address": "0x08111d584ca0920BB24ca7fd32557aCf4Cd32F40",
+    "verificationId": "3301035d-16d4-4fa7-b28d-fee5f401fe05",
+    "submittedAt": "2026-09-28T10:22:09.409Z"
+  },
+  "1-MemberToken": {
+    "address": "0x6698610A735C2ADB48EF77344EF1928065889974",
+    "verificationId": "425f373f-b3eb-41dc-a060-ae996457b95b",
+    "submittedAt": "2026-09-28T10:22:09.477Z"
+  },
+  "1-LighterSeriesAccount": {
+    "address": "0x5328B498c22B85D4910E03914461c832F3B1736f",
+    "verificationId": "3e5f003a-fc6a-46c1-a72a-4d40c4f38f88",
+    "submittedAt": "2026-09-28T10:22:10.947Z"
+  },
+  "3-LighterSeriesAccount": {
+    "address": "0x240edDDEdF7d4ef936fd0891b1e02553cd7c876a",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:42.401Z"
+  },
+  "4-LighterSeriesAccount": {
+    "address": "0xD555CFc89BC798fC01DE2A6De92d90e4d2375424",
+    "verificationId": "b70767f4-7da7-493c-abf3-4ccfa486dbc5",
+    "submittedAt": "2026-09-28T10:22:15.852Z"
+  },
+  "4-MemberToken": {
+    "address": "0xfD54fA1C7e744d8F08a71921F5E2cFb776C08510",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:42.458Z"
+  },
+  "3-MemberToken": {
+    "address": "0x19A57f3FBe524989a7471AeA9366c78D7A9d7F81",
+    "verificationId": "d56fa52d-4bd1-4775-8bae-bb3657be8636",
+    "submittedAt": "2026-09-28T10:22:20.998Z"
+  },
+  "5-MemberToken": {
+    "address": "0xe4F2187406F625fAdDD117f6D15eA8B1E1daC7C8",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:50.982Z"
+  },
+  "6-LighterSeriesAccount": {
+    "address": "0x3d67a322E03e5505279A1E01DA80105714637E30",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:50.938Z"
+  },
+  "6-MemberToken": {
+    "address": "0xE151219Ce7dfca7570a91bd3D936D89ea45e70DB",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:50.999Z"
+  },
+  "5-LighterSeriesAccount": {
+    "address": "0xb8fb72cB7Ba303e20D86C68Fb269A346CA158496",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:50.925Z"
+  },
+  "7-MemberToken": {
+    "address": "0x746B3d5273097456BDbF71088B1d22e9E364ab69",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:52.242Z"
+  },
+  "8-MemberToken": {
+    "address": "0x5735b9e19f3CB6fB54E219FDE12594E9d326B904",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:51.797Z"
+  },
+  "7-LighterSeriesAccount": {
+    "address": "0x0583a4CBcDDCb420BFC7460dae10ea0282a09C0a",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:51.571Z"
+  },
+  "8-LighterSeriesAccount": {
+    "address": "0x9Ff4A95f098892a8BbD5135dEE9E6b40563f13D6",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:51.556Z"
+  },
+  "9-LighterSeriesAccount": {
+    "address": "0x0006e33CA448e2A5078A4dBfc461E90d8810eDCf",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:52.525Z"
+  },
+  "9-MemberToken": {
+    "address": "0xA09069b8F2AeEa7a98Cb414DF8054D251Bb94f67",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:53.095Z"
+  },
+  "10-MemberToken": {
+    "address": "0xd97E063ca7Fa61Dd7aEe8e5C5ce57970D9cf1161",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:52.534Z"
+  },
+  "10-LighterSeriesAccount": {
+    "address": "0xF02cea99FEbE8f7642F60BbE0924bB4A6D1c5e41",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:52.547Z"
+  },
+  "11-MemberToken": {
+    "address": "0x5CBcDD5332b9955E6d96FDD2FbF473f734b9D561",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:53.609Z"
+  },
+  "12-LighterSeriesAccount": {
+    "address": "0x53FF2ca3d6699796FA613a39CfBe51eaEAB51f43",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:54.659Z"
+  },
+  "12-MemberToken": {
+    "address": "0x7eAFaEb843A5944a0dA66C98c7068e3A0EcC7445",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T10:26:57.663Z"
+  },
+  "14-MemberToken": {
+    "address": "0x18000f209F8f63D0Bba8B356152ABC6fda4e3805",
+    "verificationId": "deb347e8-9a1f-4a09-b504-8159037ad31b",
+    "submittedAt": "2026-09-28T10:26:58.571Z"
+  },
+  "14-LighterSeriesAccount": {
+    "address": "0x433B345197F018b0592e6c7A654Dd691f822BE92",
+    "verificationId": "3f8592b1-7226-4943-9b3a-71db1ba4ccaf",
+    "submittedAt": "2026-09-28T10:26:59.066Z"
+  },
+  "13-MemberToken": {
+    "address": "0xe0e58DF7FB669e6F55fE907C907AbE8906C1cf92",
+    "verificationId": "c86a4630-c66d-45f2-9147-91d83e927ba6",
+    "submittedAt": "2026-09-28T10:26:59.596Z"
+  },
+  "13-LighterSeriesAccount": {
+    "address": "0x72B005d68E89B3bFc6133a1a9BF0F4ace24e4441",
+    "verificationId": "f5f55dcf-132b-4ab1-bc10-61a478af56e5",
+    "submittedAt": "2026-09-28T10:27:00.881Z"
+  },
+  "16-LighterSeriesAccount": {
+    "address": "0x75E709Bdf7406C6095856fe343Ec6E478260c7AF",
+    "verificationId": "b677557e-48d3-4a5a-8142-552779eb38a6",
+    "submittedAt": "2026-09-28T10:27:01.699Z"
+  },
+  "16-MemberToken": {
+    "address": "0xd61280cEBd0490d7eC30359a483fF2A9F55DF3C5",
+    "verificationId": "d548293a-f894-4b89-84a1-5f126e89b7d0",
+    "submittedAt": "2026-09-28T10:27:01.700Z"
+  },
+  "15-MemberToken": {
+    "address": "0x7e62c8A822c007C5d0F670bbB11C9fd146477F8E",
+    "verificationId": "3ad73555-433b-4e46-8b22-e930c676c707",
+    "submittedAt": "2026-09-28T10:27:01.891Z"
+  },
+  "15-LighterSeriesAccount": {
+    "address": "0x8d1304CFB471cebfA2a05077A423F72fBC9a5367",
+    "verificationId": "67c7528b-6f22-42fb-bea6-aa89b89c785c",
+    "submittedAt": "2026-09-28T10:27:04.301Z"
+  },
+  "18-MemberToken": {
+    "address": "0xb3736f0B27e647F426AB37d129104A2F117dC5FD",
+    "verificationId": "4987c963-97ee-4387-afd8-528a1b76391e",
+    "submittedAt": "2026-09-28T10:27:05.083Z"
+  },
+  "17-LighterSeriesAccount": {
+    "address": "0x71D44AB2E07a2a8eE11fd945f9Cd6ADF4f5547A8",
+    "verificationId": "55e6ffbe-2c37-4be6-9690-b65f1b2767e5",
+    "submittedAt": "2026-09-28T10:27:05.309Z"
+  },
+  "18-LighterSeriesAccount": {
+    "address": "0x859D4c701Dd5Bd55034E78Ea250502a8640B0C00",
+    "verificationId": "d1c6de0a-374c-4885-861b-b34490605640",
+    "submittedAt": "2026-09-28T10:27:05.916Z"
+  },
+  "17-MemberToken": {
+    "address": "0xD2d7f3599383E189Ae960274c235B27BB6148290",
+    "verificationId": "849e3e65-ae2e-494c-86c4-8ac1bb9bf740",
+    "submittedAt": "2026-09-28T10:27:07.972Z"
+  },
+  "20-LighterSeriesAccount": {
+    "address": "0xA9eb62d4b78bd3b2DdCC72EF73746BB24535E27d",
+    "verificationId": "7eafbca6-83fa-4e0d-ba33-be1500ec673e",
+    "submittedAt": "2026-09-28T10:27:09.407Z"
+  }
+}

@@ -1,0 +1,1202 @@
+{
+  "2-MemberToken": {
+    "address": "0x4e1dEfA9430db98F8D0f8ff09a8f76C0816a6b9C",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:56.681Z"
+  },
+  "1-LighterSeriesAccount": {
+    "address": "0x8cb5504FFe21c340FC7F67999b3c6F5b4DccFDf8",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:57.062Z"
+  },
+  "2-LighterSeriesAccount": {
+    "address": "0x3FE5719abBf44ef12637e4387c5E905Fa5843629",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:57.139Z"
+  },
+  "1-MemberToken": {
+    "address": "0xF4D2741b2eDE1B359B1825097079e071E72345fC",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:57.145Z"
+  },
+  "3-MemberToken": {
+    "address": "0x852e400f33fA34fac637D255071d16dB3051A421",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:57.301Z"
+  },
+  "4-MemberToken": {
+    "address": "0xe24c9bb9c6aB52B0e1aeEaFb61976D22269d2Ef2",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:57.329Z"
+  },
+  "3-LighterSeriesAccount": {
+    "address": "0xb8B3918E2742053d58fA38D71c09D50560ffe05C",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:57.332Z"
+  },
+  "4-LighterSeriesAccount": {
+    "address": "0x41d41EfbdC3faF5632aC4Ee51F4f6C4cBdEd2E49",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:57.581Z"
+  },
+  "6-MemberToken": {
+    "address": "0x618DCaE523B355D462Cb80d656615B19a7236eef",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:57.816Z"
+  },
+  "5-MemberToken": {
+    "address": "0x0932BB73Eeaae387f3FB97c4306E1DF9119311E3",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:57.847Z"
+  },
+  "6-LighterSeriesAccount": {
+    "address": "0xb6f2e381e73143B418c7cae87Fa764C5225deFdc",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:57.865Z"
+  },
+  "5-LighterSeriesAccount": {
+    "address": "0x8Ca453B37713272d2d2Ec4Ce242e1cd51A713023",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:57.866Z"
+  },
+  "7-MemberToken": {
+    "address": "0xE6a1cBbC334315b2939D72A7778B3BEcF96b1b3D",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:58.046Z"
+  },
+  "8-LighterSeriesAccount": {
+    "address": "0xf19486aC188a20866DA69bB383bbEcA31b474345",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:58.115Z"
+  },
+  "7-LighterSeriesAccount": {
+    "address": "0x74907929658C4930f677eb12A40923E133C9D28E",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:58.119Z"
+  },
+  "8-MemberToken": {
+    "address": "0xB17c4f2F74841f1a57dc69d718eF90E234F9b757",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:58.120Z"
+  },
+  "10-MemberToken": {
+    "address": "0x71fbA08634a7fB17A175d2370CD3E27F99f404C0",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:58.339Z"
+  },
+  "9-MemberToken": {
+    "address": "0x5D528f3864C151aA332e1737D1689083299adc2A",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:58.356Z"
+  },
+  "9-LighterSeriesAccount": {
+    "address": "0xB104b99583ec5327a04F8B696424a9B7E7c0bB88",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:58.363Z"
+  },
+  "10-LighterSeriesAccount": {
+    "address": "0xd9734Da786190C74E707770AcdeC397A7C3ce64D",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:58.500Z"
+  },
+  "11-MemberToken": {
+    "address": "0x2E466Ba63c668fD9fE96EcDb2326b4bb609aDECB",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:58.696Z"
+  },
+  "12-MemberToken": {
+    "address": "0x4F960aD7800d4E82a520fa53DFc37177fa8b36d3",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:58.704Z"
+  },
+  "11-LighterSeriesAccount": {
+    "address": "0x8341Bcdd9212c8D1F3d3ED70E734f6B626280dDc",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:58.713Z"
+  },
+  "12-LighterSeriesAccount": {
+    "address": "0x85B789Bac6225C51Dc6C120479c6DEbeCB9607D1",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:58.722Z"
+  },
+  "13-LighterSeriesAccount": {
+    "address": "0x933F29C772b097Af2D9cA6BC94A536c08d2b55D7",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:58.854Z"
+  },
+  "14-LighterSeriesAccount": {
+    "address": "0x9C2C677c6F6Af8FfbEa9406A6eE9F4521dB2a77F",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:58.860Z"
+  },
+  "13-MemberToken": {
+    "address": "0x9C30F393Ee6a1D385B4804016B2d33E59e19Fc2F",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:58.874Z"
+  },
+  "14-MemberToken": {
+    "address": "0x49cF38Ce6EEc814B170FfF72375A4683a5e2A209",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:58.900Z"
+  },
+  "15-LighterSeriesAccount": {
+    "address": "0x3229ffCD4E33217bd0fe8568d5F3Eb81611a68CE",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.082Z"
+  },
+  "16-MemberToken": {
+    "address": "0x7223A84dEd44792b59c62a76E9C23Fb1C3689ACD",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.084Z"
+  },
+  "15-MemberToken": {
+    "address": "0x6cd9f08561751fB7b2ba697BfB7024eaa60033cc",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.085Z"
+  },
+  "16-LighterSeriesAccount": {
+    "address": "0xe350376f1B27B8D2704D904d4A0c5BfB47ddA3Ad",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.096Z"
+  },
+  "18-LighterSeriesAccount": {
+    "address": "0xDbb5D4BefD63fBeEae1b07C7899ECf0117543041",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.269Z"
+  },
+  "18-MemberToken": {
+    "address": "0x36313726821E9Bd81e59ea9f2fe0cbaF68bC4C04",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.270Z"
+  },
+  "17-MemberToken": {
+    "address": "0x69288317759F6cfE62cb112E7176cAcAE2419351",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.281Z"
+  },
+  "17-LighterSeriesAccount": {
+    "address": "0x7b29Abe6d98559eb5a8D52311f4d45f15142ed41",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.301Z"
+  },
+  "19-LighterSeriesAccount": {
+    "address": "0xD51fFF2764893a57A1a024eD7388e5385f9aE710",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.435Z"
+  },
+  "20-LighterSeriesAccount": {
+    "address": "0x96975b8d09190DdA3599f67De38cDF44863a271D",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.469Z"
+  },
+  "19-MemberToken": {
+    "address": "0xF4Df5C714aC5Cc6EFAF506856B9049d339bcDAcF",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.485Z"
+  },
+  "20-MemberToken": {
+    "address": "0x598A36eB46e988671Ee8E8dcD5c9f1b3b85fd599",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.500Z"
+  },
+  "22-LighterSeriesAccount": {
+    "address": "0x045149aB8B78b79fc9A2F4bc85ce82ba6B82D6Ed",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.636Z"
+  },
+  "22-MemberToken": {
+    "address": "0xa7034d7E935f46817C8576a82f5172a117637364",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.646Z"
+  },
+  "21-MemberToken": {
+    "address": "0xA3581FC6602a0Bd4FA76839461Acd90A99493e07",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.647Z"
+  },
+  "21-LighterSeriesAccount": {
+    "address": "0x78B02417c4cb284CFc34ECDC013609afb301C226",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.741Z"
+  },
+  "24-MemberToken": {
+    "address": "0x9328ae102d8471434BB691a8641A2A18c050Be2F",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.948Z"
+  },
+  "23-LighterSeriesAccount": {
+    "address": "0x46e03C237941538214a953B7e9554E835f5a1960",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.966Z"
+  },
+  "24-LighterSeriesAccount": {
+    "address": "0x34C0EA1a5958040AD0EE98E1dB045180a7CC6305",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:55:59.969Z"
+  },
+  "23-MemberToken": {
+    "address": "0x76Bd2942328E13C7174191Ff12fE7D86B359D49d",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:00.094Z"
+  },
+  "25-MemberToken": {
+    "address": "0x966B19A14A92B61d43bcBd4DD45596fB7893091A",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:00.243Z"
+  },
+  "26-MemberToken": {
+    "address": "0xdEFDbbF33D94175bBd562355865EfB348BEddd31",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:00.250Z"
+  },
+  "26-LighterSeriesAccount": {
+    "address": "0x005349C9f88032af871B63E5407aEaDc19c53b31",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:00.308Z"
+  },
+  "25-LighterSeriesAccount": {
+    "address": "0x863da3ED684B9fa0365683Cc1f8f6081A6407575",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:00.606Z"
+  },
+  "27-MemberToken": {
+    "address": "0xB0754E1592FC58B27AE19535F9C85d86f529D5F0",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:00.764Z"
+  },
+  "28-MemberToken": {
+    "address": "0x8A663b7cEF1Dd8eFD4038dB6c2B2316Fb501EE36",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:00.784Z"
+  },
+  "27-LighterSeriesAccount": {
+    "address": "0xb5a76D10d62aee2dD6327763d8D6207Af8eD681D",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:00.787Z"
+  },
+  "28-LighterSeriesAccount": {
+    "address": "0xADc34B4A14B3ec7Df978Dee04B64BC0D87EE7807",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:00.792Z"
+  },
+  "29-LighterSeriesAccount": {
+    "address": "0xAa61594835a1400edf6d9724A14828C0Fdd9086B",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:00.947Z"
+  },
+  "30-MemberToken": {
+    "address": "0xF883292F01681767b121c1BD052BcEc61388eB01",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:00.953Z"
+  },
+  "30-LighterSeriesAccount": {
+    "address": "0xC6D3f4e9Ca3F1E150f3f9896cECc7E49043d3273",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:00.965Z"
+  },
+  "29-MemberToken": {
+    "address": "0x91E69F0dD66501e3d6f71eCd416Ab2DA5E89996d",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.005Z"
+  },
+  "31-MemberToken": {
+    "address": "0xAD1148B16a03621aE772843f75e28FC9840415d0",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.163Z"
+  },
+  "32-LighterSeriesAccount": {
+    "address": "0x3561A37a7404876CbdbF52d587b5158948C98a74",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.172Z"
+  },
+  "31-LighterSeriesAccount": {
+    "address": "0x6388a0f598988A1D8E8aC0682809E785b7f25Acc",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.172Z"
+  },
+  "32-MemberToken": {
+    "address": "0x13285B9Fae24b93213c4e071a93eE65d735315d4",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.175Z"
+  },
+  "34-MemberToken": {
+    "address": "0x5D9C73D9C6c5aACBb2DFFEDc6B26f867069bb5A9",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.344Z"
+  },
+  "33-MemberToken": {
+    "address": "0x18EA6F3342d613198Bda663a2Ec053582C8b80a0",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.345Z"
+  },
+  "33-LighterSeriesAccount": {
+    "address": "0x28aEB5a733e0AA7B71a0D557DcA56Ba727a33309",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.354Z"
+  },
+  "34-LighterSeriesAccount": {
+    "address": "0x9ce5A1c3ca72A0F1510909E2E16bCB47dEb02522",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.356Z"
+  },
+  "36-MemberToken": {
+    "address": "0xB02c88EE8E40E392d2C7C7C4b6C3E49daB10f938",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.553Z"
+  },
+  "36-LighterSeriesAccount": {
+    "address": "0xdcaEE78E3f1e1eD44Bc7701C3653A461Ce2Dc15a",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.555Z"
+  },
+  "35-LighterSeriesAccount": {
+    "address": "0x11C5b9C1473EdCD37B85cdAc92738C6932eCF23e",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.563Z"
+  },
+  "35-MemberToken": {
+    "address": "0x35eae81F9A871e6d6D0F319857b6966A6d1cD7F8",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.563Z"
+  },
+  "38-MemberToken": {
+    "address": "0x34D99A1B2Cb6D2b020d44B26951A186064fDb158",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.715Z"
+  },
+  "38-LighterSeriesAccount": {
+    "address": "0x09D3d3f62C331786961B586181f4ef046fe4028c",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.727Z"
+  },
+  "37-LighterSeriesAccount": {
+    "address": "0xd69057b68F489D4B002a3683424Fb6ebfe9fd50a",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.727Z"
+  },
+  "37-MemberToken": {
+    "address": "0x6a6f00082ce8D00FDf1B4CA83bc9B8b0cFC41D4B",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.735Z"
+  },
+  "40-MemberToken": {
+    "address": "0x1fdd9d92e5BE70c2113d46c075Ef4aEf37409870",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.881Z"
+  },
+  "39-MemberToken": {
+    "address": "0x04358E33b03d671695FC49D3d934E479120A6bC9",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.881Z"
+  },
+  "40-LighterSeriesAccount": {
+    "address": "0x9655803A75372b2cbfFd913a0c642411A96cEF83",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.891Z"
+  },
+  "39-LighterSeriesAccount": {
+    "address": "0xF910b631f497b09Bcd8acd0211C8c50C967C7022",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:01.892Z"
+  },
+  "42-MemberToken": {
+    "address": "0x02E08099d77db92Ed45d0c00aC80b00bfC2f7EDD",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:02.048Z"
+  },
+  "41-LighterSeriesAccount": {
+    "address": "0x91029a83D8373ef881Fa961837E77Ecb9d8e14b2",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:02.053Z"
+  },
+  "41-MemberToken": {
+    "address": "0x095e8E57c93c0703C3EA4f51cB784B0A556bF9F0",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:02.056Z"
+  },
+  "42-LighterSeriesAccount": {
+    "address": "0xe5f5E9b6D078E7dd797C6616a27427Aab786a314",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:02.063Z"
+  },
+  "44-MemberToken": {
+    "address": "0x65b4F7eF9c851579486e9B7dFeabA1b998af7E0A",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:02.234Z"
+  },
+  "44-LighterSeriesAccount": {
+    "address": "0x54Ea6cb50C6f51fCC40C914399774845D3A06d0A",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:02.237Z"
+  },
+  "43-LighterSeriesAccount": {
+    "address": "0xACF1031b8703A988b4701506E92762c379Ed5FC3",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:02.238Z"
+  },
+  "43-MemberToken": {
+    "address": "0xE19FB91F15DDdB55cdbA2c24EA254916A132Ebc5",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:02.250Z"
+  },
+  "46-LighterSeriesAccount": {
+    "address": "0x0dD77bB02fda30ecf4198CcE6A9fdFCDb8Ed7669",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:02.589Z"
+  },
+  "46-MemberToken": {
+    "address": "0xeD38c472242BE7893B836aE41D9c34B147c53EDB",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:02.626Z"
+  },
+  "45-LighterSeriesAccount": {
+    "address": "0x13F18D5B701c0EBd124198f862E7664Aa4304FB5",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:02.639Z"
+  },
+  "45-MemberToken": {
+    "address": "0x88425E52b14BA12E7Bd31311756595cA407295D3",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:02.675Z"
+  },
+  "47-MemberToken": {
+    "address": "0x3AB0737eE7df0517e8Efc9bcA84C79e832Cc63d8",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:02.804Z"
+  },
+  "48-MemberToken": {
+    "address": "0x31B139119aaB9c590981764f0e5435F722BDC220",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:02.829Z"
+  },
+  "48-LighterSeriesAccount": {
+    "address": "0x58ff942a47DbE7F2728Da724653eE6DB29B7e6f4",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:02.834Z"
+  },
+  "47-LighterSeriesAccount": {
+    "address": "0xD0455A7f69B1BFf5EAE8952aD7885F6e67553001",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:02.846Z"
+  },
+  "49-LighterSeriesAccount": {
+    "address": "0xE8730D1AEb22309E2BB41D1435C4C792EbA81b9a",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:03.010Z"
+  },
+  "50-LighterSeriesAccount": {
+    "address": "0x6EbAa37B3c0f3B87bf5e1ACd43CC77d4A6a8f770",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:03.021Z"
+  },
+  "50-MemberToken": {
+    "address": "0xcDEA0fFdF9e02d75B62CA26e4b18978fD4e68dA5",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:03.131Z"
+  },
+  "49-MemberToken": {
+    "address": "0x48f89a08c0D9E7563C7bee0C59Dfb1c1ca3B68c5",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:56:03.156Z"
+  },
+  "52-MemberToken": {
+    "address": "0x37772191aa74eCe4c73f1812762F69Eac111df88",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:48.351Z"
+  },
+  "51-LighterSeriesAccount": {
+    "address": "0x14a3A6902b262F5119E2de441495eBe8283a192f",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:50.127Z"
+  },
+  "51-MemberToken": {
+    "address": "0x6F68ee238D2bb07E4Fa241a9FCe3490BBB30aA6C",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:48.453Z"
+  },
+  "52-LighterSeriesAccount": {
+    "address": "0xc5033b5F0709C1893B2C0453c113a28D3FcB3e7e",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:48.228Z"
+  },
+  "53-MemberToken": {
+    "address": "0x858EbfEDFe7E0dcF7C2a44323885604EEF7c8D91",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:51.327Z"
+  },
+  "54-MemberToken": {
+    "address": "0x12b7608bb0D875bEF1A976B0B8E4465b2609238F",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:51.107Z"
+  },
+  "54-LighterSeriesAccount": {
+    "address": "0xb7eDf248CAaFb123423377208b51FD950dB41816",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:50.320Z"
+  },
+  "53-LighterSeriesAccount": {
+    "address": "0x0AAd3e5448dbf5F1B9110BA16d61dddbf31Ef266",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:50.693Z"
+  },
+  "55-MemberToken": {
+    "address": "0x8671AaAb476253484fACbfADE932B16aff204711",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:51.893Z"
+  },
+  "56-LighterSeriesAccount": {
+    "address": "0xeB10a7A711d3638Bfc3Ae1969D0abA2ebD1a8baD",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:51.518Z"
+  },
+  "55-LighterSeriesAccount": {
+    "address": "0x638C7b8Ba8B2eC5f06961aCDb9B86a53fC58D3ba",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:52.641Z"
+  },
+  "56-MemberToken": {
+    "address": "0xbEed503ea1F84a51E01cB9A1eb3Db7D59a7A006B",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:52.174Z"
+  },
+  "57-LighterSeriesAccount": {
+    "address": "0x50B53E1c7394f6771eC046Cb6F2D3A2837BeC875",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:52.848Z"
+  },
+  "58-MemberToken": {
+    "address": "0x9a31a06aac32c0a788b8cdE97AC3307142be65a8",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:53.108Z"
+  },
+  "57-MemberToken": {
+    "address": "0x111750dAC31E555C0404728E4C95D62b12861669",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:52.866Z"
+  },
+  "58-LighterSeriesAccount": {
+    "address": "0x75a7b6135A39abBcb0EE3Dfc99CaA981B69f545f",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:53.087Z"
+  },
+  "59-MemberToken": {
+    "address": "0x0d9FD0bD3Ef9D488Eea1Bae06099EC62fb50543e",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:55.429Z"
+  },
+  "60-MemberToken": {
+    "address": "0xc0586c369922CdC03679c54b754D9679095AB3A6",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:53.586Z"
+  },
+  "59-LighterSeriesAccount": {
+    "address": "0x5071dCC59336Cd6D3eff4f1ACFDea7c9fb990aab",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:53.240Z"
+  },
+  "60-LighterSeriesAccount": {
+    "address": "0xBc3678b94c6f05D0E4fEcA714d183b4107049b56",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:53.588Z"
+  },
+  "62-MemberToken": {
+    "address": "0xff8AaB0393C798eE42335239b072D429258EDE99",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:56.056Z"
+  },
+  "61-MemberToken": {
+    "address": "0x952A00B8E01b156E208Be6379F68Df2B9b76Cba6",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:55.632Z"
+  },
+  "62-LighterSeriesAccount": {
+    "address": "0x550d7F64217dff7B0F657fB3331c1B7bAefFC9Dd",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:55.586Z"
+  },
+  "61-LighterSeriesAccount": {
+    "address": "0xf7A45e043C98BA30aD73191807b5D9548ACcF24E",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:55.572Z"
+  },
+  "63-MemberToken": {
+    "address": "0x09908562a21fd4D9f91973dC05f62E3c780DDBd5",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:56.550Z"
+  },
+  "63-LighterSeriesAccount": {
+    "address": "0x5FCA588642F69d5bD60f1c0a185ff192d2576231",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:56.653Z"
+  },
+  "64-MemberToken": {
+    "address": "0xaB00F6430E5F64593b5Be3E745CC151327C39C23",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:56.208Z"
+  },
+  "64-LighterSeriesAccount": {
+    "address": "0x7C40E2945c30299630cE4E313F88700B47042C3c",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:56.248Z"
+  },
+  "66-MemberToken": {
+    "address": "0xD28452f3b8B92b30843d4B02814C57a1dbc1a2aa",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:56.780Z"
+  },
+  "65-LighterSeriesAccount": {
+    "address": "0x9A7ff6B3432AAEc31C6C393dd9c2ad2A07aa6f3a",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:56.814Z"
+  },
+  "66-LighterSeriesAccount": {
+    "address": "0x61Af8eE5449153598F81373f03c5ADE7fe4fd562",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:56.776Z"
+  },
+  "65-MemberToken": {
+    "address": "0xb1a4CcE88420BB9740eF23427fAdbcC2Bf0f84E7",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:56.853Z"
+  },
+  "67-LighterSeriesAccount": {
+    "address": "0x0c76E8d5636cC7BbcF186B36E4B960c18916f405",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:57.065Z"
+  },
+  "68-MemberToken": {
+    "address": "0x30C21E6f3c93585F1eE5CB7df594963DA6FeD319",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:57.302Z"
+  },
+  "67-MemberToken": {
+    "address": "0x8620d8eFc62155dF6f920Dc862289B778C8009B3",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:57.022Z"
+  },
+  "68-LighterSeriesAccount": {
+    "address": "0x920288DA6425b601b38F5fFD9c7935050B8dD4fb",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:57.040Z"
+  },
+  "69-LighterSeriesAccount": {
+    "address": "0x331034Af1a50eDBf2E851810817CE9455179046B",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:57.491Z"
+  },
+  "69-MemberToken": {
+    "address": "0x5399B48A2f69d834b12074247121D2676e7F12c8",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:57.523Z"
+  },
+  "70-LighterSeriesAccount": {
+    "address": "0x734D4dce1863a48838C4EBea9eD1Bb786412DA30",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:57.655Z"
+  },
+  "70-MemberToken": {
+    "address": "0x79Ad2A067EfB21E6CE4DCeB89Fb24a41fD64C7D8",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:57.471Z"
+  },
+  "72-LighterSeriesAccount": {
+    "address": "0x1575f16e5f8111C61E915471E9C018F73EcecD7a",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:57.835Z"
+  },
+  "72-MemberToken": {
+    "address": "0xCe5D868aFCD4Dad8aE98A16e384e1c9ae7a6b146",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:57.830Z"
+  },
+  "71-LighterSeriesAccount": {
+    "address": "0xbE4828B3d9Ea7C8fd57b812CbE2e2BC1C93E4c61",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:57.856Z"
+  },
+  "71-MemberToken": {
+    "address": "0x8867AA55DD9F90a7AAC1AA27261E2f4760B79DeF",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:58.849Z"
+  },
+  "73-LighterSeriesAccount": {
+    "address": "0x068Ac5a755aCcA7C90deb4F5A55B490aeDdF1367",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:59.017Z"
+  },
+  "74-LighterSeriesAccount": {
+    "address": "0x3B3aFc0F140743446E084C5f59497FCB4B768E70",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:59.694Z"
+  },
+  "73-MemberToken": {
+    "address": "0x6C610b63243aeF591B313B995a3611BC866a81b5",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:59.012Z"
+  },
+  "74-MemberToken": {
+    "address": "0x1790B914B461cc6f3b6da570d806799151163c13",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:58:59.028Z"
+  },
+  "76-MemberToken": {
+    "address": "0x0D3f84BD55311d01041847E128fA97CaE10CB6da",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:00.024Z"
+  },
+  "76-LighterSeriesAccount": {
+    "address": "0xB8807A82eA4F0008Da5De3fF392f7f0981CD9d5c",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:01.035Z"
+  },
+  "75-MemberToken": {
+    "address": "0x7D7C9D0F3AE953534653a921Cf3fb4dff6508b00",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:00.942Z"
+  },
+  "75-LighterSeriesAccount": {
+    "address": "0x37F51ff15916cea87485EB56597BEE907F5539ad",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:01.131Z"
+  },
+  "77-LighterSeriesAccount": {
+    "address": "0xf242549Ff3E7434637861C976175d6b861340497",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:02.282Z"
+  },
+  "77-MemberToken": {
+    "address": "0xA016508f57bE5ef4E7Af5aCf48EE750223165e16",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:01.259Z"
+  },
+  "78-LighterSeriesAccount": {
+    "address": "0x544C38579221CB3a93dAc0A8e35A84e6Bf8253D1",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:02.128Z"
+  },
+  "78-MemberToken": {
+    "address": "0xC64435a2831A0aA1D35EFd9985996E49529BCAD3",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:01.455Z"
+  },
+  "80-MemberToken": {
+    "address": "0x725d78b6743a7Dd230d8507d6Cc03514177EA421",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:02.445Z"
+  },
+  "79-LighterSeriesAccount": {
+    "address": "0xE9f15dBa88737733152853dBeB6E4FD9DE17319a",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:02.449Z"
+  },
+  "80-LighterSeriesAccount": {
+    "address": "0xc8b5C371A4aA8928cB0e410dE34907Ec49eEFFf9",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:02.421Z"
+  },
+  "79-MemberToken": {
+    "address": "0x5E0A375b2A24A6c317c51dc8E8c598Ca6e13649d",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:02.449Z"
+  },
+  "81-MemberToken": {
+    "address": "0xdaB76A50aF47b8Fcf6FDEC6923FCA3A6EB610D0A",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:02.975Z"
+  },
+  "82-LighterSeriesAccount": {
+    "address": "0x21bECD4f48EA0a2f71791561E53C52FDd1A4d943",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:02.972Z"
+  },
+  "81-LighterSeriesAccount": {
+    "address": "0x74E4EE7Ef658722a6CE6e6ccb50B627a68BBEDef",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:02.673Z"
+  },
+  "82-MemberToken": {
+    "address": "0xcC254cBdA07f9F1cEA66618C990418fAC0Ac9844",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:02.918Z"
+  },
+  "84-MemberToken": {
+    "address": "0xFA4Bd8AD58588b368dc5cb36A3bcE26BE130D3B5",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:03.171Z"
+  },
+  "83-MemberToken": {
+    "address": "0x40F54cbcC7767b14Dc4157A131a67361c2Ee65cD",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:03.192Z"
+  },
+  "83-LighterSeriesAccount": {
+    "address": "0x3C0bEB615B26b6FCc6c003F9D46835244E00aCD5",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:03.164Z"
+  },
+  "84-LighterSeriesAccount": {
+    "address": "0xC19C9adF3b0744f1ecc8b1b596E355Bad964549C",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:03.728Z"
+  },
+  "86-MemberToken": {
+    "address": "0xEB8834f16268B90d48C600306E28264d2d69B83a",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:04.222Z"
+  },
+  "86-LighterSeriesAccount": {
+    "address": "0x628708ce464512530dE9ceb61489437352B162ff",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:03.851Z"
+  },
+  "85-MemberToken": {
+    "address": "0xb7920e8e07fb4A770f5739a350D078cc43C7e5A1",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:04.195Z"
+  },
+  "85-LighterSeriesAccount": {
+    "address": "0xa719435f8eE945e14C0d01cAbb4bb5500fbAB736",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:04.495Z"
+  },
+  "87-LighterSeriesAccount": {
+    "address": "0x67b112221bD48ECb277Dc405Bd5101Cf463bdedb",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:04.639Z"
+  },
+  "88-MemberToken": {
+    "address": "0xf739911D596f970fB86297933Bb35A07Ac68F262",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:05.183Z"
+  },
+  "88-LighterSeriesAccount": {
+    "address": "0x13a8f6b789F3bC780f6a158c40981c6A864894cb",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:04.623Z"
+  },
+  "87-MemberToken": {
+    "address": "0x8447ac086D1cF53B70728202577473D9234DB58A",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:04.722Z"
+  },
+  "90-MemberToken": {
+    "address": "0xF02253df799F93ec5E6241652A7a34393BB75DD8",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:05.351Z"
+  },
+  "90-LighterSeriesAccount": {
+    "address": "0xBd74642360dA6a63490BEfa47B7630aeEDf6596a",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:05.682Z"
+  },
+  "89-MemberToken": {
+    "address": "0x7afF2d76eF99926CA6428fD4EF32518AAC515A51",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:05.352Z"
+  },
+  "89-LighterSeriesAccount": {
+    "address": "0x2C794Cc98665E0b5C53881401aca60A00F15691A",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:05.360Z"
+  },
+  "92-LighterSeriesAccount": {
+    "address": "0xfB330CFc5f3C884a40856c180a066717FAb2D2BA",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:05.877Z"
+  },
+  "91-LighterSeriesAccount": {
+    "address": "0x940b472ad7d972507104f4B44A623CFDC8C5e4F1",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.022Z"
+  },
+  "92-MemberToken": {
+    "address": "0x6B8EB18c61ce86d0Ee3db58d3F1af6407FdAae1a",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:05.870Z"
+  },
+  "91-MemberToken": {
+    "address": "0x5BD92162eD33fD91914fbDEe1D4B8c5c5b03D616",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.016Z"
+  },
+  "93-LighterSeriesAccount": {
+    "address": "0x6D24CBDdA0BF3c2f77bf16374709a6BEF7216b7E",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.200Z"
+  },
+  "93-MemberToken": {
+    "address": "0xa545970BF67356524441fCF0cd8427b7aC5B7C9d",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.150Z"
+  },
+  "94-LighterSeriesAccount": {
+    "address": "0x43238cE8CCA84FbAa30F27Ac2e53a618291A2a83",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.202Z"
+  },
+  "94-MemberToken": {
+    "address": "0xF3B0c0E7e092C339D9EFb4FD511558627573270E",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.211Z"
+  },
+  "95-LighterSeriesAccount": {
+    "address": "0x580f99e333419E13e43ee0E480aC5eea31Cac1e5",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.338Z"
+  },
+  "95-MemberToken": {
+    "address": "0x9a8579B46926db87D9e7E76cEB81da5a8157d5d2",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.339Z"
+  },
+  "96-MemberToken": {
+    "address": "0x0B37DB39e57065d1e0186007Ebcf041C663fba92",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.364Z"
+  },
+  "96-LighterSeriesAccount": {
+    "address": "0xE36d3755b6dbf054A508063Ea5196222c869CFE0",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.340Z"
+  },
+  "98-MemberToken": {
+    "address": "0xd3E9Ba95a09E82642ff4915943cBe9FE071b9905",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.531Z"
+  },
+  "97-MemberToken": {
+    "address": "0x40eFa8D44A028477eEc5BB3cE0aD71940ecd0e11",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.542Z"
+  },
+  "98-LighterSeriesAccount": {
+    "address": "0xAaEc74Ba2aF876ffDa2ec7E0C0CEba7c8d9EaA5a",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.522Z"
+  },
+  "97-LighterSeriesAccount": {
+    "address": "0x04016462967c47de20D177Be194ff830FE6476cB",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.523Z"
+  },
+  "100-LighterSeriesAccount": {
+    "address": "0x78546f32A3dad890fF0971B8478aEc47B6e3E24A",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.666Z"
+  },
+  "99-MemberToken": {
+    "address": "0x3eAa92355090C8f070a751d99801adbaeE47a305",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.702Z"
+  },
+  "100-MemberToken": {
+    "address": "0x75310828F0A2e3b5f388eD4c369cBB9D63d29583",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.711Z"
+  },
+  "99-LighterSeriesAccount": {
+    "address": "0x682241974e69349C7ECf47A860B1873BC55869F4",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T08:59:06.702Z"
+  }
+}

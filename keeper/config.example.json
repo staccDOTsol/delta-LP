@@ -1,0 +1,9 @@
+{
+  "maxMemberAssets": "0",
+  "maxOrderNotional": "0",
+  "maximumGasWei": "0",
+  "refreshSeconds": 15,
+  "cancelAfterSeconds": 5,
+  "pollSeconds": 3,
+  "ownerBootstrap": false
+}

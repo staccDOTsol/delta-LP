@@ -1,0 +1,50 @@
+{
+  "MemberController": {
+    "address": "0xB8B04378E9291a735E9552f7a8a5593Bca6529FD",
+    "status": "pending",
+    "guid": "mn3g2tdzstx3ptvaxbeflztudj7ixauypuqwezzajp5bualbc5",
+    "submittedAt": "2026-09-28T06:47:25.365Z",
+    "result": "Pending in queue",
+    "checkedAt": "2026-09-28T07:06:00.543Z"
+  },
+  "HouseFeeRouter": {
+    "address": "0xBfac70063f04e116F5a509cC746BEeb2F053467D",
+    "status": "pending",
+    "guid": "nvtnknuz3ilv3hqqek4amycwvnusauzvgsnz5t933fwhpqmpbw",
+    "submittedAt": "2026-09-28T06:47:26.143Z",
+    "result": "Pending in queue",
+    "checkedAt": "2026-09-28T07:06:01.113Z"
+  },
+  "MemberV4Hook": {
+    "address": "0x9715Cf2ec10ab69a40381550Bf58793FcD416540",
+    "status": "pending",
+    "guid": "vry3jqiysyj3zaagebuqjmc1yh2j7v16g5y8xeiqf71ajzfm87",
+    "submittedAt": "2026-09-28T06:47:27.097Z",
+    "result": "Pending in queue",
+    "checkedAt": "2026-09-28T07:06:01.689Z"
+  },
+  "NeutralEscrowFactory": {
+    "address": "0x5D021517AAD69E90a112a5987a59E54E0af87416",
+    "status": "pending",
+    "guid": "blukb9eyw2nzrvydmv32ibtvacl2gy3gczkfckuptr9g2gg6cv",
+    "submittedAt": "2026-09-28T06:47:28.004Z",
+    "result": "Pending in queue",
+    "checkedAt": "2026-09-28T07:06:02.282Z"
+  },
+  "NeutralVault": {
+    "address": "0xe9AE3aEb63680960995978ee6c33E68B57c00688",
+    "status": "pending",
+    "guid": "ie8yzmih8wdf3wcs9ncux2en9eyscephai958y84qudu3uee3k",
+    "submittedAt": "2026-09-28T06:47:28.980Z",
+    "result": "Pending in queue",
+    "checkedAt": "2026-09-28T07:06:02.863Z"
+  },
+  "MemberFactory": {
+    "address": "0xe740806027CD13c0fA2c5181654b8FD5384b363B",
+    "status": "pending",
+    "guid": "zlxsmgzkqmegww8vwjm7kcezd4pkkfzuqs64livt6nhmpzyjm7",
+    "submittedAt": "2026-09-28T06:47:29.764Z",
+    "result": "Pending in queue",
+    "checkedAt": "2026-09-28T07:06:03.431Z"
+  }
+}

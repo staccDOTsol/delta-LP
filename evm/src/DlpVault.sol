@@ -76,6 +76,7 @@ contract DlpVault is ERC20, ReentrancyGuard, IUniswapV3SwapCallback {
     address public authority; // rotates crank/params; never touches funds
     address public crank;
     Params public params;
+    bool public depositsEnabled; // closed at deployment until the pilot is ready
 
     Phase public phase;
     uint64 public epoch;
@@ -111,6 +112,9 @@ contract DlpVault is ERC20, ReentrancyGuard, IUniswapV3SwapCallback {
     event Deposited(address indexed user, uint256 quoteIn, uint256 sharesOut);
     event Withdrawn(address indexed user, uint256 sharesIn, uint256 quoteOut);
     event PhaseChanged(Phase phase, uint64 epoch);
+    event DepositsEnabled(bool enabled);
+    event AuthorityChanged(address indexed authority);
+    event CrankChanged(address indexed crank);
     event Hedged(int256 collateralDelta, int256 debtDelta, uint256 debtAfter, uint32 healthX100);
     event Placed(uint256 tokenId, int24 tickLower, int24 tickUpper, uint128 liquidity, uint256 amount0, uint256 amount1);
 
@@ -129,6 +133,8 @@ contract DlpVault is ERC20, ReentrancyGuard, IUniswapV3SwapCallback {
     error ZeroAmount();
     error BadParams();
     error LeftoverLiquidity();
+    error DepositsClosed();
+    error NoEquity();
 
     // ------------------------------------------------------------------ constructor
 
@@ -145,6 +151,7 @@ contract DlpVault is ERC20, ReentrancyGuard, IUniswapV3SwapCallback {
         address crank_,
         Params memory params_
     ) ERC20(name_, symbol_) {
+        if (authority_ == address(0) || crank_ == address(0)) revert BadParams();
         pool = pool_;
         npm = npm_;
         morpho = morpho_;
@@ -158,6 +165,7 @@ contract DlpVault is ERC20, ReentrancyGuard, IUniswapV3SwapCallback {
         baseIsToken0 = (t0 == market_.loanToken);
         baseDecimals = ERC20(market_.loanToken).decimals();
         quoteDecimals = ERC20(market_.collateralToken).decimals();
+        if (quoteDecimals > 18) revert BadParams();
         poolFee = pool_.fee();
         tickSpacing = pool_.tickSpacing();
         feedBase = feedBase_;
@@ -196,11 +204,20 @@ contract DlpVault is ERC20, ReentrancyGuard, IUniswapV3SwapCallback {
     // ------------------------------------------------------------------ admin (no fund control)
 
     function setCrank(address c) external onlyAuthority {
+        if (c == address(0)) revert BadParams();
         crank = c;
+        emit CrankChanged(c);
     }
 
     function setAuthority(address a) external onlyAuthority {
+        if (a == address(0)) revert BadParams();
         authority = a;
+        emit AuthorityChanged(a);
+    }
+
+    function setDepositsEnabled(bool enabled) external onlyAuthority inPhase(Phase.Idle) {
+        depositsEnabled = enabled;
+        emit DepositsEnabled(enabled);
     }
 
     function setParams(Params calldata p) external onlyAuthority inPhase(Phase.Idle) {
@@ -210,7 +227,7 @@ contract DlpVault is ERC20, ReentrancyGuard, IUniswapV3SwapCallback {
     function _setParams(Params memory p) internal {
         if (p.epsBps == 0 || p.epsBps > 10_000 || p.maxPriceDevBps == 0 || p.maxPriceDevBps > 10_000) revert BadParams();
         if (p.minHealthX100 < 110 || p.maxSwapBps > 10_000 || p.maxMintBpsPerEpoch > 10_000 || p.maxBurnBpsPerEpoch > 10_000) revert BadParams();
-        if (p.twapWindow == 0) revert BadParams();
+        if (p.twapWindow == 0 || p.chainlinkMaxAge == 0) revert BadParams();
         params = p;
     }
 
@@ -292,6 +309,18 @@ contract DlpVault is ERC20, ReentrancyGuard, IUniswapV3SwapCallback {
     // ------------------------------------------------------------------ users
 
     function deposit(uint256 quoteIn, uint256 minShares, address to) external nonReentrant inPhase(Phase.Idle) returns (uint256 shares) {
+        return _deposit(quoteIn, minShares, to);
+    }
+
+    /// @notice Refresh NAV and deposit atomically in one wallet transaction.
+    function depositWithSync(uint256 quoteIn, uint256 minShares, address to) external nonReentrant inPhase(Phase.Idle) returns (uint256 shares) {
+        if (!depositsEnabled) revert DepositsClosed();
+        sync();
+        return _deposit(quoteIn, minShares, to);
+    }
+
+    function _deposit(uint256 quoteIn, uint256 minShares, address to) internal returns (uint256 shares) {
+        if (!depositsEnabled) revert DepositsClosed();
         if (quoteIn == 0) revert ZeroAmount();
         if (syncBlock != block.number) revert StaleSync();
         if (flags != 0) {
@@ -299,9 +328,10 @@ contract DlpVault is ERC20, ReentrancyGuard, IUniswapV3SwapCallback {
             revert PriceDeviation();
         }
         uint256 supply = totalSupply();
-        if (supply == 0 || equity == 0) {
+        if (supply == 0) {
             shares = quoteIn * 10 ** (18 - quoteDecimals); // bootstrap 1:1
         } else {
+            if (equity == 0) revert NoEquity();
             shares = FullMath.mulDiv(quoteIn, supply, equity);
         }
         if (shares < minShares || shares == 0) revert Slippage();
@@ -318,6 +348,16 @@ contract DlpVault is ERC20, ReentrancyGuard, IUniswapV3SwapCallback {
 
     /// @notice Pays from idle quote only. If the vault is fully deployed, the crank frees quote first.
     function withdraw(uint256 shares, uint256 minQuote, address to) external nonReentrant inPhase(Phase.Idle) returns (uint256 quoteOut) {
+        return _withdraw(shares, minQuote, to);
+    }
+
+    /// @notice Refresh NAV and withdraw atomically. Closing deposits never closes exits.
+    function withdrawWithSync(uint256 shares, uint256 minQuote, address to) external nonReentrant inPhase(Phase.Idle) returns (uint256 quoteOut) {
+        sync();
+        return _withdraw(shares, minQuote, to);
+    }
+
+    function _withdraw(uint256 shares, uint256 minQuote, address to) internal returns (uint256 quoteOut) {
         if (shares == 0) revert ZeroAmount();
         if (syncBlock != block.number) revert StaleSync();
         if (flags & FLAG_PRICE_DEVIATION != 0) revert PriceDeviation(); // NAV unreliable; under-health exits are fine

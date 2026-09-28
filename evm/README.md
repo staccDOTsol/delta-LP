@@ -1,4 +1,12 @@
-# dlp-evm — the same receipt on Robinhood Chain (4663)
+# deltaLP contracts on Robinhood Chain (4663)
+
+The current tokenized-Lighter work is in `src/tokenized/`: per-member custody and
+accounting, 2% mint / 4% redeem fees to the Wizards fanout, untaxed member transfers,
+and a V4 pool activity hook. Its empty core is deployed on Robinhood mainnet and fork-tested; **tokenized trading is not live**.
+See [the architecture, fee policy and remaining work](../docs/TOKENIZED-MEMBERS.md).
+Run `forge test -vv` for the full contract suite.
+
+The sections below describe the earlier NVDA/Morpho vault, whose deposits remain closed.
 
 `DlpVault` = tight-range **Uniswap v3** stock/USDG LP + **Morpho Blue** borrow hedge, one ERC‑20
 receipt minted/burned at NAV, rebalanced as one object behind a phase machine. Solidity port of the
@@ -77,4 +85,14 @@ withdraw‑collateral.
   the flywheel.
 - Withdrawal queue; single rotatable crank; no session/weekend haircut on Morpho collateral
   (see Vigil in the recon for the pattern).
-- Deployment script + verification; nothing is deployed.
+
+## Closed launch deployment
+
+NVDA/USDG vault `0x32C47683D0E41DAc58A750fccb7200ad031D3993` is deployed on chain 4663,
+with deposits disabled and no user funds. The source has an exact-match verification on
+Sourcify. See [`deployments/4663.json`](deployments/4663.json) and
+[the launch runbook](../docs/LAUNCH.md). Borrow liquidity was zero at deployment.
+
+`scripts/preflight.mjs` checks dependencies and liquidity; `scripts/deploy.mjs` defaults
+to gas simulation and requires `--broadcast` to deploy. Run both from the repository root.
+Atomic `depositWithSync` / `withdrawWithSync` entry points support ordinary wallet transactions.

@@ -1,0 +1,109 @@
+{
+  "chainId": 4663,
+  "version": "v6",
+  "checkedAt": "2026-09-28T10:25:00Z",
+  "planHash": "0xf43b7156b1b896b0bdbd032044f5e3e4ee507841033f7f23892b8144786872b7",
+  "softwareCallsConfirmed": 30,
+  "source": {
+    "pending-adapter": {
+      "address": "0xE454667569852d99BeB0C19c7275fAbCc2874104",
+      "runtimeCodeHash": "0xdb6440e7d08a16c4dd2a09194a5baf8bc95717a6d080e54ccc7d58c9829458c7",
+      "checkedBlock": "74722934",
+      "verificationId": "dcc79d41-be66-4779-b005-13eefb462f02",
+      "source": "verified",
+      "creationMatch": "match",
+      "runtimeMatch": "match"
+    },
+    "edition-1": {
+      "address": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41",
+      "runtimeCodeHash": "0xdfcb0c2ce66f292a4697b52f509cd01c9d72009fb70e1242915509a1da8fde3b",
+      "checkedBlock": "74721903",
+      "verificationId": "5c870f26-f36c-4ed5-b32d-276e65cf3a3d",
+      "source": "pending"
+    },
+    "edition-2": {
+      "address": "0xd301a76601F27c682F64062b4A254fd7aed601Ea",
+      "runtimeCodeHash": "0x31fd98511d375aba2612f5bc02a4ee8dcbf77f9006449066603089033ebac4d9",
+      "checkedBlock": "74721903",
+      "verificationId": "57081812-e886-4fbc-a98e-ec1ff43fc86b",
+      "source": "pending"
+    },
+    "edition-5": {
+      "address": "0xa6D443b39fE77B8e1013482d300994cA84B5635C",
+      "runtimeCodeHash": "0xee91e8dddb0baa9b97765e05cedbf86d43f11cb29c9df2947ed496c5ccdb94d7",
+      "checkedBlock": "74721903",
+      "verificationId": "269dcbb4-48d3-4ccb-b9ed-907b5a5cd06e",
+      "source": "pending"
+    },
+    "edition-10": {
+      "address": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131",
+      "runtimeCodeHash": "0x5ec8104238f17384f91c64e254ffb6e7a3d7576a0df131e1b8ffa2c7dad649e3",
+      "checkedBlock": "74721903",
+      "verificationId": "51bed157-d0dd-4891-8e4a-b79c1b45739e",
+      "source": "pending"
+    }
+  },
+  "tests": {
+    "solidityNftPassed": 56,
+    "applicationPassed": 168,
+    "databaseSkipped": 17
+  },
+  "bundleFork": {
+    "status": "LOCAL-FORK-ONLY: first mint without seed passed",
+    "at": "2026-09-28T10:20:43.009Z",
+    "planHash": "0xf43b7156b1b896b0bdbd032044f5e3e4ee507841033f7f23892b8144786872b7",
+    "minted": [
+      {
+        "denomination": 1,
+        "address": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41",
+        "account": "0x4bfC948462296fC1373ca539d70CEE2b982E2070",
+        "batch": "0x97214A847981df804e2372f96E5f082e9b84Df8d",
+        "contribution": "931799",
+        "gasUsed": "2558824"
+      },
+      {
+        "denomination": 2,
+        "address": "0xd301a76601F27c682F64062b4A254fd7aed601Ea",
+        "account": "0xDE57852B2d4B5D2Bb338794ec45812C909dDda8F",
+        "batch": "0x97214A847981df804e2372f96E5f082e9b84Df8d",
+        "contribution": "1863598",
+        "gasUsed": "859968"
+      },
+      {
+        "denomination": 5,
+        "address": "0xa6D443b39fE77B8e1013482d300994cA84B5635C",
+        "account": "0xbF3CF79F0B27C0cF03885993BDE609D470401F13",
+        "batch": "0x97214A847981df804e2372f96E5f082e9b84Df8d",
+        "contribution": "4658993",
+        "gasUsed": "859968"
+      },
+      {
+        "denomination": 10,
+        "address": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131",
+        "account": "0xE43D4E7f2b6dcDb624Cd837691917C179a35f0AD",
+        "batch": "0x97214A847981df804e2372f96E5f082e9b84Df8d",
+        "contribution": "9317973",
+        "gasUsed": "859968"
+      }
+    ],
+    "receiptSupply": "0",
+    "pendingWithdrawalAfterNftTransfer": "passed"
+  },
+  "production": {
+    "url": "https://deltalp.fun",
+    "deploymentId": "dpl_CQWKLawK9MpggYXHY8fCMv1a14TK",
+    "v6BindingsVerified": true,
+    "mobileViewportWidth": 390,
+    "mobileDocumentWidth": 390,
+    "legacyPendingUSDG": "3"
+  },
+  "worker": {
+    "app": "delta-lp-keeper",
+    "machine": "807d42cee2d348",
+    "mode": "observation",
+    "health": "passing",
+    "stateDirectory": "/data/keeper-v6",
+    "members": 100
+  },
+  "activation": "NFTs paused; DN entries closed; owner activation and funded trading are separate."
+}

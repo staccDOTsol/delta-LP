@@ -1,0 +1,44 @@
+{
+  "MemberController": {
+    "address": "0xB8B04378E9291a735E9552f7a8a5593Bca6529FD",
+    "match": "match",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T06:43:11.795Z"
+  },
+  "HouseFeeRouter": {
+    "address": "0xBfac70063f04e116F5a509cC746BEeb2F053467D",
+    "match": "match",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T06:43:12.202Z"
+  },
+  "MemberV4Hook": {
+    "address": "0x9715Cf2ec10ab69a40381550Bf58793FcD416540",
+    "match": "match",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T06:43:12.602Z"
+  },
+  "MemberFactory": {
+    "address": "0xe740806027CD13c0fA2c5181654b8FD5384b363B",
+    "match": "match",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T06:43:13.276Z"
+  },
+  "NeutralEscrowFactory": {
+    "address": "0x5D021517AAD69E90a112a5987a59E54E0af87416",
+    "match": "match",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T06:43:12.994Z"
+  },
+  "NeutralVault": {
+    "address": "0xe9AE3aEb63680960995978ee6c33E68B57c00688",
+    "match": "match",
+    "creationMatch": "match",
+    "runtimeMatch": "match",
+    "verifiedAt": "2026-09-28T06:43:13.150Z"
+  }
+}

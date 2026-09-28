@@ -1,0 +1,33 @@
+{
+  "app": "delta-lp-keeper",
+  "dashboard": "https://fly.io/apps/delta-lp-keeper/monitoring",
+  "region": "yyz",
+  "machineId": "807d42cee2d348",
+  "image": "registry.fly.io/delta-lp-keeper:deployment-01M3KE3AE5Q651ZGG92VB2NJZE",
+  "imageDigest": "sha256:df586c478f7b833aae35a350b614804b7dcb749aa66f92861fa91e1d3ac3c4cd",
+  "volume": {
+    "id": "vol_4y82kx6yx0x0p19r",
+    "name": "keeper_data",
+    "sizeGiB": 1,
+    "encrypted": true,
+    "snapshotRetentionDays": 7,
+    "mount": "/data",
+    "stateDirectory": "/data/keeper-v3"
+  },
+  "mode": "observation",
+  "signingSecretsConfigured": false,
+  "publicService": false,
+  "verifiedAt": "2026-09-28T07:20:00.162889+00:00",
+  "checks": {
+    "singleMachine": true,
+    "freshObservationMembers": 100,
+    "entriesOpen": false,
+    "gracefulRestart": true,
+    "volumeMarkerSurvivedRestart": true
+  },
+  "validation": {
+    "nodeTestsPassed": 136,
+    "nodeTestsSkipped": 17,
+    "fundedMainnetLifecycleCompleted": false
+  }
+}

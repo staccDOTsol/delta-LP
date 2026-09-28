@@ -1,0 +1,69 @@
+{
+  "launchMode": "pending-contribution",
+  "collectingBatch": null,
+  "at": "2026-09-28T10:20:12.274Z",
+  "chainId": 4663,
+  "block": "74720830",
+  "receiptSupply": "0",
+  "adapter": {
+    "address": "0xE454667569852d99BeB0C19c7275fAbCc2874104",
+    "paused": true,
+    "ready": false,
+    "currentBatch": "0x0000000000000000000000000000000000000000"
+  },
+  "collections": [
+    {
+      "denomination": 1,
+      "address": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41",
+      "deployed": true,
+      "indexed": true,
+      "lookupHttpStatus": 200,
+      "paused": true,
+      "totalMinted": "0",
+      "collectionSlug": "money-doubler-1-265020144",
+      "collectionURL": "https://opensea.io/collection/money-doubler-1-265020144",
+      "contractStandard": "erc721",
+      "dropLookupHttpStatus": 404
+    },
+    {
+      "denomination": 2,
+      "address": "0xd301a76601F27c682F64062b4A254fd7aed601Ea",
+      "deployed": true,
+      "indexed": true,
+      "lookupHttpStatus": 200,
+      "paused": true,
+      "totalMinted": "0",
+      "collectionSlug": "money-doubler-2-658160246",
+      "collectionURL": "https://opensea.io/collection/money-doubler-2-658160246",
+      "contractStandard": "erc721",
+      "dropLookupHttpStatus": 404
+    },
+    {
+      "denomination": 5,
+      "address": "0xa6D443b39fE77B8e1013482d300994cA84B5635C",
+      "deployed": true,
+      "indexed": true,
+      "lookupHttpStatus": 200,
+      "paused": true,
+      "totalMinted": "0",
+      "collectionSlug": "money-doubler-5-638625887",
+      "collectionURL": "https://opensea.io/collection/money-doubler-5-638625887",
+      "contractStandard": "erc721",
+      "dropLookupHttpStatus": 404
+    },
+    {
+      "denomination": 10,
+      "address": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131",
+      "deployed": true,
+      "indexed": true,
+      "lookupHttpStatus": 200,
+      "paused": true,
+      "totalMinted": "0",
+      "collectionSlug": "money-doubler-10-411012397",
+      "collectionURL": "https://opensea.io/collection/money-doubler-10-411012397",
+      "contractStandard": "erc721",
+      "dropLookupHttpStatus": 404
+    }
+  ],
+  "note": "Read-only snapshot. OpenSea indexing and an active stage do not prove a mint will succeed; fresh swap quotes and transaction simulation are also required. Pending USDG is not activated DN shares; minting does not require existing receipt inventory."
+}

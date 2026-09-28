@@ -1,0 +1,97 @@
+{
+  "at": "2026-09-28T10:35:03.556Z",
+  "chainId": 4663,
+  "collections": [
+    {
+      "denomination": 1,
+      "address": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41",
+      "block": "74729659",
+      "paused": false,
+      "totalMinted": "0",
+      "priceETH": "0.000381625641274187",
+      "quoteValidUntil": 1790592102,
+      "unavailableReason": null,
+      "simulation": "passed"
+    },
+    {
+      "denomination": 2,
+      "address": "0xd301a76601F27c682F64062b4A254fd7aed601Ea",
+      "block": "74729664",
+      "paused": false,
+      "totalMinted": "0",
+      "priceETH": "0.000763251282548374",
+      "quoteValidUntil": 1790592102,
+      "unavailableReason": null,
+      "simulation": "passed"
+    },
+    {
+      "denomination": 5,
+      "address": "0xa6D443b39fE77B8e1013482d300994cA84B5635C",
+      "block": "74729664",
+      "paused": false,
+      "totalMinted": "0",
+      "priceETH": "0.001908128206370935",
+      "quoteValidUntil": 1790592102,
+      "unavailableReason": null,
+      "simulation": "passed"
+    },
+    {
+      "denomination": 10,
+      "address": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131",
+      "block": "74729664",
+      "paused": false,
+      "totalMinted": "0",
+      "priceETH": "0.00381625641274187",
+      "quoteValidUntil": 1790592102,
+      "unavailableReason": null,
+      "simulation": "passed"
+    }
+  ],
+  "batch": "0x0000000000000000000000000000000000000000",
+  "pendingUSDG": "0",
+  "simulationScope": "eth_call only; synthetic payer balance overridden to 1 ETH. No transaction signed or broadcast.",
+  "operatorActivation": {
+    "app": "delta-lp-keeper",
+    "machine": "807d42cee2d348",
+    "image": "registry.fly.io/delta-lp-keeper:deployment-01M3KS2MY8H24H1MPN4R03BM7N",
+    "mode": "execution",
+    "kind": "nft-sale",
+    "health": "passing",
+    "healthObservedAt": "2026-09-28T10:34:27.663Z",
+    "stateDirectory": "/data/keeper-v6",
+    "activatedBy": "User via interactive nft:fly-launch"
+  },
+  "neutralVault": {
+    "symbol": "ETH",
+    "address": "0x19Bc982b4387c21e0D146b365e033dF5F14f6C85",
+    "block": "74729779",
+    "observedAt": "2026-09-28T10:35:10.000Z",
+    "tiers": 50,
+    "entryFeeBps": 300,
+    "exitFeeBps": 600,
+    "configured": true,
+    "entriesOpen": true,
+    "epoch": "1",
+    "phase": 0,
+    "pendingAssets": "930000",
+    "minimumBatchAssets": "2000000000",
+    "totalSupply": "0",
+    "nav": "0",
+    "delta": "0",
+    "gross": "0",
+    "allocationSettled": false,
+    "readyToActivate": false,
+    "activationIssue": null
+  },
+  "marketplace": {
+    "allFourIndexed": true,
+    "publicDropApiStatus": 404,
+    "publicationConfirmed": false,
+    "checkedAt": "2026-09-28T10:32:47.950Z"
+  },
+  "limitations": [
+    "NFT quote/sale worker only; funded Lighter strategy execution is not active in this mode.",
+    "No production paid mint was executed by this verification. Simulated payer balance does not establish an actual wallet balance.",
+    "DN receipts remain zero until funding threshold, execution, reconciliation and allocation complete."
+  ]
+}

@@ -1,0 +1,13 @@
+evm/
+solana/
+data/
+tests/
+.agents/
+.env*
+!.env.example
+docs/
+.git/
+.venv-execution/
+execution/
+artifacts/
+coverage/

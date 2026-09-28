@@ -1,0 +1,55 @@
+{
+  "name": "delta-lp-platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "node --env-file=.env.local --import tsx waitlist/server.ts",
+    "dev:sandbox": "tsx platform/server.ts",
+    "build": "tsc --noEmit && vite build",
+    "start": "node --env-file=.env.local --import tsx waitlist/server.ts --production",
+    "db:migrate": "node --env-file=.env.local --import tsx waitlist/migrate.ts",
+    "test": "tsx --test tests/*.test.ts",
+    "test:waitlist": "node --env-file-if-exists=.env.local --import tsx waitlist/test.ts",
+    "test:coverage": "tsx --test --experimental-test-coverage tests/*.test.ts",
+    "test:runtime": "tsc -p tsconfig.server.json && node --input-type=module -e \"await import('./artifacts/server-runtime/api/index.js'); console.log('Server ESM startup passed.');\"",
+    "check": "npm run build && npm run test:runtime && npm test",
+    "simulate": "tsx platform/simulate.ts",
+    "keeper:observe": "tsx keeper/run.ts",
+    "keeper:run": "tsx keeper/run.ts --execute",
+    "keeper:launch": "tsx keeper/launch.ts",
+    "keeper:fly-launch": "tsx keeper/launch.ts --fly",
+    "nft:launch": "node --env-file-if-exists=.env.local --import tsx nft/launch.ts",
+    "nft:fly-launch": "node --env-file-if-exists=.env.local --import tsx nft/launch.ts --fly",
+    "test:solana": "cd solana && cargo test -p dlp-math",
+    "test:evm": "cd evm && forge test -vv"
+  },
+  "dependencies": {
+    "@fontsource/dm-sans": "^5.3.0",
+    "@fontsource/manrope": "^5.3.0",
+    "@neondatabase/serverless": "^1.1.0",
+    "express": "^5.1.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "resend": "^6.30.0",
+    "tsx": "^4.20.0",
+    "viem": "^2.56.9",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@types/supertest": "^6.0.0",
+    "@vercel/blob": "^2.8.0",
+    "@vitejs/plugin-react": "^4.5.0",
+    "supertest": "^7.1.0",
+    "typescript": "^5.8.0",
+    "vite": "^6.3.0"
+  }
+}

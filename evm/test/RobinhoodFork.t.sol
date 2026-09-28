@@ -89,6 +89,9 @@ contract RobinhoodForkTest is Test {
                 twapWindow: 600
             })
         );
+        assertFalse(vault.depositsEnabled(), "new deployments must start closed");
+        vm.prank(authority);
+        vault.setDepositsEnabled(true);
         vm.prank(user);
         IERC20(USDG).approve(address(vault), type(uint256).max);
         emit log_named_address("vault", address(vault));
@@ -156,7 +159,10 @@ contract RobinhoodForkTest is Test {
         int24 tl = ((cur - 60) / TS) * TS;
         int24 tu = ((cur + 60) / TS) * TS;
         // token0 = USDG, token1 = NVDA
-        uint128 L = vault.liquidityForAmounts(tl, tu, 2_000e6, type(uint128).max);
+        // Bound BOTH legs. At a different live tick, 2,000 USDG on one side can
+        // require far more than 2,000 USDG of NVDA on the other, breaching health.
+        uint256 baseBudget = FullMath.mulDiv(2_000e6, oracle.price(), 1e36);
+        uint128 L = vault.liquidityForAmounts(tl, tu, 2_000e6, baseBudget);
         (uint256 need0, uint256 need1) = vault.amountsForLiquidity(tl, tu, L);
         emit log_named_int("range lower", tl);
         emit log_named_int("range upper", tu);
@@ -256,5 +262,46 @@ contract RobinhoodForkTest is Test {
         vm.prank(authority);
         vault.setCrank(address(1));
         assertEq(vault.crank(), address(1));
+    }
+
+    function test_launch_gate_and_atomic_wallet_flow() public {
+        vm.prank(authority);
+        vault.setDepositsEnabled(false);
+        vm.prank(user);
+        vm.expectRevert(DlpVault.DepositsClosed.selector);
+        vault.depositWithSync(100e6, 100e18, user);
+        vm.prank(user);
+        vm.expectRevert(DlpVault.NotAuthority.selector);
+        vault.setDepositsEnabled(true);
+        vm.prank(authority);
+        vault.setDepositsEnabled(true);
+        vm.roll(block.number + 1);
+        vm.prank(user);
+        uint256 shares = vault.depositWithSync(100e6, 100e18, user);
+        assertEq(shares, 100e18);
+        vm.prank(authority);
+        vault.setDepositsEnabled(false);
+        vm.roll(block.number + 1);
+        vm.prank(user);
+        uint256 quoteOut = vault.withdrawWithSync(shares, 100e6, user);
+        assertEq(quoteOut, 100e6);
+        assertEq(vault.totalSupply(), 0);
+    }
+
+    function test_atomic_deposit_enforces_minimum_shares() public {
+        vm.prank(user);
+        vm.expectRevert(DlpVault.Slippage.selector);
+        vault.depositWithSync(100e6, 101e18, user);
+        assertEq(vault.totalSupply(), 0);
+        assertEq(IERC20(USDG).balanceOf(address(vault)), 0);
+    }
+
+    function test_admin_addresses_cannot_be_zero() public {
+        vm.startPrank(authority);
+        vm.expectRevert(DlpVault.BadParams.selector);
+        vault.setCrank(address(0));
+        vm.expectRevert(DlpVault.BadParams.selector);
+        vault.setAuthority(address(0));
+        vm.stopPrank();
     }
 }
