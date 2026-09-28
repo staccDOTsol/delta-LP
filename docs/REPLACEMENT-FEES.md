@@ -1,5 +1,7 @@
 # Replacement fee stack: 3% / 6%, Wizards and four collections
 
+> Superseded deployment record: v6 replaces the entire immutable fee/NFT stack. Use [V6-REPLACEMENT.md](V6-REPLACEMENT.md) for current addresses and activation steps. Keep v5 available for deposit recovery. The v5 commands below document its historical deployment.
+
 The September 28 replacement core is deployed on Robinhood Chain 4663. It does
 not modify the older v3 contracts, which retain 2% entry / 4% exit and all-Wizards.
 The reused v4 controller reports 3% entry / 6% exit. All 100 members and the

@@ -36,10 +36,15 @@ async function verify(e){
   const result=await submitted.json();if(typeof result.verificationId!=='string')throw new Error(`${e.key}: missing verification ID.`);
   record[e.key]={address:e.address,verificationId:result.verificationId,submittedAt:new Date().toISOString()};save();
 }
+const failures=[];
+let failedBatches=0;
 for(let start=0;start<entries.length;start+=4){
   const results=await Promise.allSettled(entries.slice(start,start+4).map(verify));
-  for(const result of results)if(result.status==='rejected')throw result.reason;
+  results.forEach((result,index)=>{if(result.status==='rejected')failures.push({key:entries[start+index].key,error:String(result.reason?.message??'Source verification failed')});});
+  failedBatches=results.every(result=>result.status==='rejected')?failedBatches+1:0;
+  if(failedBatches===3){console.error('Source service unavailable for three complete batches; preserving progress for a later retry.');break;}
   if(start%40===0)console.log(`Checked ${Math.min(start+4,entries.length)}/${entries.length} child contracts.`);
 }
 const matched=Object.values(record).filter(r=>r.creationMatch==='match'&&r.runtimeMatch==='match').length;
-console.log(JSON.stringify({recorded:Object.keys(record).length,matched,pending:Object.keys(record).length-matched}));
+console.log(JSON.stringify({recorded:Object.keys(record).length,matched,pending:Object.keys(record).length-matched,failures}));
+if(failures.length)process.exitCode=1; // Confirmed records survive; reruns retry only unresolved work.

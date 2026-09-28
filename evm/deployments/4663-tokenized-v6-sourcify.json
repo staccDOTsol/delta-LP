@@ -1,0 +1,37 @@
+{
+  "WeightedNftFeeFanout": {
+    "address": "0x0D06A5981107629Fadf2e8104c9979afF78E9Dc6",
+    "verificationId": "ec6141d1-a40f-415f-8126-389611196091",
+    "submittedAt": "2026-09-28T10:21:16.062Z"
+  },
+  "SplitHouseFeeRouter": {
+    "address": "0x28E833384b720Ad0A428935cAe8d5b49fa62A1c0",
+    "verificationId": "34b4eba8-554a-4c86-93ba-9307dc16ad38",
+    "submittedAt": "2026-09-28T10:21:27.660Z"
+  },
+  "SplitFeeMemberController": {
+    "address": "0xA79017035c9Fe045c797581321b6F36f554c55b2",
+    "verificationId": "c247de82-3c71-4bb8-9ab9-9f6286dd88d6",
+    "submittedAt": "2026-09-28T10:21:31.298Z"
+  },
+  "MemberV4Hook": {
+    "address": "0xcA196659d69DA75F7ccDEBe5A913be1ae5D8e540",
+    "verificationId": "7089df38-9978-477d-ae64-259466bd5278",
+    "submittedAt": "2026-09-28T10:21:34.785Z"
+  },
+  "NeutralEscrowFactory": {
+    "address": "0x6Cd0FCA62Cd246dce867424214cd1EbDcb851EB6",
+    "verificationId": "8931aecf-f908-4138-b4e8-35f8a0e66a9a",
+    "submittedAt": "2026-09-28T10:21:35.733Z"
+  },
+  "NeutralVault": {
+    "address": "0x19Bc982b4387c21e0D146b365e033dF5F14f6C85",
+    "verificationId": "e6cd3787-abb6-4802-88b2-5b2202d085ca",
+    "submittedAt": "2026-09-28T10:21:38.297Z"
+  },
+  "MemberFactory": {
+    "address": "0x7cC2c4F5E3626D136D4Caa1476996F20E45E186b",
+    "verificationId": "74b69d77-8e12-4d9c-8f88-e03d88d19840",
+    "submittedAt": "2026-09-28T10:21:43.017Z"
+  }
+}

@@ -4,6 +4,8 @@ import {Wallet,ArrowRight,RefreshCw} from 'lucide-react';
 import {connectWallet} from './client.js';
 import {NeutralClient} from './neutral-client.js';
 import {neutralDeployments} from '../../strategy/neutral-deployment.js';
+import {legacyNeutralDeployment} from '../../strategy/legacy-neutral-deployment.js';
+import {readNeutral} from '../../strategy/neutral.js';
 import type {NeutralState} from '../../strategy/neutral.js';
 import {exitMinimum} from '../../strategy/neutral-quotes.js';
 
@@ -11,7 +13,8 @@ type Snapshot=Awaited<ReturnType<NeutralClient['snapshot']>>;
 type Exit=Awaited<ReturnType<NeutralClient['exitDetails']>>;
 const usd=(n:string|bigint)=>Number(formatUnits(BigInt(n),6)).toLocaleString('en',{maximumFractionDigits:6});
 const shares=(n:bigint)=>formatUnits(n,18);
-export function NeutralPanel(){
+export function NeutralPanel({legacy=false}:{legacy?:boolean}){
+  const deployed=legacy?legacyNeutralDeployment:neutralDeployments[0];
   const [state,setState]=useState<NeutralState>(),[client,setClient]=useState<NeutralClient>(),[snapshot,setSnapshot]=useState<Snapshot>();
   const [amount,setAmount]=useState('10'),[busy,setBusy]=useState(''),[error,setError]=useState(''),[notice,setNotice]=useState('');
   const [txHash,setTxHash]=useState(''),[minimum,setMinimum]=useState(''),[cashMinimum,setCashMinimum]=useState('');
@@ -29,6 +32,7 @@ export function NeutralPanel(){
       const items=await Promise.all(indices.map(i=>c.exitDetails(i)));
       if(sequence===refreshSequence.current)setExits(items);
     }else{
+      if(legacy){const prior=await readNeutral(deployed);if(sequence===refreshSequence.current)setState(prior);return;}
       const response=await fetch('/api/strategies/neutral');if(!response.ok)throw new Error('Pool status is unavailable.');
       const body=await response.json() as {vaults:NeutralState[]};if(sequence===refreshSequence.current)setState(body.vaults[0]);
     }
@@ -72,29 +76,28 @@ export function NeutralPanel(){
     try{
       const w=await connectWallet();
       setSnapshot(undefined);setExits([]);setWalletCash(undefined);
-      setClient(new NeutralClient(w.provider,w.address,neutralDeployments[0]));
+      setClient(new NeutralClient(w.provider,w.address,deployed));
       setNotice('Wallet connected. Review the amount and pool status.');
     }catch(e){setError(e instanceof Error?e.message:'Wallet connection failed.');}
     finally{running.current=false;setBusy('');}
   }
-  const deployed=neutralDeployments[0];
   let saved:ReturnType<NeutralClient['pending']>=null,journalError='';
   try{saved=client?.pending()??null;}catch{journalError='The saved transaction record could not be read. Preserve it and inspect the wallet history before recovery.';}
   const pending=client?.hasPending();
   let exitFloor:string|null=null;
   if(snapshot&&snapshot.balance>0n)try{exitFloor=usd(exitMinimum(snapshot.balance,BigInt(snapshot.state.totalSupply),snapshot.state.nav===null?null:BigInt(snapshot.state.nav),snapshot.state.exitFeeBps));}catch{/* stale valuation: offer in-kind recovery */}
   return <div className="neutral-entry">
-    <span className="track-label">ONE RECEIPT · MATCHED LONG / SHORT POOLS</span><h2>Enter delta neutral.</h2>
-    <p>Your USDG is split across matching long and short tiers. The receipt is issued after the venue positions are reconciled and liquidity is added to every paired V4 pool.</p>
+    <span className="track-label">ONE RECEIPT · MATCHED LONG / SHORT POOLS</span><h2>{legacy?'Recover an earlier deposit.':'Enter delta neutral.'}</h2>
+    {legacy?<p>Your earlier deposit remains in the previous vault. Connect its wallet to refund pending USDG or recover existing positions.</p>:<p>Your USDG is split across matching long and short tiers. The receipt is issued after the venue positions are reconciled and liquidity is added to every paired V4 pool.</p>}
     <div className="neutral-facts"><span>{state?`ETH · 1–${state.tiers}× targets`:'ETH · all supported tiers'}</span><span>{state?`Current contract: ${state.entryFeeBps/100}% entry · ${state.exitFeeBps/100}% exit`:'Reading contract fees…'}</span><span>0% transfer tax</span></div>
     <p className="trade-notice">Targets retain collateral headroom; actual leverage varies. This is a managed, leveraged LP strategy. Fees and losses affect your balance, and liquidation remains possible.</p>
-    <label className="neutral-amount">Deposit <span>USDG</span><input aria-label="Neutral deposit amount" inputMode="decimal" value={amount} maxLength={19} onChange={e=>setAmount(e.target.value)} disabled={!!busy}/></label>
+    {!legacy&&<label className="neutral-amount">Deposit <span>USDG</span><input aria-label="Neutral deposit amount" inputMode="decimal" value={amount} maxLength={19} onChange={e=>setAmount(e.target.value)} disabled={!!busy}/></label>}
     {state?<div className="account-summary"><dl><div><dt>Pending batch</dt><dd>{usd(state.pendingAssets)} / {usd(state.minimumBatchAssets)} USDG</dd></div><div><dt>Receipt supply</dt><dd>{shares(BigInt(state.totalSupply))}</dd></div><div><dt>Pool state</dt><dd>{!state.configured?'Configuring all tiers':!state.entriesOpen?'Entries closed':state.phase===0?'Collecting':state.phase===1?'Building positions':'Refunds available'}</dd></div></dl></div>:<p role="status">{deployed?'Reading pool state…':'Preparing the receipt deployment.'}</p>}
     {!client?<button type="button" className="wl-button" disabled={!!busy||!deployed} onClick={()=>void connect()}><Wallet size={18}/>Connect wallet<ArrowRight size={17}/></button>:<>
       <p className="trade-notice" role="status">{client.address.slice(0,6)}…{client.address.slice(-4)} · {walletCash?.address===client.address&&walletCash.balance!==undefined?`${usd(walletCash.balance)} USDG in wallet`:walletCash?.address===client.address&&walletCash.error?<>{walletCash.error} <button className="inline-link" onClick={()=>setBalanceRetry(n=>n+1)}>Retry balance</button></>:'Loading USDG balance…'}</p>
-      {state?.configured&&!state.entriesOpen&&coordinator===client.address.toLowerCase()?<section className="neutral-position"><h3>Coordinator controls</h3><p>Enable refundable USDG deposits while the pool builds toward 2,000 USDG. This action does not start allocation or trading.</p><button className="secondary-button" disabled={!!busy||!!pending} onClick={()=>void run('Confirm enabling deposits in your wallet…',()=>client.openEntries())}>Enable deposits</button></section>:null}
-      <button type="button" className="wl-button" disabled={!!busy||!!pending||!state?.entriesOpen||state.phase!==0} onClick={()=>void run('Confirm entry in your wallet…',()=>client.enter(amount))}>Enter delta neutral<ArrowRight size={17}/></button>
-      <p className="trade-notice">One application action; your wallet may ask for USDG approval and deposit separately. Pending deposits earn no pool fees. Pooling must reach the batch minimum before allocation starts.</p>
+      {!legacy&&state?.configured&&!state.entriesOpen&&coordinator===client.address.toLowerCase()?<section className="neutral-position"><h3>Coordinator controls</h3><p>Enable refundable USDG deposits while the pool builds toward 2,000 USDG. This action does not start allocation or trading.</p><button className="secondary-button" disabled={!!busy||!!pending} onClick={()=>void run('Confirm enabling deposits in your wallet…',()=>client.openEntries())}>Enable deposits</button></section>:null}
+      {!legacy&&<button type="button" className="wl-button" disabled={!!busy||!!pending||!state?.entriesOpen||state.phase!==0} onClick={()=>void run('Confirm entry in your wallet…',()=>client.enter(amount))}>Enter delta neutral<ArrowRight size={17}/></button>}
+      {!legacy&&<p className="trade-notice">One application action; your wallet may ask for USDG approval and deposit separately. Pending deposits earn no pool fees. Pooling must reach the batch minimum before allocation starts.</p>}
       {snapshot&&snapshot.pendingAssets>0n?<section className="neutral-position"><h3>Your pending deposit</h3><strong>{usd(snapshot.pendingAssets)} USDG</strong><p>Minimum receipt: {shares(snapshot.minimumShares)} dlpDN. {snapshot.issued?'Member claims issued; paired exposure and LP activation remain pending.':'Cash remains refundable before claims are issued.'}</p>
         <div className="funding-actions">{!snapshot.issued?<button className="secondary-button" disabled={!!busy||!!pending} onClick={()=>void run('Returning pending USDG…',()=>client.cancel())}>Cancel & refund</button>:<button className="secondary-button" disabled={!!busy||!!pending} onClick={()=>void run('Recovering member claims…',()=>client.recover(false))}>Recover member tokens</button>}
         {state?.readyToActivate?<button className="secondary-button" disabled={!!busy||!!pending} onClick={()=>void run('Activating confirmed pools…',()=>client.activate())}>Activate receipts</button>:null}</div>
@@ -108,7 +111,7 @@ export function NeutralPanel(){
       {saved?<section className="neutral-position"><h3>Confirm saved transaction</h3><p>{saved.label} has not been confirmed. No automatic retry will be sent.</p><label>Wallet transaction hash<input value={txHash} placeholder={saved.hash??'0x…'} onChange={e=>setTxHash(e.target.value)}/></label><button className="secondary-button" disabled={!!busy} onClick={()=>void run('Checking the saved transaction…',()=>client.reconcile(txHash||undefined))}>Check confirmation</button></section>:null}
       {journalError?<p className="wl-error" role="alert">{journalError}</p>:null}
     </>}
-    {state&&!state.entriesOpen?<p className="trade-notice">The coordinator must enable deposits on-chain. The 2,000 USDG minimum starts allocation; it is not a minimum individual deposit.</p>:null}
+    {!legacy&&state&&!state.entriesOpen?<p className="trade-notice">The coordinator must enable deposits on-chain. The 2,000 USDG minimum starts allocation; it is not a minimum individual deposit.</p>:null}
     <button className="inline-link" disabled={!!busy} onClick={()=>void run('Refreshing on-chain state…',async()=>{await refresh();return 'On-chain state refreshed.';})}>Refresh <RefreshCw size={13}/></button>
     {busy?<p role="status">{busy}</p>:null}{notice?<p className="execution-status" role="status">{notice}</p>:null}{error?<p className="wl-error" role="alert">{error}</p>:null}
   </div>;

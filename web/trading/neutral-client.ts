@@ -3,6 +3,7 @@ import {z} from 'zod';
 import {chain,USDG} from './client.js';
 import {neutralAbi,exitAbi,allocationAbi} from '../../strategy/neutral-abi.js';
 import {neutralDeployments,type NeutralDeployment} from '../../strategy/neutral-deployment.js';
+import {legacyNeutralDeployment} from '../../strategy/legacy-neutral-deployment.js';
 import {readNeutral} from '../../strategy/neutral.js';
 import {receiptMinimum,usdgAmount,exitMinimum} from '../../strategy/neutral-quotes.js';
 
@@ -17,7 +18,7 @@ function rejected(error:unknown):boolean{for(let n=0;error&&typeof error==='obje
 /** User-wallet only. No server signer and no automatic retry of an ambiguous write. */
 export class NeutralClient {
   constructor(readonly provider:EIP1193Provider,readonly address:Address,readonly deployment:NeutralDeployment){
-    if(!neutralDeployments.some(d=>d.address===deployment.address&&d.runtimeCodeHash===deployment.runtimeCodeHash))throw new Error('Unknown neutral vault.');
+    if(![...neutralDeployments,legacyNeutralDeployment].some(d=>d.address===deployment.address&&d.runtimeCodeHash===deployment.runtimeCodeHash))throw new Error('Unknown neutral vault.');
   }
   private get key(){return `dlp.neutral.tx.v1.${this.deployment.address.toLowerCase()}.${this.address.toLowerCase()}`;}
   pending(){const raw=localStorage.getItem(this.key);return raw?journalSchema.parse(JSON.parse(raw)):null;}
@@ -26,7 +27,9 @@ export class NeutralClient {
     const controller=await rpc.readContract({address:this.deployment.address,abi:neutralAbi,functionName:'controller'});
     return rpc.readContract({address:controller,abi:coordinatorAbi,functionName:'keeper'});
   }
-  async openEntries(){return this.locked(async()=>{
+  async openEntries(){
+    this.requireCurrent();
+    return this.locked(async()=>{
     if((await this.coordinator()).toLowerCase()!==this.address.toLowerCase())throw new Error('Only the vault coordinator can enable deposits.');
     if(await rpc.readContract({address:this.deployment.address,abi:neutralAbi,functionName:'entriesOpen'}))return 'Deposits are already open.';
     // The deployed vault enforces configured membership and ready fee recipients.
@@ -93,7 +96,12 @@ export class NeutralClient {
     return {state,balance,pendingAssets:pending[0],minimumShares:pending[1],usdg,exitCount:count,
       issued:allocation!==zeroAddress&&await rpc.readContract({address:allocation,abi:allocationAbi,functionName:'settled',blockNumber})};
   }
-  async enter(text:string){return this.locked(async()=>{
+  private requireCurrent(){
+    if(!neutralDeployments.some(d=>d.address===this.deployment.address))throw new Error('This earlier vault is available for recovery only.');
+  }
+  async enter(text:string){
+    this.requireCurrent();
+    return this.locked(async()=>{
     const assets=usdgAmount(text),s=await this.snapshot();
     if(!s.state.configured||!s.state.entriesOpen||s.state.phase!==0)throw new Error('This pool is not collecting deposits right now.');
     if(assets>s.usdg)throw new Error('Your wallet has insufficient USDG.');

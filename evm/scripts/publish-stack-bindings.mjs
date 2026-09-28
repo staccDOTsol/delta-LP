@@ -36,6 +36,12 @@ if(nft.status!=='deployed-paused'||nft.collections.length!==4||nft.dependencies.
 const pendingAdapter=nft.deployments.find(d=>d.contract==='DnPendingAdapter');
 const pendingCode=pendingAdapter&&await client.getCode({address:pendingAdapter.address,blockNumber});
 if(!pendingCode||keccak256(pendingCode)!==pendingAdapter.runtimeCodeHash)throw new Error('NFT adapter runtime mismatch.');
+const nftPins=[...nft.deployments,...Object.values(nft.dependencies)].map(({address,runtimeCodeHash})=>({address,runtimeCodeHash}));
+nftPins.push({address:'0x8Dc178eFB8111BB0973Dd9d722ebeFF267c98F94',runtimeCodeHash:'0xd707b1da8cb165e5ea35a3b4450d971eb562ec171e23492aa117036b78a868f6'});
+for(const pin of nftPins){
+  const code=await client.getCode({address:pin.address,blockNumber});
+  if(!code||keccak256(code)!==pin.runtimeCodeHash)throw new Error('NFT dependency runtime mismatch.');
+}
 for(let i=0;i<4;i++)if((await read('WeightedNftFeeFanout','collections',[BigInt(i)])).toLowerCase()!==nft.collections[i].address.toLowerCase())throw new Error('NFT collection registry mismatch.');
 if((await read('HouseFeeRouter','nftFanout')).toLowerCase()!==contracts.WeightedNftFeeFanout.address.toLowerCase())throw new Error('NFT router wiring mismatch.');
 if(!await read('NeutralVault','configured')||await read('NeutralVault','entriesOpen')||await read('NeutralVault','totalSupply')!==0n||await read('NeutralVault','pendingAssets')!==0n)throw new Error('Replacement must be configured, closed and empty before initial promotion.');
@@ -55,4 +61,5 @@ writeFileSync(new URL('strategy/neutral-deployment.ts',root),`import type {Addre
 const nftBinding={adapter:pendingAdapter.address,adapterRuntimeCodeHash:pendingAdapter.runtimeCodeHash,receipt:vault,
   collections:nft.collections.map(({denomination,address})=>({denomination,address}))};
 writeFileSync(new URL('strategy/nft-deployment.ts',root),`import type {Address,Hash} from 'viem';\nexport type NftDeployment={adapter:Address;adapterRuntimeCodeHash:Hash;receipt:Address;collections:readonly {denomination:number;address:Address}[]};\nexport const nftDeployment:NftDeployment|null=${JSON.stringify(nftBinding,null,2)};\n`);
+writeFileSync(new URL('strategy/nft-pins.ts',root),`// Confirmed deployment fingerprints; no signing material.\nexport const nftOwner='${nft.owner}' as const;\nexport const nftPins=${JSON.stringify(nftPins,null,2)} as const;\n`);
 console.log(JSON.stringify({version,block:String(blockNumber),controller,vault,router,status:'Local bindings written; rebuild site and worker before activation.'}));

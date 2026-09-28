@@ -66,16 +66,12 @@ resuming without overwriting immutable paths. Never remove a live publisher lock
 
 ## Prepare, simulate and verify
 
-The v5 bundle is deployed and paused. Source matches on Sourcify; all four
-collections are indexed on OpenSea, with no published drop returned. See
-`evm/deployments/4663-nft-v5-verification.json` and the remaining inputs in
-[SALE-SETUP.md](SALE-SETUP.md). The preparation commands below document the tested
-deployment; do not regenerate or redeploy the frozen bundle to open a sale.
+The v6 Studio-compatible bundle is deployed with its immutable four-collection fee registry. See `evm/deployments/4663-nft-v6.json` and [the replacement record](../docs/V6-REPLACEMENT.md). All four collections are indexed on OpenSea; indexing does not open a sale. The previous v5 vault remains available for deposit recovery.
 
 For preparing a replacement deployment after its vault has been recorded:
 
 ```sh
-node --env-file=.env.local nft/prepare-deployment.mjs --version=v5
+node --env-file=.env.local nft/prepare-deployment.mjs --version=v6 --studio --plan-dir=artifacts/nft-studio-v6
 ```
 
 Alternatively use `--target=path.json` with chainId4663 plus actual receipt and
@@ -89,15 +85,15 @@ registry. It includes no paid mint, financial deposit, trade or sale-opening cal
 Start an isolated Anvil fork on loopback port9557, then run:
 
 ```sh
-node nft/simulate-deployment.mjs
-node nft/simulate-pending-mint.mjs
+node nft/simulate-deployment.mjs --plan-dir=artifacts/nft-studio-v6
+node nft/simulate-pending-mint.mjs --plan-dir=artifacts/nft-studio-v6
 ```
 
 The script rejects remote endpoints, checks chain/client identity, simulates the
 complete plan, and records plan/runtime hashes and configuration checks. The
 impersonation balance is local test ETH only. Submit the reviewed bundle through
 the deployment task's sole transaction writer; do not compete with the keeper.
-The second script uses the actual simulated CREATE2 addresses to mint two editions
+The second script uses the actual simulated CREATE2 addresses to mint all four editions
 with zero DN supply, verify real USDG pooling, transfer one NFT and withdraw its
 pending cash through the new owner's account. Those mint/withdrawal transactions
 exist only on the isolated fork; their report is not evidence of mainnet sales.
@@ -105,9 +101,9 @@ exist only on the isolated fork; their report is not evidence of mainnet sales.
 After broadcast, save actual address-to-creation-tx hashes and run:
 
 ```sh
-node --env-file=.env.local nft/verify-collections.mjs --transactions=path.json
-node --env-file=.env.explorer.local nft/verify-explorer.mjs --version=v5
-node --env-file=.env.local --env-file=.env.nft-opensea.local nft/check-opensea.mjs
+node --env-file=.env.local nft/verify-collections.mjs --plan-dir=artifacts/nft-studio-v6 --transactions=path.json
+node --env-file=.env.explorer.local nft/verify-explorer.mjs --version=v6 --plan-dir=artifacts/nft-studio-v6
+node --env-file=.env.local --env-file=.env.nft-opensea.local nft/check-opensea.mjs --plan-dir=artifacts/nft-studio-v6
 ```
 
 Source verification compares live runtime with the tested fork and checks actual
@@ -120,8 +116,7 @@ expire after seven days.
 `verify-explorer.mjs` submits standard JSON and constructor arguments to Etherscan
 using `ETHERSCAN_API_KEY` from the ignored environment file. It checks the
 deployed plan hash and successful transactions, records accepted jobs separately
-from confirmed verification, and never signs. The five current submissions are
-queued; Sourcify source matching is complete.
+from confirmed verification, and never signs. Verification records distinguish queued requests from confirmed source matches.
 
 Opening a pending-funded sale still requires fresh bounded swap quotes, fixed-wei
 prices/schedule and per-wallet limits, clear pending/refund disclosures, and

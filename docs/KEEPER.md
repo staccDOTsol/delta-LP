@@ -1,4 +1,6 @@
-# Run the v5 operator
+# Run the v6 operator
+
+Current: v6 is deployed on Fly in observation mode with 100 members and passing health checks. The previous v5 journal remains at `/data/keeper-v5`. [Current addresses and NFT activation steps](V6-REPLACEMENT.md). Historical deployment snapshots below do not replace current bindings.
 
 The keeper is a separate long-running Node process. Vercel serves the website;
 it does not keep this process alive. The deployed controller assigns both keeper
@@ -11,7 +13,7 @@ strategy accounts unfunded. The initial Fly deployment was observation-only. The
 
 ## NFT contribution queue
 
-The v5 bindings include the actual pending contribution adapter and its runtime hash.
+The v6 bindings include the actual pending contribution adapter and its runtime hash.
 When its collecting batch plus public pending deposits meet the 2,000 USDG threshold,
 entries are open and all members are idle, the keeper queues that batch through the
 same signed transaction journal. It starts allocation on a subsequent observation.
@@ -23,7 +25,7 @@ The code never requires creator seed inventory. Observation mode only plans thes
 [`delta-lp-keeper`](https://fly.io/apps/delta-lp-keeper/monitoring) runs one Machine
 in Toronto (`yyz`), with 1 shared CPU and 512 MB memory. Its encrypted 1 GB
 `keeper_data` volume mounts at `/data`; status and transaction journals live at
-`/data/keeper-v5`. Keep exactly one worker for this operator account. The app has
+`/data/keeper-v6`. Keep exactly one worker for this operator account. The app has
 no public HTTP service or public IP; its internal `/healthz` check requires a fresh
 snapshot of all 100 distinct members from the current process.
 The [v5 deployment record](deployments/fly-keeper-v5-2026-09-28.json)
@@ -94,7 +96,7 @@ npm run keeper:observe -- --once
 ```
 
 This mode never reads a private key, sends a transaction, or opens entries.
-`artifacts/keeper-v5/status.json` records per-member decisions and the current
+`artifacts/keeper-v6/status.json` records per-member decisions and the current
 vault phase. `ready` means an unsigned next operation was identified; it does
 not mean trading is live. On the empty deployment those operations are initial
 zero-equity reports, proven by unused custody state and the L1 account registry.
@@ -121,13 +123,13 @@ other scripts or wallets using the same EOA can cause a nonce conflict.
 
 ```sh
 cd /Users/stacc/delta-LP
-mkdir -p artifacts/keeper-v5
-chmod 700 artifacts/keeper-v5
-cp keeper/config.example.json artifacts/keeper-v5/config.json
-chmod 600 artifacts/keeper-v5/config.json ~/staccoverflow.eth
+mkdir -p artifacts/keeper-v6
+chmod 700 artifacts/keeper-v6
+cp keeper/config.example.json artifacts/keeper-v6/config.json
+chmod 600 artifacts/keeper-v6/config.json ~/staccoverflow.eth
 ```
 
-Edit `artifacts/keeper-v5/config.json` and replace the three zero limits:
+Edit `artifacts/keeper-v6/config.json` and replace the three zero limits:
 
 | Setting | Meaning |
 | --- | --- |
@@ -150,8 +152,8 @@ close a position or limit its possible losses.
 Start the signing process yourself:
 
 ```sh
-DELTA_KEEPER_CONFIG="$PWD/artifacts/keeper-v5/config.json" \
-DELTA_KEEPER_STATE="$PWD/artifacts/keeper-v5" \
+DELTA_KEEPER_CONFIG="$PWD/artifacts/keeper-v6/config.json" \
+DELTA_KEEPER_STATE="$PWD/artifacts/keeper-v6" \
 DELTA_KEEPER_KEY_FILE="$HOME/staccoverflow.eth" \
 npm run keeper:run
 ```
@@ -202,7 +204,7 @@ An expired request or unachievable minimum requires the owner's recovery action.
   venue keys are derived in memory from an owner signature, matching `/operator`.
 - A process lock rejects a second worker. After a crash, confirm the old process
   is gone and reconcile pending transactions before removing only `worker.lock`.
-  On Fly this lock is `/data/keeper-v5/worker.lock`. A graceful SIGTERM restart
+  On Fly this lock is `/data/keeper-v6/worker.lock`. A graceful SIGTERM restart
   removes it after the current cycle; a forced kill can leave it behind. Automatic
   process restart deliberately does not erase that lock or the signed journal.
 - API errors, wrong custody identity, unprocessed priority requests, foreign

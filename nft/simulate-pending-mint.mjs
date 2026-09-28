@@ -7,9 +7,10 @@ const url=new URL(endpoint);
 if(url.protocol!=='http:'||url.hostname!=='127.0.0.1'||!url.port)throw Error('Explicit loopback Anvil required');
 const rpc=createPublicClient({transport:http(endpoint)});
 if(!(await rpc.request({method:'web3_clientVersion'})).toLowerCase().includes('anvil')||await rpc.getChainId()!==4663)throw Error('Wrong local fork');
-const planText=readFileSync('artifacts/nft-deployment/unsigned.json','utf8');
+const planDir=process.argv.find(x=>x.startsWith('--plan-dir='))?.slice(11)||'artifacts/nft-deployment';
+const planText=readFileSync(`${planDir}/unsigned.json`,'utf8');
 const plan=JSON.parse(planText);
-const simulation=JSON.parse(readFileSync('artifacts/nft-deployment/fork-simulation.json'));
+const simulation=JSON.parse(readFileSync(`${planDir}/fork-simulation.json`));
 const planHash=keccak256(toHex(planText));
 if(plan.launchMode!=='pending-contribution'||simulation.planHash!==planHash)throw Error('Untested pending plan');
 const art=name=>JSON.parse(readFileSync(`evm/out/${name}.sol/${name}.json`));
@@ -21,7 +22,7 @@ const alice='0x00000000000000000000000000000000000a11ce';
 const bob='0x0000000000000000000000000000000000000b0b';
 const sea=plan.dependencies.seaDrop.address;
 const feeRecipient='0x0000a26b00c1F0DF003000390027140000fAa719';
-const nftAbi=art('DnPendingSeaDropEdition').abi;
+const nftAbi=art(plan.editionContract??'DnPendingSeaDropEdition').abi;
 const adapterAbi=art('DnPendingAdapter').abi;
 const batchAbi=art('NftContributionBatch').abi;
 const erc20=parseAbi(['function totalSupply() view returns(uint256)','function balanceOf(address) view returns(uint256)']);
@@ -47,7 +48,7 @@ await send(plan.owner,plan.adapter,adapterAbi,'setQuote',[2000n*10n**6n,10n**18n
 await send(plan.owner,plan.adapter,adapterAbi,'setPaused',[false]);
 const minted=[];
 const seaAbi=parseAbi(['function mintPublic(address nftContract,address feeRecipient,address minterIfNotPayer,uint256 quantity) payable']);
-for(const collection of [plan.collections[0],plan.collections[3]]){
+for(const collection of plan.collections){
  const price=400000000000000n*BigInt(collection.denomination);
  await send(plan.owner,collection.address,nftAbi,'setFundingQuote',[2000n*10n**6n,now+600n]);
  await send(plan.owner,collection.address,nftAbi,'updatePublicDrop',[sea,{mintPrice:price,startTime:now-1n,endTime:now+3600n,maxTotalMintableByWallet:20,feeBps:1000,restrictFeeRecipients:true}]);
@@ -60,7 +61,7 @@ for(const collection of [plan.collections[0],plan.collections[3]]){
  assert(await read(vault,erc20,'balanceOf',[account])===0n,'Pending cash mislabeled as DN shares');
  minted.push({denomination:collection.denomination,address:collection.address,account,batch,contribution:String(contribution),gasUsed:String(mint.gasUsed)});
 }
-assert(minted[0].batch.toLowerCase()===minted[1].batch.toLowerCase(),'Editions did not pool in one collecting batch');
+assert(minted.every(m=>m.batch.toLowerCase()===minted[0].batch.toLowerCase()),'Editions did not pool in one collecting batch');
 const total=minted.reduce((n,x)=>n+BigInt(x.contribution),0n);
 assert(await read(usdg,erc20,'balanceOf',[minted[0].batch])===total,'Escrow cash/credit mismatch');
 assert(await read(vault,erc20,'totalSupply')===0n,'Genesis smoke unexpectedly issued DN shares');
@@ -73,5 +74,5 @@ assert(await read(usdg,erc20,'balanceOf',[first.account])===BigInt(first.contrib
 assert(await read(first.batch,batchAbi,'contributions',[first.account])===0n,'Withdrawn credit not cleared');
 for(const account of [plan.owner,alice,bob])await rpc.request({method:'anvil_stopImpersonatingAccount',params:[account]});
 const result={status:'LOCAL-FORK-ONLY: first mint without seed passed',at:new Date().toISOString(),planHash,minted,receiptSupply:'0',pendingWithdrawalAfterNftTransfer:'passed'};
-writeFileSync('artifacts/nft-deployment/pending-mint-simulation.json',JSON.stringify(result,null,2));
+writeFileSync(`${planDir}/pending-mint-simulation.json`,JSON.stringify(result,null,2));
 console.log(JSON.stringify(result));

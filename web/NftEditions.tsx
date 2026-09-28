@@ -2,6 +2,7 @@ import {lazy,Suspense,useState} from 'react';
 import {ArrowUpRight} from 'lucide-react';
 import {NFT_DENOMINATIONS, type NftDenomination} from '../strategy/nft-editions.ts';
 import {nftDeployment} from '../strategy/nft-deployment.ts';
+import {nftOpenSeaUrls} from '../strategy/nft-opensea.ts';
 import './nft-editions.css';
 const NftMintPanel=lazy(()=>import('./trading/NftMintPanel.tsx').then(m=>({default:m.NftMintPanel})));
 
@@ -11,6 +12,7 @@ const design = 'https://github.com/staccDOTsol/delta-LP/blob/codex/fuel-platform
 export function NftEditions() {
   const [edition, setEdition] = useState<NftDenomination>(1);
   const collection = nftDeployment?.collections.find(item => item.denomination === edition);
+  const openSeaUrl = collection && nftOpenSeaUrls[collection.address.toLowerCase()];
   return <section className="nft-editions" id="nft-editions" aria-labelledby="nft-editions-title">
     <div className="nft-editions-heading">
       <div><span className="wl-kicker">FOUR COLLECTIONS · 10,000 EACH</span><h2 id="nft-editions-title">An NFT with its own portfolio.</h2></div>
@@ -21,6 +23,7 @@ export function NftEditions() {
       {NFT_DENOMINATIONS.map(value => <button key={value} type="button" aria-pressed={edition === value} onClick={() => setEdition(value)}>${value}</button>)}
     </div></fieldset>
     {collection&&<Suspense fallback={<p role="status">Loading mint controls…</p>}><NftMintPanel collection={collection.address}/></Suspense>}
+    {openSeaUrl?<a className="inline-link" href={openSeaUrl} target="_blank" rel="noreferrer">View the ${edition} collection on OpenSea <ArrowUpRight size={15}/></a>:null}
     <div className="nft-mint-breakdown" aria-live="polite" aria-atomic="true">
       <div className="nft-price-summary"><span>Target mint price</span><strong>${edition}</strong><small>Paid in ETH · 10,000 NFTs in this edition</small></div>
       <dl>

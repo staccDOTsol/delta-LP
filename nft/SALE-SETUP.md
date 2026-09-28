@@ -9,7 +9,7 @@ not executable transactions or proof of activation.
 
 Fill every null in the template. No financial limits have been selected. Fixed
 addresses and fees come from the deployed
-[`v5 manifest`](../evm/deployments/4663-nft-v5.json).
+[`v6 manifest`](../evm/deployments/4663-nft-v6.json).
 
 | Input | Meaning and bounds |
 | --- | --- |
@@ -48,13 +48,12 @@ state before constructing/signing transactions.
 This is four public-drop settings, five quote settings and five activation calls.
 Do not encode nulls or expired quotes as executable calldata. ABIs are in
 `evm/out/DnPendingAdapter.sol/DnPendingAdapter.json` and
-`evm/out/DnPendingSeaDropEdition.sol/DnPendingSeaDropEdition.json`.
+`evm/out/DnPendingSeaDropEditionV2.sol/DnPendingSeaDropEditionV2.json`.
 
 **Quote refresh is still an operational dependency.** Adapter quotes expire
 within 15 minutes and can exhaust their cap sooner. Minting fails when either
 quote expires or the cap is insufficient. Sustained sales require an
-owner-operated refresh process with explicit quote policy and cap limits. The
-current strategy observer does not supply that service.
+owner-operated refresh process with explicit quote policy and cap limits. The user-run `npm run nft:fly-launch` configures the shared worker for this service. A software deployment alone keeps observation mode; it does not enable paid mints.
 
 ## OpenSea publication
 
@@ -62,11 +61,9 @@ Creator operations need wallet-scoped authorization in addition to the public
 API key. Use the owner's authenticated Studio session or a scoped wallet token
 for drop management. See [OpenSea authentication](https://docs.opensea.io/reference/auth).
 
-Configure the existing collections, with matching prices, dates and wallet
-limits. Review generated publish transactions against the deployed ABI: these
-custom collections support individual SeaDrop setters but **do not implement
-`multiConfigure`**. Generic Studio publication compatibility is unproven. Local
-fork tests establish canonical SeaDrop `mintPublic` compatibility only.
+Use the four v6 collection addresses from the manifest. Old v5 Studio drafts belong to different contracts and must not be republished for this replacement. Creator payout must be each collection's own address, preserving atomic mint funding.
+
+`DnPendingSeaDropEditionV2` implements Studio's `multiConfigure`, supply events, idempotent payer updates and signed-stage configuration. The actual captured Studio publish payload passes a Robinhood fork regression after rebinding only its collection payout. Public and signed mints retain the same fixed price, 10% OpenSea fee and funding checks. Unsupported allowlist and token-gated stages revert. This test does not itself publish a mainnet drop.
 
 After publication, check [drop details](https://docs.opensea.io/reference/get_drop_by_slug)
 for the correct chain/address and schedule, and simulate the actual buyer mint

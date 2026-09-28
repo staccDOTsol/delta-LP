@@ -6,18 +6,21 @@ import {client,rpc,loadSigner,stringify} from './preflight.mjs';
 
 const version=process.argv.find(x=>x.startsWith('--version='))?.slice(10);
 if(!version||!/^v[1-9][0-9]*$/.test(version)||Number(version.slice(1))<4)throw Error('Replacement version required.');
+const planDir=process.argv.find(x=>x.startsWith('--plan-dir='))?.slice(11)||'artifacts/nft-deployment';
 const broadcast=process.argv.includes('--broadcast');
-const planText=readFileSync('artifacts/nft-deployment/unsigned.json','utf8');
+const planText=readFileSync(`${planDir}/unsigned.json`,'utf8');
 const plan=JSON.parse(planText),planHash=keccak256(toHex(planText));
-const simulation=JSON.parse(readFileSync('artifacts/nft-deployment/fork-simulation.json','utf8'));
+const simulation=JSON.parse(readFileSync(`${planDir}/fork-simulation.json`,'utf8'));
 const stack=JSON.parse(readFileSync(`evm/deployments/4663-tokenized-${version}.json`,'utf8'));
 const path=`evm/deployments/4663-nft-${version}.json`,privateDir=`artifacts/nft-deployment-${version}`;
 const art=name=>JSON.parse(readFileSync(`evm/out/${name}.sol/${name}.json`,'utf8'));
 const equal=(a,b)=>String(a).toLowerCase()===String(b).toLowerCase();
+const editionContract=plan.version===3?'DnPendingSeaDropEditionV2':'DnPendingSeaDropEdition';
+if(plan.editionContract&&plan.editionContract!==editionContract)throw Error('Edition ABI version mismatch.');
 const denominations=[1,2,5,10];
 const factory='0x4e59b44847b379578588920cA78FbF26c0B4956C';
 if(await client.getChainId()!==4663||plan.chainId!==4663||plan.status!=='unsigned-paused-deployment'
-  ||plan.version!==2||plan.launchMode!=='pending-contribution'
+  ||![2,3].includes(plan.version)||plan.launchMode!=='pending-contribution'
   ||stack.status!=='deployed-empty'||!equal(plan.owner,stack.authority)
   ||plan.collections.length!==4||plan.deployments.length!==5||plan.calls.length!==30
   ||simulation.status!=='local-fork-simulation-only'||simulation.planHash!==planHash||simulation.receipts.length!==30
@@ -42,13 +45,13 @@ if(!equal(adapter,plan.adapter))throw Error('Adapter mismatch.');
 for(let i=0;i<4;i++){
   const edition=plan.collections[i],d=denominations[i];
   if(edition.denomination!==d||edition.count!==10000||!edition.verifiedAt)throw Error('Wrong launch editions.');
-  const address=deployment(`edition-${d}`,'DnPendingSeaDropEdition',[`Money Doubler $${d}`,`DLP${d}`,BigInt(d),plan.owner,adapter,plan.dependencies.houseFees.address]);
+  const address=deployment(`edition-${d}`,editionContract,[`Money Doubler $${d}`,`DLP${d}`,BigInt(d),plan.owner,adapter,plan.dependencies.houseFees.address]);
   if(!equal(address,edition.address))throw Error('Collection mismatch.');
-  call('DnPendingSeaDropEdition',address,'configure');
-  call('DnPendingSeaDropEdition',address,'setBaseURI',[edition.baseURI]);
-  call('DnPendingSeaDropEdition',address,'setContractURI',[edition.contractURI]);
-  call('DnPendingSeaDropEdition',address,'setProvenanceHash',[edition.provenanceHash]);
-  call('DnPendingSeaDropEdition',address,'updateDropURI',[plan.dependencies.seaDrop.address,edition.contractURI]);
+  call(editionContract,address,'configure');
+  call(editionContract,address,'setBaseURI',[edition.baseURI]);
+  call(editionContract,address,'setContractURI',[edition.contractURI]);
+  call(editionContract,address,'setProvenanceHash',[edition.provenanceHash]);
+  call(editionContract,address,'updateDropURI',[plan.dependencies.seaDrop.address,edition.contractURI]);
   call('DnPendingAdapter',adapter,'setEdition',[address,true]);
 }
 call('WeightedNftFeeFanout',plan.dependencies.weightedFanout.address,'configure',[plan.collections.map(x=>x.address)]);
@@ -69,7 +72,7 @@ const account=loadSigner();
 if(!equal(account.address,plan.owner))throw Error('Wrong deployment signer.');
 const chain=defineChain({id:4663,name:'Robinhood Chain',nativeCurrency:{name:'Ether',symbol:'ETH',decimals:18},rpcUrls:{default:{http:[rpc]}}});
 const wallet=createWalletClient({account,chain,transport:http(rpc)});
-const record=existsSync(path)?JSON.parse(readFileSync(path,'utf8')):{version,chainId:4663,planHash,owner:account.address,status:'deploying-paused-software',adapter,collections:plan.collections,dependencies:plan.dependencies,deployments:plan.deployments,calls:[]};
+const record=existsSync(path)?JSON.parse(readFileSync(path,'utf8')):{version,chainId:4663,planHash,owner:account.address,status:'deploying-paused-software',adapter,editionContract,collections:plan.collections,dependencies:plan.dependencies,deployments:plan.deployments,calls:[]};
 if(record.planHash!==planHash||record.owner!==account.address)throw Error('Deployment journal changed.');
 function save(){writeFileSync(`${path}.tmp`,stringify(record)+'\n');renameSync(`${path}.tmp`,path);}
 const cap=1_000_000_000_000_000n;
@@ -114,9 +117,9 @@ for(let i=0;i<expected.length;i++){
 }
 const read=(name,address,functionName,args=[])=>client.readContract({address,abi:art(name).abi,functionName,args});
 if(!await read('DnPendingAdapter',adapter,'paused'))throw Error('Expected paused adapter.');
-for(const edition of plan.collections)if(!await read('DnPendingSeaDropEdition',edition.address,'paused')||await read('DnPendingSeaDropEdition',edition.address,'totalMinted')!==0n)throw Error('Expected paused empty edition.');
+for(const edition of plan.collections)if(!await read(editionContract,edition.address,'paused')||await read(editionContract,edition.address,'totalMinted')!==0n)throw Error('Expected paused empty edition.');
 const fanout=plan.dependencies.weightedFanout.address;
 if(!await read('WeightedNftFeeFanout',fanout,'configured')||!equal(await read('WeightedNftFeeFanout',fanout,'initializer'),'0x0000000000000000000000000000000000000000'))throw Error('Fee registry not finalized.');
 for(let i=0;i<4;i++)if(!equal(await read('WeightedNftFeeFanout',fanout,'collections',[BigInt(i)]),plan.collections[i].address))throw Error('Fee registry mismatch.');
 record.status='deployed-paused';record.verifiedAt=new Date().toISOString();record.gasCostETH=formatEther(record.calls.reduce((n,x)=>n+BigInt(x.actualGasCostWei),0n));save();
-console.log(stringify({status:record.status,adapter,collections:plan.collections.map(x=>({denomination:x.denomination,address:x.address})),gasCostETH:record.gasCostETH}));
+console.log(stringify({status:record.status,adapter,editionContract,collections:plan.collections.map(x=>({denomination:x.denomination,address:x.address})),gasCostETH:record.gasCostETH}));

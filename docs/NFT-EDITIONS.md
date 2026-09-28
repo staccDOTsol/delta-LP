@@ -1,6 +1,6 @@
 # NFT-owned contributions and delta-neutral accounts
 
-Status: the mint-funded implementation and the exact 30-call deployment bundle passed Robinhood fork tests. The corrected v5 DN vault and 100 members are deployed. All four NFT collections and their contribution adapter are deployed and configured, with mints paused. All 40,000 launch assets are published and URL-verified.
+Status: the mint-funded implementation and the exact 30-call deployment bundle passed Robinhood fork tests. The v6 DN vault and 100 members are deployed. All four NFT collections and their contribution adapter are deployed and configured, with mints paused. All 40,000 launch assets are published and URL-verified.
 
 ## Mint proceeds build the pool
 
@@ -43,31 +43,31 @@ The separate 1% primary mint fee and requested 10% secondary royalty go entirely
 
 `NftContributionBatch` has no owner or arbitrary sweep. Claims always pay the originally credited NFT account. Once queued, the funds are subject to the vault's allocation cycle. After a one-day recovery delay, anyone can recover a stalled batch: unallocated funds return as USDG; already issued member claims recover in kind. In-kind delivery is paginated, at most 20 member tokens per call. A cash refund cannot be mislabelled as successful DN activation.
 
-The corrected v5 vault measures its activation loss bound after the 3% entry fee, allowing up to 1% additional execution loss. This fixes the old empty vault's incompatibility between a 3% entry charge and a gross 97% activation minimum. Receipt issuance still requires the position, price and delta checks.
+The v6 vault measures its activation loss bound after the 3% entry fee, allowing up to 1% additional execution loss. This fixes the old empty vault's incompatibility between a 3% entry charge and a gross 97% activation minimum. Receipt issuance still requires the position, price and delta checks.
 
 ## Deployment and activation
 
-All 30 deployment/configuration transactions succeeded, using 0.000395971166982 ETH. The fee registry is permanently bound to the following four collections:
+All 30 deployment/configuration transactions succeeded, using 0.000525854666942 ETH. The fee registry is permanently bound to the following four collections:
 
 | Component | Robinhood address |
 | --- | --- |
-| Pending contribution adapter | `0x7518E5121A2841568dDE5A81eec8C962EcfCc0C5` |
-| $1 collection | `0xa8dC97388FD0919A654bc05E21034afaafd1FF43` |
-| $2 collection | `0x95fc6306d95F8264Ad6cc5336FB8df7e58BCbb7A` |
-| $5 collection | `0xA09255F0D9cF94475369A962B3Df6Fd7ac926761` |
-| $10 collection | `0xDa66c3e243D15813E6810c0370823A67b1497672` |
+| Pending contribution adapter | `0xE454667569852d99BeB0C19c7275fAbCc2874104` |
+| $1 collection | `0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41` |
+| $2 collection | `0xd301a76601F27c682F64062b4A254fd7aed601Ea` |
+| $5 collection | `0xa6D443b39fE77B8e1013482d300994cA84B5635C` |
+| $10 collection | `0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131` |
 
-All five NFT/adapter contracts have matching creation and runtime source verification on Sourcify. All four collections are indexed on OpenSea; mint drops are not yet published, and Etherscan verification jobs remain queued. Actual transaction hashes and runtime hashes are in `evm/deployments/4663-nft-v5.json`. The canonical replacement receipt is `0x3D4Ee6D147AF67371073e74206D6d49e64960f9c`. It reuses the v4 controller, hook, fee router, factory and all 100 deployed members. See `evm/deployments/4663-tokenized-v5.json` and `4663-neutral-v5-registry.json`.
+All four v6 collections are indexed on OpenSea. Studio recognizes their 10,000 supply and the replacement supports the actual `multiConfigure` transaction. Paid sale activation and Studio publication remain separate owner actions. Source verification requests and confirmed matches are recorded in the deployment reports. See [the v6 replacement record](V6-REPLACEMENT.md) for canonical addresses, tests and operator steps.
 
-`nft/prepare-deployment.mjs --version=v5` produces the pending-contribution bundle. `evm/scripts/deploy-nft-bundle.mjs --version=v5` independently reconstructs every allowed zero-value deployment/configuration call and compares the fork simulation hash. The broadcast option deploys paused contracts; it never mints, transfers strategy collateral, opens a sale or trades. The superseded inventory adapter is retained only as historical code and is not used by this launch.
+Actual transaction/runtime hashes are in `evm/deployments/4663-nft-v6.json`; core and all 100 member pairs are in `4663-tokenized-v6.json` and `4663-neutral-v6-registry.json`. The old v5 vault retains its refundable 3 USDG user deposit; the site exposes its recovery controls.
 
 Before paid mints open, the operator must configure ETH stage prices/timing and wallet limits, supply fresh bounded swap quotes, and complete the marketplace checks. No prefunded receipt inventory is required. Vault entry/keeper activation is a separate operational step; the website must display pending contributions until actual allocation completes.
 
 ## Evidence and limits
 
-- The complete Solidity suite passes 128 tests. The application build/runtime checks pass with 157 Node tests and 17 database integration tests skipped.
+- The replacement NFT suite passes 56 Solidity tests, including ten Studio/migration tests. Application build/runtime checks pass with 168 Node tests and 17 database integration tests skipped.
 - Focused tests cover first mint with zero receipt supply, actual SeaDrop payment, USDG conservation, multiple editions sharing a batch, NFT transfer followed by the new owner's withdrawal, and rollback on quote/slippage failure.
-- The exact prepared deployment was simulated as 30 successful calls. A second local-fork script then minted two editions through those exact contracts, checked their shared USDG escrow, and withdrew one NFT's contribution through its real ERC-6551 account.
+- The exact prepared deployment was simulated as 30 successful calls. A second local-fork script then minted all four editions through those exact contracts, checked their shared USDG escrow, and withdrew one NFT's contribution through its real ERC-6551 account.
 - Root vault/batch tests cover proportional actual receipt delivery, cash refunds, stalled allocation recovery, paginated member claims and rounding conservation. Venue fills in these tests are fixtures; these are not funded mainnet trading results.
 
 No APY, dollar peg or immunity to liquidation is implied. A running keeper, available liquidity and continuous reconciliation remain necessary.

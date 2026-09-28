@@ -1,6 +1,6 @@
 # deltaLP — public integration handoff
 
-> September 28 fee revision: the replacement uses **3% entry / 6% exit**, split **50% Wizards / 50% four NFT collections**, weighted by mint tier. The v5 replacement receipt and all 100 members are deployed; the historical v3 addresses below retain their original 2%/4% policy. Use `4663-tokenized-v5.json` for new integrations. NFT mint proceeds now accumulate toward the pooled 2,000 USDG threshold; no creator seed inventory is required. See [replacement implementation and operator steps](REPLACEMENT-FEES.md).
+> Current deployment is **v6**: 3% entry / 6% exit, 50% Wizards / 50% four NFT collections weighted 1/2/5/10. Use [the current v6 addresses and operator record](V6-REPLACEMENT.md) and `4663-tokenized-v6.json` for integrations. The older addresses and snapshots below are historical, not current bindings.
 
 **Updated:** September 28, 2026
 **Network:** Robinhood Chain, chain ID **4663**

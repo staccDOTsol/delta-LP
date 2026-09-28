@@ -10,12 +10,13 @@ if(!key)throw Error('ETHERSCAN_API_KEY must be provided in the environment');
 const version=process.argv.find(x=>x.startsWith('--version='))?.slice(10)||'v5';
 if(!/^v[1-9][0-9]*$/.test(version))throw Error('Invalid deployment version');
 const manifest=JSON.parse(readFileSync(`evm/deployments/4663-nft-${version}.json`));
-const planText=readFileSync('artifacts/nft-deployment/unsigned.json','utf8');
+const planDir=process.argv.find(x=>x.startsWith('--plan-dir='))?.slice(11)||'artifacts/nft-deployment';
+const planText=readFileSync(`${planDir}/unsigned.json`,'utf8');
 if(manifest.chainId!==4663||manifest.status!=='deployed-paused'||manifest.planHash!==keccak256(toHex(planText))||manifest.calls.length!==30||manifest.calls.some(c=>c.status!=='success'))throw Error('Expected confirmed NFT software deployment');
 const path=`evm/deployments/4663-nft-${version}-etherscan.json`;
 const record=existsSync(path)?JSON.parse(readFileSync(path)):{};
 for(const entry of manifest.deployments){
- if(!entry.transactionHash||!entry.runtimeCodeHash||!['DnPendingAdapter','DnPendingSeaDropEdition'].includes(entry.contract))throw Error('Incomplete deployment proof');
+ if(!entry.transactionHash||!entry.runtimeCodeHash||!['DnPendingAdapter','DnPendingSeaDropEdition','DnPendingSeaDropEditionV2'].includes(entry.contract))throw Error('Incomplete deployment proof');
  const old=record[entry.label];
  if(old&&old.address.toLowerCase()!==entry.address.toLowerCase())throw Error('Verification address changed');
  if(old?.status==='verified'){console.log(`${entry.label}: explorer verified`);continue;}

@@ -1,8 +1,8 @@
 const deployment = {
   "chainId": 4663,
-  "version": "v5",
-  "registryFile": "4663-neutral-v5-registry.json",
-  "genesisBlock": "74655399",
+  "version": "v6",
+  "registryFile": "4663-neutral-v6-registry.json",
+  "genesisBlock": "74715624",
   "feePolicy": {
     "entryFeeBps": 300,
     "exitFeeBps": 600,
@@ -12,40 +12,40 @@ const deployment = {
   "status": "prototype",
   "contracts": {
     "MemberController": {
-      "address": "0xae3600b13a2F894f81F6565DD207492601B2Ce3E",
-      "runtimeCodeHash": "0x3be4509eeaf2d11acd30bc31b51f8ff717640dc748202131618de9e939328bb4",
-      "transactionHash": "0x79668288d8e9199e0261042b156d886079082f651f061f3ebf53e6e27ca1499b"
+      "address": "0xA79017035c9Fe045c797581321b6F36f554c55b2",
+      "runtimeCodeHash": "0xc778c528846e672b7b1f150ba3655991e2a083685b78d2e01db91133e9182157",
+      "transactionHash": "0x19e44d94490a9438be329509928f29cf29a828a8a8f8f4033be1b8ed7dcf9cc4"
     },
     "HouseFeeRouter": {
-      "address": "0x0264C6739483f80285B4e6ebd342B22b3785A9F0",
-      "runtimeCodeHash": "0x8282dcd9c44e5f90b2b56cdab4785a54394e59fa651346c152a073a4aaf5b328",
-      "transactionHash": "0x6d92f34ecd8ccf76e582c7781e3715b1b32cecc030b7e36cfd92b8d0290e7737"
+      "address": "0x28E833384b720Ad0A428935cAe8d5b49fa62A1c0",
+      "runtimeCodeHash": "0x15a2927574bf2f190a4a69c1f427327e3c6eec5009e971d0343610961e4c6e8f",
+      "transactionHash": "0xefc04a4372f174a6df374bb7a16d5ab1ca119bb21d01a529705f2f23aed2610b"
     },
     "WeightedNftFeeFanout": {
-      "address": "0x5D38705D0c40c814CF2Eeb67d9ECD885cd9708FC",
+      "address": "0x0D06A5981107629Fadf2e8104c9979afF78E9Dc6",
       "runtimeCodeHash": "0x32033799123487bd165178898a45ce0380ae907cda19a2a44c6047f67d26faa9",
-      "transactionHash": "0x554fea39512ccfde3389345c2614d5506ff0b64fc3f8439117578584bcb4b4f0"
+      "transactionHash": "0xc443c523697ef60f98c8106aa6231b11c79fe5217aec048102250453b8d63021"
     },
     "MemberV4Hook": {
-      "address": "0xAC6faA03b0dB4bB8b4dB9989653A68fd5112e540",
-      "runtimeCodeHash": "0x377bc1b180cf4272d487aba89d84e34ffeeb90064464e20a868dcbf92bb59351",
-      "transactionHash": "0xfd1e2b72162d08a402507850d0e509dc7e5e6c8e843b69695464f03358a20a28"
+      "address": "0xcA196659d69DA75F7ccDEBe5A913be1ae5D8e540",
+      "runtimeCodeHash": "0x645f35e1124b2c053b0fc128d3fc4c3359fb3d97c143e439a5b8cdd09387e244",
+      "transactionHash": "0x449dbd8a7cc8c2820b6a05412d0962430dd12100f3a1d5023d111be830f76045"
     },
     "NeutralEscrowFactory": {
-      "address": "0x1C194B26fE68A4b4801a21E4a36a89A5803aDb71",
-      "runtimeCodeHash": "0x9bd7a862fdccc54b1b4836156d4a5c15490d86ea60d7c687d01aada5963be225",
-      "transactionHash": "0x6e1ea187c95ef8f1bb8a70ef2f776ac217ee7fc734094c120f2ffc71e44738bd"
+      "address": "0x6Cd0FCA62Cd246dce867424214cd1EbDcb851EB6",
+      "runtimeCodeHash": "0xa836b4292e6d8c07cdc6b8d94962fff2b038d263db1ff24b15ba9382f8d97284",
+      "transactionHash": "0x234dffa5c364dd749311393ea608ac8b0e5c2d8b38e16407859fc0321ad02fa1"
     },
     "NeutralVault": {
-      "address": "0x3D4Ee6D147AF67371073e74206D6d49e64960f9c",
-      "runtimeCodeHash": "0x30f048d9fc0e88a8b91523e2dafee18aa25f70bfbabaa8c9c5fd370f2a3b6366",
-      "transactionHash": "0x45bc3ff850c17e9a80ff7b2a6eade054668275732dc923c260f8fdff0fcf690f"
+      "address": "0x19Bc982b4387c21e0D146b365e033dF5F14f6C85",
+      "runtimeCodeHash": "0x032ba58f74a83fab080a73dd973a8fb0ae74c046b99d34ab3379585c26b0d91f",
+      "transactionHash": "0xb3d731ec02b6239c85d4d6388e38e3eb3088f371870eee10e0126d573c89ea08"
     },
     "MemberFactory": {
-      "address": "0x4E7782e66dD5e0F5D820676F6FAe1bfC2509fa54",
-      "runtimeCodeHash": "0xcfd6ad6842a1d665d770629899c84ed1edc2242e58b4b73a0ee1094415a47f29"
+      "address": "0x7cC2c4F5E3626D136D4Caa1476996F20E45E186b",
+      "runtimeCodeHash": "0xc9a5f6e041ac12db45c69f7093277f0e6057a2c17c5d3fee00d744644b07b9f4"
     }
   },
-  "fanout": "0x0264C6739483f80285B4e6ebd342B22b3785A9F0"
+  "fanout": "0x28E833384b720Ad0A428935cAe8d5b49fa62A1c0"
 } as const;
 export default deployment;

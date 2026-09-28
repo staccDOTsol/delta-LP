@@ -3,16 +3,17 @@ import {readFileSync,writeFileSync,existsSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {homedir} from 'node:os';
 import {createPublicClient,http,keccak256,toHex} from 'viem';
-const plan=JSON.parse(readFileSync('artifacts/nft-deployment/unsigned.json','utf8'));
+const planDir=process.argv.find(x=>x.startsWith('--plan-dir='))?.slice(11)||'artifacts/nft-deployment';
+const plan=JSON.parse(readFileSync(`${planDir}/unsigned.json`,'utf8'));
 if(plan.launchMode!=='pending-contribution')throw Error('Superseded inventory-funded plan');
-const simulation=JSON.parse(readFileSync('artifacts/nft-deployment/fork-simulation.json','utf8'));
-if(simulation.planHash!==keccak256(toHex(readFileSync('artifacts/nft-deployment/unsigned.json','utf8'))))throw Error('Plan changed after fork simulation');
+const simulation=JSON.parse(readFileSync(`${planDir}/fork-simulation.json`,'utf8'));
+if(simulation.planHash!==keccak256(toHex(readFileSync(`${planDir}/unsigned.json`,'utf8'))))throw Error('Plan changed after fork simulation');
 const client=createPublicClient({transport:http(process.env.ROBINHOOD_RPC_URL||'https://rpc.mainnet.chain.robinhood.com')});
 if(await client.getChainId()!==4663)throw Error('Wrong chain');
 const block=await client.getBlock();
-const recordPath='artifacts/nft-deployment/verification.json';
+const recordPath=`${planDir}/verification.json`;
 const record=existsSync(recordPath)?JSON.parse(readFileSync(recordPath,'utf8')):{};
-const transactionPath=process.argv.find(x=>x.startsWith('--transactions='))?.slice(15)||'artifacts/nft-deployment/transactions.json';
+const transactionPath=process.argv.find(x=>x.startsWith('--transactions='))?.slice(15)||`${planDir}/transactions.json`;
 const transactions=existsSync(transactionPath)?JSON.parse(readFileSync(transactionPath,'utf8')):{};
 const artifact=name=>JSON.parse(readFileSync(`evm/out/${name}.sol/${name}.json`,'utf8'));
 const read=(name,address,functionName,args=[])=>client.readContract({address,abi:artifact(name).abi,functionName,args,blockNumber:block.number});
@@ -21,7 +22,7 @@ for(const entry of plan.deployments){
  const code=await client.getCode({address:entry.address,blockNumber:block.number});
  if(!code||keccak256(code)!==simulation.runtimeHashes[entry.address.toLowerCase()])throw Error(`${entry.label}: deployed bytecode does not match the tested fork`);
  if(!equalAddress(await read(entry.contract,entry.address,'owner'),plan.owner))throw Error('Owner mismatch');
- if(entry.contract==='DnPendingSeaDropEdition'){
+ if(['DnPendingSeaDropEdition','DnPendingSeaDropEditionV2'].includes(entry.contract)){
   const config=plan.collections.find(c=>equalAddress(c.address,entry.address));
   if(!await read(entry.contract,entry.address,'configured')||!equalAddress(await read(entry.contract,entry.address,'adapter'),plan.adapter)
       ||!equalAddress(await read(entry.contract,entry.address,'receipt'),plan.dependencies.receipt.address)

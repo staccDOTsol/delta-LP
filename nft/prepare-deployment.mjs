@@ -2,6 +2,9 @@
 // This never reads a key, broadcasts, seeds inventory, swaps or opens mints.
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {createPublicClient,http,encodeDeployData,encodeFunctionData,getCreate2Address,keccak256,toHex,concat,parseAbi} from 'viem';
+const studio=process.argv.includes('--studio');
+const editionContract=studio?'DnPendingSeaDropEditionV2':'DnPendingSeaDropEdition';
+const planDir=process.argv.find(x=>x.startsWith('--plan-dir='))?.slice(11)||'artifacts/nft-deployment';
 const owner='0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158';
 const factory='0x4e59b44847b379578588920cA78FbF26c0B4956C';
 const houseFees='0xBfac70063f04e116F5a509cC746BEeb2F053467D';
@@ -62,19 +65,19 @@ for(const edition of assets){
   const r=await fetch(url,{signal:AbortSignal.timeout(30000)});if(!r.ok)throw Error(`Unavailable public metadata for $${edition.denomination}`);
   const m=await r.json();if(!m.image||m.image.includes('REPLACE_WITH_CID'))throw Error('Invalid public image URL');
  }
- const address=deploy('DnPendingSeaDropEdition',[`Money Doubler $${edition.denomination}`,`DLP${edition.denomination}`,BigInt(edition.denomination),owner,adapter,houseFees],`edition-${edition.denomination}`);
- configure('DnPendingSeaDropEdition',address,'configure');
- configure('DnPendingSeaDropEdition',address,'setBaseURI',[edition.baseURI]);
- configure('DnPendingSeaDropEdition',address,'setContractURI',[edition.contractURI]);
- configure('DnPendingSeaDropEdition',address,'setProvenanceHash',[edition.provenanceHash]);
- configure('DnPendingSeaDropEdition',address,'updateDropURI',[dependencies.seaDrop,edition.contractURI]);
+ const address=deploy(editionContract,[`Money Doubler $${edition.denomination}`,`DLP${edition.denomination}`,BigInt(edition.denomination),owner,adapter,houseFees],`edition-${edition.denomination}`);
+ configure(editionContract,address,'configure');
+ configure(editionContract,address,'setBaseURI',[edition.baseURI]);
+ configure(editionContract,address,'setContractURI',[edition.contractURI]);
+ configure(editionContract,address,'setProvenanceHash',[edition.provenanceHash]);
+ configure(editionContract,address,'updateDropURI',[dependencies.seaDrop,edition.contractURI]);
  configure('DnPendingAdapter',adapter,'setEdition',[address,true]);
  collections.push({...edition,address});
 }
 configure('WeightedNftFeeFanout',target.weightedFanout.address,'configure',[collections.map(x=>x.address)]);
-const bundle={version:2,launchMode:'pending-contribution',status:'unsigned-paused-deployment',chainId:4663,owner,observedAt:new Date(Number(block.timestamp)*1000).toISOString(),block:String(block.number),receiptSupply:String(supply),entriesOpen:open,adapter,collections,dependencies:pinned,deployments,calls,
+const bundle={version:studio?3:2,editionContract,launchMode:'pending-contribution',status:'unsigned-paused-deployment',chainId:4663,owner,observedAt:new Date(Number(block.timestamp)*1000).toISOString(),block:String(block.number),receiptSupply:String(supply),entriesOpen:open,adapter,collections,dependencies:pinned,deployments,calls,
  openingRequirements:['Explicit pending-USDG contribution display, fixed NFT-account withdrawal and later actual-receipt claims. No seed receipt inventory is required.','Fresh bounded ETH/USDG swap quotes and exact ETH prices, sale schedule, and per-wallet mint limit.','Canonical single-writer transaction submission; do not compete with the keeper EOA.','Verified deployed source/configuration and OpenSea indexing/compatibility check.'],
  explicitlyExcluded:['No USDG/ETH capital funding, swap, trade, approval, deposit, mint or unpause transaction is included.']};
-mkdirSync('artifacts/nft-deployment',{recursive:true});
-writeFileSync('artifacts/nft-deployment/unsigned.json',JSON.stringify(bundle,(_,v)=>typeof v==='bigint'?String(v):v,2));
+mkdirSync(planDir,{recursive:true});
+writeFileSync(`${planDir}/unsigned.json`,JSON.stringify(bundle,(_,v)=>typeof v==='bigint'?String(v):v,2));
 console.log(JSON.stringify({adapter,collections:collections.map(x=>({denomination:x.denomination,address:x.address})),calls:calls.length,receiptSupply:String(supply),status:bundle.status}));

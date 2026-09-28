@@ -2,35 +2,35 @@
 export const nftOwner='0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158' as const;
 export const nftPins=[
   {
-    "address": "0x7518E5121A2841568dDE5A81eec8C962EcfCc0C5",
-    "runtimeCodeHash": "0xc38340e0d5d17037ca8178e5c1d1526feb4ee366ae619244a4e6813108c7cc54"
+    "address": "0xE454667569852d99BeB0C19c7275fAbCc2874104",
+    "runtimeCodeHash": "0xdb6440e7d08a16c4dd2a09194a5baf8bc95717a6d080e54ccc7d58c9829458c7"
   },
   {
-    "address": "0xa8dC97388FD0919A654bc05E21034afaafd1FF43",
-    "runtimeCodeHash": "0x5788116b0ed5fd5abc40047960bb82890a8938c940f54028c6bd2b05cba656fe"
+    "address": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41",
+    "runtimeCodeHash": "0xdfcb0c2ce66f292a4697b52f509cd01c9d72009fb70e1242915509a1da8fde3b"
   },
   {
-    "address": "0x95fc6306d95F8264Ad6cc5336FB8df7e58BCbb7A",
-    "runtimeCodeHash": "0x36bf217849f47ba65c5812015ebc770ca14acb34b89d0464e6fd58ba1e57224e"
+    "address": "0xd301a76601F27c682F64062b4A254fd7aed601Ea",
+    "runtimeCodeHash": "0x31fd98511d375aba2612f5bc02a4ee8dcbf77f9006449066603089033ebac4d9"
   },
   {
-    "address": "0xA09255F0D9cF94475369A962B3Df6Fd7ac926761",
-    "runtimeCodeHash": "0x7028363b010d457a7e5cd8c955a249453f0e2a27769204a50d4648a0a0bc1898"
+    "address": "0xa6D443b39fE77B8e1013482d300994cA84B5635C",
+    "runtimeCodeHash": "0xee91e8dddb0baa9b97765e05cedbf86d43f11cb29c9df2947ed496c5ccdb94d7"
   },
   {
-    "address": "0xDa66c3e243D15813E6810c0370823A67b1497672",
-    "runtimeCodeHash": "0x000ecf7847f390fc21d18edf216ef84597e61787aa221d53c55245536ac71306"
+    "address": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131",
+    "runtimeCodeHash": "0x5ec8104238f17384f91c64e254ffb6e7a3d7576a0df131e1b8ffa2c7dad649e3"
   },
   {
     "address": "0x4e59b44847b379578588920cA78FbF26c0B4956C",
     "runtimeCodeHash": "0x2fa86add0aed31f33a762c9d88e807c475bd51d0f52bd0955754b2608f7e4989"
   },
   {
-    "address": "0x3D4Ee6D147AF67371073e74206D6d49e64960f9c",
-    "runtimeCodeHash": "0x30f048d9fc0e88a8b91523e2dafee18aa25f70bfbabaa8c9c5fd370f2a3b6366"
+    "address": "0x19Bc982b4387c21e0D146b365e033dF5F14f6C85",
+    "runtimeCodeHash": "0x032ba58f74a83fab080a73dd973a8fb0ae74c046b99d34ab3379585c26b0d91f"
   },
   {
-    "address": "0x5D38705D0c40c814CF2Eeb67d9ECD885cd9708FC",
+    "address": "0x0D06A5981107629Fadf2e8104c9979afF78E9Dc6",
     "runtimeCodeHash": "0x32033799123487bd165178898a45ce0380ae907cda19a2a44c6047f67d26faa9"
   },
   {

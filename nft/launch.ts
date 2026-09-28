@@ -40,7 +40,7 @@ try{
   console.log('Quote capacity is bounded by remaining NFT inventory; quotes expire after 10 minutes without updates.');
   console.log(`${preview.calls.length} calls in the next setup stage. The same journal also serves the strategy operator; never run a second signer.`);
   let gas:bigint;
-  for(;;){try{gas=parseOperatorAmount(await io.question('Lifetime gas budget for the shared v5 journal, in ETH: '),18);break;}catch(e){console.error((e as Error).message);}}
+  for(;;){try{gas=parseOperatorAmount(await io.question(`Lifetime gas budget for the shared ${deployment.version} journal, in ETH: `),18);break;}catch(e){console.error((e as Error).message);}}
   settings={...existing,maxMemberAssets:existing.maxMemberAssets??'0',maxOrderNotional:existing.maxOrderNotional??'0',maximumGasWei:String(gas!),
     refreshSeconds:15,cancelAfterSeconds:5,pollSeconds:10,ownerBootstrap:false,nftOnly:true,nftSale:proposed};
   const provided=(await io.question('Key-file path [~/staccoverflow.eth] — path only: ')).trim();

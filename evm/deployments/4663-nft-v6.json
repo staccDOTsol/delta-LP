@@ -1,0 +1,548 @@
+{
+  "version": "v6",
+  "chainId": 4663,
+  "planHash": "0xf43b7156b1b896b0bdbd032044f5e3e4ee507841033f7f23892b8144786872b7",
+  "owner": "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158",
+  "status": "deployed-paused",
+  "adapter": "0xE454667569852d99BeB0C19c7275fAbCc2874104",
+  "editionContract": "DnPendingSeaDropEditionV2",
+  "collections": [
+    {
+      "denomination": 1,
+      "count": 10000,
+      "sourceHash": "67b222d1aa4a4f513515ca4bcf360d123fe4dc614dc81c187af29d9e1b929445",
+      "provenanceHash": "0xfa879a7acc264cccf5f05e0b037483dfc064b1d327897127553b41a77ae098e0",
+      "baseURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/1/67b222d1aa4a4f513515ca4bcf360d123fe4dc614dc81c187af29d9e1b929445/metadata/",
+      "contractURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/1/67b222d1aa4a4f513515ca4bcf360d123fe4dc614dc81c187af29d9e1b929445/collection.json",
+      "preview": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/1/67b222d1aa4a4f513515ca4bcf360d123fe4dc614dc81c187af29d9e1b929445/images/1.png",
+      "manifest": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/1/67b222d1aa4a4f513515ca4bcf360d123fe4dc614dc81c187af29d9e1b929445/manifest.json",
+      "verifiedAt": "2026-09-28T08:06:35.460Z",
+      "verification": "All metadata GET/hash + all image HEAD/size; 11 image GET/hash samples per edition",
+      "address": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41"
+    },
+    {
+      "denomination": 2,
+      "count": 10000,
+      "sourceHash": "483cb9583e8dc808e16ae27e091d3c0829f0c8ffc461de02be4e84bc249c6d96",
+      "provenanceHash": "0x63a9390c3cf4256cf0c403aff2ca42c28728958584e80ea2d53495e397d63312",
+      "baseURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/2/483cb9583e8dc808e16ae27e091d3c0829f0c8ffc461de02be4e84bc249c6d96/metadata/",
+      "contractURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/2/483cb9583e8dc808e16ae27e091d3c0829f0c8ffc461de02be4e84bc249c6d96/collection.json",
+      "preview": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/2/483cb9583e8dc808e16ae27e091d3c0829f0c8ffc461de02be4e84bc249c6d96/images/1.png",
+      "manifest": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/2/483cb9583e8dc808e16ae27e091d3c0829f0c8ffc461de02be4e84bc249c6d96/manifest.json",
+      "verifiedAt": "2026-09-28T08:11:52.716Z",
+      "verification": "All metadata GET/hash + all image HEAD/size; 11 image GET/hash samples per edition",
+      "address": "0xd301a76601F27c682F64062b4A254fd7aed601Ea"
+    },
+    {
+      "denomination": 5,
+      "count": 10000,
+      "sourceHash": "2a5060dafde9802cedebaec481ac94d6e9ce92e4f0e15cb458e9f824fd8e9c93",
+      "provenanceHash": "0x0475c2f9fada2a6641abb752ca6271bb2fa5c2a4d1c786232cf71ec52fcbd052",
+      "baseURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/5/2a5060dafde9802cedebaec481ac94d6e9ce92e4f0e15cb458e9f824fd8e9c93/metadata/",
+      "contractURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/5/2a5060dafde9802cedebaec481ac94d6e9ce92e4f0e15cb458e9f824fd8e9c93/collection.json",
+      "preview": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/5/2a5060dafde9802cedebaec481ac94d6e9ce92e4f0e15cb458e9f824fd8e9c93/images/1.png",
+      "manifest": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/5/2a5060dafde9802cedebaec481ac94d6e9ce92e4f0e15cb458e9f824fd8e9c93/manifest.json",
+      "verifiedAt": "2026-09-28T08:17:16.829Z",
+      "verification": "All metadata GET/hash + all image HEAD/size; 11 image GET/hash samples per edition",
+      "address": "0xa6D443b39fE77B8e1013482d300994cA84B5635C"
+    },
+    {
+      "denomination": 10,
+      "count": 10000,
+      "sourceHash": "d753926317deb4dd0deaa06c055b6f8b4f0b59e8e384c8b24a75a34e1cfe0afc",
+      "provenanceHash": "0x9d20c2d91c474d2d2071419efd681ff6337d28cdb247bf373fe356feb172e711",
+      "baseURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/10/d753926317deb4dd0deaa06c055b6f8b4f0b59e8e384c8b24a75a34e1cfe0afc/metadata/",
+      "contractURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/10/d753926317deb4dd0deaa06c055b6f8b4f0b59e8e384c8b24a75a34e1cfe0afc/collection.json",
+      "preview": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/10/d753926317deb4dd0deaa06c055b6f8b4f0b59e8e384c8b24a75a34e1cfe0afc/images/1.png",
+      "manifest": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/10/d753926317deb4dd0deaa06c055b6f8b4f0b59e8e384c8b24a75a34e1cfe0afc/manifest.json",
+      "verifiedAt": "2026-09-28T08:21:58.313Z",
+      "verification": "All metadata GET/hash + all image HEAD/size; 11 image GET/hash samples per edition",
+      "address": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131"
+    }
+  ],
+  "dependencies": {
+    "create2": {
+      "address": "0x4e59b44847b379578588920cA78FbF26c0B4956C",
+      "runtimeCodeHash": "0x2fa86add0aed31f33a762c9d88e807c475bd51d0f52bd0955754b2608f7e4989"
+    },
+    "receipt": {
+      "address": "0x19Bc982b4387c21e0D146b365e033dF5F14f6C85",
+      "runtimeCodeHash": "0x032ba58f74a83fab080a73dd973a8fb0ae74c046b99d34ab3379585c26b0d91f"
+    },
+    "weightedFanout": {
+      "address": "0x0D06A5981107629Fadf2e8104c9979afF78E9Dc6",
+      "runtimeCodeHash": "0x32033799123487bd165178898a45ce0380ae907cda19a2a44c6047f67d26faa9"
+    },
+    "houseFees": {
+      "address": "0xBfac70063f04e116F5a509cC746BEeb2F053467D",
+      "runtimeCodeHash": "0x264c0c86568e4a21b566578647bf6fa0f5c43d7831e7b28e408459c69abe6df2"
+    },
+    "seaDrop": {
+      "address": "0x00005EA00Ac477B1030CE78506496e8C2dE24bf5",
+      "runtimeCodeHash": "0x53e4b9339cf624803c9a7d0195576cca5b917920813508d86b3eb93dcbabeb5c"
+    },
+    "registry": {
+      "address": "0x000000006551c19487814612e58FE06813775758",
+      "runtimeCodeHash": "0xda1d5b06e579f9e42e59b00fbc22939896ecb38dc8830d40de0a2508fecd6735"
+    },
+    "accountImplementation": {
+      "address": "0x41C8f39463A868d3A88af00cd0fe7102F30E44eC",
+      "runtimeCodeHash": "0xdf5eeb80b53e48dfd667fff5264976de4004fdd27eef4f6b954d182109f0f85b"
+    },
+    "poolManager": {
+      "address": "0x8366a39CC670B4001A1121B8F6A443A643e40951",
+      "runtimeCodeHash": "0xbd3881180b547f5fe817545743cfb4343e96b1bc6640dcd70c106b0066e95626"
+    },
+    "swapHook": {
+      "address": "0xC74E7983718DAEEfE5dA80690Afbd65d7eF74088",
+      "runtimeCodeHash": "0xa9bb63f2396e50fa055cac1f2a6093f8352b37b7a773b2f406a6acf118350fbb"
+    },
+    "usdg": {
+      "address": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
+      "runtimeCodeHash": "0x864cc9ad53b338b82da1f7cab85ab0b3d5c8861acb422b6fec63cf36234f36a6"
+    }
+  },
+  "deployments": [
+    {
+      "label": "pending-adapter",
+      "contract": "DnPendingAdapter",
+      "address": "0xE454667569852d99BeB0C19c7275fAbCc2874104",
+      "constructorArgs": [
+        "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158",
+        "0x19Bc982b4387c21e0D146b365e033dF5F14f6C85",
+        "0x032ba58f74a83fab080a73dd973a8fb0ae74c046b99d34ab3379585c26b0d91f"
+      ],
+      "creationCodeHash": "0x9474aaf272fe4474ecf062a0d3f15e3dcf7e9fd3231abd1299b53b72f212c316",
+      "transactionHash": "0xa8c02b1ea59bf5ce8db9cd1a950b7ba792a3296f77b26715cfcdd25ed7d0d772",
+      "runtimeCodeHash": "0xdb6440e7d08a16c4dd2a09194a5baf8bc95717a6d080e54ccc7d58c9829458c7"
+    },
+    {
+      "label": "edition-1",
+      "contract": "DnPendingSeaDropEditionV2",
+      "address": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41",
+      "constructorArgs": [
+        "Money Doubler $1",
+        "DLP1",
+        "1",
+        "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158",
+        "0xE454667569852d99BeB0C19c7275fAbCc2874104",
+        "0xBfac70063f04e116F5a509cC746BEeb2F053467D"
+      ],
+      "creationCodeHash": "0x38b732afa4ab39c47c175901c7235c47d600aaa3cd4f753c7f081b8976c5200a",
+      "transactionHash": "0xb6cd9de0e11b884eccf275152839384fe27fd0c38693942a72b638219521d825",
+      "runtimeCodeHash": "0xdfcb0c2ce66f292a4697b52f509cd01c9d72009fb70e1242915509a1da8fde3b"
+    },
+    {
+      "label": "edition-2",
+      "contract": "DnPendingSeaDropEditionV2",
+      "address": "0xd301a76601F27c682F64062b4A254fd7aed601Ea",
+      "constructorArgs": [
+        "Money Doubler $2",
+        "DLP2",
+        "2",
+        "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158",
+        "0xE454667569852d99BeB0C19c7275fAbCc2874104",
+        "0xBfac70063f04e116F5a509cC746BEeb2F053467D"
+      ],
+      "creationCodeHash": "0x13dd60bfad32651b211efb84b59ba269f602bbfb067cccc1742e10326fa1e3a4",
+      "transactionHash": "0x1255e51e4e5ec7994a952d3ee4cf6b55c81aee2c2eeb2410e93a562ea51e3c67",
+      "runtimeCodeHash": "0x31fd98511d375aba2612f5bc02a4ee8dcbf77f9006449066603089033ebac4d9"
+    },
+    {
+      "label": "edition-5",
+      "contract": "DnPendingSeaDropEditionV2",
+      "address": "0xa6D443b39fE77B8e1013482d300994cA84B5635C",
+      "constructorArgs": [
+        "Money Doubler $5",
+        "DLP5",
+        "5",
+        "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158",
+        "0xE454667569852d99BeB0C19c7275fAbCc2874104",
+        "0xBfac70063f04e116F5a509cC746BEeb2F053467D"
+      ],
+      "creationCodeHash": "0xbf708b38823c4b10f56316fd5b8cc672605402178c79d1dc65d3116c49fc4c26",
+      "transactionHash": "0xb9f522b0a0deec38ec79be795412c44b7b2fef4b5e17c4da71a1a06adf4d7045",
+      "runtimeCodeHash": "0xee91e8dddb0baa9b97765e05cedbf86d43f11cb29c9df2947ed496c5ccdb94d7"
+    },
+    {
+      "label": "edition-10",
+      "contract": "DnPendingSeaDropEditionV2",
+      "address": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131",
+      "constructorArgs": [
+        "Money Doubler $10",
+        "DLP10",
+        "10",
+        "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158",
+        "0xE454667569852d99BeB0C19c7275fAbCc2874104",
+        "0xBfac70063f04e116F5a509cC746BEeb2F053467D"
+      ],
+      "creationCodeHash": "0x2c055f931f31de1d36b90b6e39e9eb8e50a9fc7f68fec0d6813da5fc8e421d31",
+      "transactionHash": "0xacabd8fb9889d9f1c6241ee78f334697c0908deaa32138c698e5dc1e8833793b",
+      "runtimeCodeHash": "0x5ec8104238f17384f91c64e254ffb6e7a3d7576a0df131e1b8ffa2c7dad649e3"
+    }
+  ],
+  "calls": [
+    {
+      "index": 0,
+      "label": "Deploy pending-adapter",
+      "to": "0x4e59b44847b379578588920cA78FbF26c0B4956C",
+      "dataHash": "0x5126748d861cef631b8ea3c21ea6f1f31d8ddda75fa4647303c1fef6ce93d0c8",
+      "nonce": 49581,
+      "hash": "0xa8c02b1ea59bf5ce8db9cd1a950b7ba792a3296f77b26715cfcdd25ed7d0d772",
+      "maxGasCostWei": "121525980960000",
+      "status": "success",
+      "block": "74719958",
+      "actualGasCostWei": "79185268188000"
+    },
+    {
+      "index": 1,
+      "label": "Deploy edition-1",
+      "to": "0x4e59b44847b379578588920cA78FbF26c0B4956C",
+      "dataHash": "0x3e353843965e1b324390356a7b759827c678a950505a2e588de680ed49870c74",
+      "nonce": 49582,
+      "hash": "0xb6cd9de0e11b884eccf275152839384fe27fd0c38693942a72b638219521d825",
+      "maxGasCostWei": "150987433085000",
+      "status": "success",
+      "block": "74719993",
+      "actualGasCostWei": "98269554996000"
+    },
+    {
+      "index": 2,
+      "label": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41: configure",
+      "to": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41",
+      "dataHash": "0x18d986fbdfd38ff7b02c4cb48fb4d481d45368cb9f5a09e72e11613332a52e90",
+      "nonce": 49583,
+      "hash": "0x2bc77b3537264d87d7ca7370ef60138193e84e571285aa9faf218f4c68e71fcc",
+      "maxGasCostWei": "4072183672500",
+      "status": "success",
+      "block": "74720012",
+      "actualGasCostWei": "2665241232000"
+    },
+    {
+      "index": 3,
+      "label": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41: setBaseURI",
+      "to": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41",
+      "dataHash": "0x43074aa3f9407b7ae66fd2616fede4a26487b364fecb93f3779cb83315447732",
+      "nonce": 49584,
+      "hash": "0xd5202b513fb6499c6022548d9952140663b04c32a8bb051940985139ef96504b",
+      "maxGasCostWei": "5449028300000",
+      "status": "success",
+      "block": "74720039",
+      "actualGasCostWei": "3512985316000"
+    },
+    {
+      "index": 4,
+      "label": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41: setContractURI",
+      "to": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41",
+      "dataHash": "0xc744ed594ca224700e63306dc119bfaeb3bfc96817f584f0a12cca6a9c9566e4",
+      "nonce": 49585,
+      "hash": "0xf804ea214247df058d8f2c3fa9793228b4f5285759243075ffa4818095af8d57",
+      "maxGasCostWei": "5452898250000",
+      "status": "success",
+      "block": "74720067",
+      "actualGasCostWei": "3544862780000"
+    },
+    {
+      "index": 5,
+      "label": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41: setProvenanceHash",
+      "to": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41",
+      "dataHash": "0xce47df1550fcaf38579810d8689952dec1194577564514a8098da0dd62482325",
+      "nonce": 49586,
+      "hash": "0xa6894d466cc4206267f7222669d1094e89cbdcf1c3ef5990e3b34fc823f566d8",
+      "maxGasCostWei": "1744541287500",
+      "status": "success",
+      "block": "74720092",
+      "actualGasCostWei": "1118129688000"
+    },
+    {
+      "index": 6,
+      "label": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41: updateDropURI",
+      "to": "0x97E78A8aEEEb79076dBfbaBB23F016be7c354F41",
+      "dataHash": "0x63ad9d78491551aa0615f1f8f52569ee71b5f74cdd9f41a245c0809fd8c8179b",
+      "nonce": 49587,
+      "hash": "0x936cec12c0f8754c02fe15c5e2fc1a378392b38c0a3fa22c4428682989ea49f7",
+      "maxGasCostWei": "1491522322500",
+      "status": "success",
+      "block": "74720142",
+      "actualGasCostWei": "951836616000"
+    },
+    {
+      "index": 7,
+      "label": "0xE454667569852d99BeB0C19c7275fAbCc2874104: setEdition",
+      "to": "0xE454667569852d99BeB0C19c7275fAbCc2874104",
+      "dataHash": "0xde78b2b22f01bf82312f2346cd6dbb2ddd9901138939bd18df7be4cafef8b200",
+      "nonce": 49588,
+      "hash": "0x6c1401e66486ba85c947cb409a0e9135cd7f7738920a2d3c11e6a57b78dd8f60",
+      "maxGasCostWei": "1738609140000",
+      "status": "success",
+      "block": "74720160",
+      "actualGasCostWei": "1114616860000"
+    },
+    {
+      "index": 8,
+      "label": "Deploy edition-2",
+      "to": "0x4e59b44847b379578588920cA78FbF26c0B4956C",
+      "dataHash": "0xe5bf45e89a2cd78b9c63f2bd2e94fd4fdbc8c4534a00f19e2ec9ad738519e235",
+      "nonce": 49589,
+      "hash": "0x1255e51e4e5ec7994a952d3ee4cf6b55c81aee2c2eeb2410e93a562ea51e3c67",
+      "maxGasCostWei": "149984150000000",
+      "status": "success",
+      "block": "74720196",
+      "actualGasCostWei": "97715117500000"
+    },
+    {
+      "index": 9,
+      "label": "0xd301a76601F27c682F64062b4A254fd7aed601Ea: configure",
+      "to": "0xd301a76601F27c682F64062b4A254fd7aed601Ea",
+      "dataHash": "0x18d986fbdfd38ff7b02c4cb48fb4d481d45368cb9f5a09e72e11613332a52e90",
+      "nonce": 49590,
+      "hash": "0x892929ba20be34ce817318f0c17719ddcf896204c321b0c0a85b8964a421ae1e",
+      "maxGasCostWei": "4049540212500",
+      "status": "success",
+      "block": "74720214",
+      "actualGasCostWei": "2647120000000"
+    },
+    {
+      "index": 10,
+      "label": "0xd301a76601F27c682F64062b4A254fd7aed601Ea: setBaseURI",
+      "to": "0xd301a76601F27c682F64062b4A254fd7aed601Ea",
+      "dataHash": "0x284777000f71492609c38ef2052294c584db2b39dc1ef4768499586ed35d1449",
+      "nonce": 49591,
+      "hash": "0x0b77ba5af9dc9c38a3e6a1394e8c52ce1707cc6076e1863467c56ec6961d5383",
+      "maxGasCostWei": "5393623570000",
+      "status": "success",
+      "block": "74720231",
+      "actualGasCostWei": "3532911840000"
+    },
+    {
+      "index": 11,
+      "label": "0xd301a76601F27c682F64062b4A254fd7aed601Ea: setContractURI",
+      "to": "0xd301a76601F27c682F64062b4A254fd7aed601Ea",
+      "dataHash": "0x87f38b460df5896007db4eb64f072eb5e8aea1ba96f831226e1d9ee1187d4ca4",
+      "nonce": 49592,
+      "hash": "0x0ab228c19a4c9f713e72a4e8fdb716a18cbf83fe0ac547a8ad2dbdda2194eae7",
+      "maxGasCostWei": "5477375100000",
+      "status": "success",
+      "block": "74720248",
+      "actualGasCostWei": "3557342208000"
+    },
+    {
+      "index": 12,
+      "label": "0xd301a76601F27c682F64062b4A254fd7aed601Ea: setProvenanceHash",
+      "to": "0xd301a76601F27c682F64062b4A254fd7aed601Ea",
+      "dataHash": "0xbf060455562a0527c80a38574574cbd9ff362d82febb12a61fa5beab68311854",
+      "nonce": 49593,
+      "hash": "0x333e35934c29cc4aa0dc0546903eed81fcfc6802277894273b97e24b6089d223",
+      "maxGasCostWei": "1735528257500",
+      "status": "success",
+      "block": "74720265",
+      "actualGasCostWei": "1117816434000"
+    },
+    {
+      "index": 13,
+      "label": "0xd301a76601F27c682F64062b4A254fd7aed601Ea: updateDropURI",
+      "to": "0xd301a76601F27c682F64062b4A254fd7aed601Ea",
+      "dataHash": "0x552affdb39b5acc936862277b2f7b340f51af8901d34e53e63c7c5f06f7de25e",
+      "nonce": 49594,
+      "hash": "0xefad7da4faaac94e8ed56e497489a91a032510eca0e3aff03387ef940d6d9458",
+      "maxGasCostWei": "1494355365000",
+      "status": "success",
+      "block": "74720282",
+      "actualGasCostWei": "943500610000"
+    },
+    {
+      "index": 14,
+      "label": "0xE454667569852d99BeB0C19c7275fAbCc2874104: setEdition",
+      "to": "0xE454667569852d99BeB0C19c7275fAbCc2874104",
+      "dataHash": "0x11d3cd5c599acc77a58712327d3ff1489886d11ae3cd826e3d26cba341c97d4c",
+      "nonce": 49595,
+      "hash": "0x84a27b3671b05502f2c1fab2b7f2c23f41c00b1c0685c1ae279590de578a9987",
+      "maxGasCostWei": "1744325400000",
+      "status": "success",
+      "block": "74720299",
+      "actualGasCostWei": "1114304408000"
+    },
+    {
+      "index": 15,
+      "label": "Deploy edition-5",
+      "to": "0x4e59b44847b379578588920cA78FbF26c0B4956C",
+      "dataHash": "0x897b1f0cfd39cf5b5aeb27d16ab6cf3017c4120a3b6601c7e60185c98c5e221a",
+      "nonce": 49596,
+      "hash": "0xb9f522b0a0deec38ec79be795412c44b7b2fef4b5e17c4da71a1a06adf4d7045",
+      "maxGasCostWei": "150704802400000",
+      "status": "success",
+      "block": "74720317",
+      "actualGasCostWei": "97761642830000"
+    },
+    {
+      "index": 16,
+      "label": "0xa6D443b39fE77B8e1013482d300994cA84B5635C: configure",
+      "to": "0xa6D443b39fE77B8e1013482d300994cA84B5635C",
+      "dataHash": "0x18d986fbdfd38ff7b02c4cb48fb4d481d45368cb9f5a09e72e11613332a52e90",
+      "nonce": 49597,
+      "hash": "0x67c1100c8f9a6dd035e247be012639702ef934c630ceb84a750efaeec94e145d",
+      "maxGasCostWei": "4051966297500",
+      "status": "success",
+      "block": "74720334",
+      "actualGasCostWei": "2649473334000"
+    },
+    {
+      "index": 17,
+      "label": "0xa6D443b39fE77B8e1013482d300994cA84B5635C: setBaseURI",
+      "to": "0xa6D443b39fE77B8e1013482d300994cA84B5635C",
+      "dataHash": "0x4cacf66048479824552d01b004d688fa7cd0d793b9d0a671490881a9a231590b",
+      "nonce": 49598,
+      "hash": "0xa000bf1cfc96f07a589fdc89ffbdf675e808dd93df94ee42f1fa43190e818930",
+      "maxGasCostWei": "5414602060000",
+      "status": "success",
+      "block": "74720351",
+      "actualGasCostWei": "3540929640000"
+    },
+    {
+      "index": 18,
+      "label": "0xa6D443b39fE77B8e1013482d300994cA84B5635C: setContractURI",
+      "to": "0xa6D443b39fE77B8e1013482d300994cA84B5635C",
+      "dataHash": "0xaf1b88caba6a0e433c14dd681e55e860a90c8822767cec0ed6a2512789427aaf",
+      "nonce": 49599,
+      "hash": "0x0f36dc74d1d9c0c56fd10a756cf9ce352c8789db79cdec316923eb07134bc3ee",
+      "maxGasCostWei": "5456161830000",
+      "status": "success",
+      "block": "74720368",
+      "actualGasCostWei": "3608644400000"
+    },
+    {
+      "index": 19,
+      "label": "0xa6D443b39fE77B8e1013482d300994cA84B5635C: setProvenanceHash",
+      "to": "0xa6D443b39fE77B8e1013482d300994cA84B5635C",
+      "dataHash": "0x8649280cb5df18386a8663a95ff0df349feb48f52cb92a9c7be18c4998c5a11b",
+      "nonce": 49600,
+      "hash": "0xdbedd96597e3b2762d8176fdd5689ab32ede34dbd09710c4dfe90bbf90283f86",
+      "maxGasCostWei": "1745407925000",
+      "status": "success",
+      "block": "74720396",
+      "actualGasCostWei": "1113985388000"
+    },
+    {
+      "index": 20,
+      "label": "0xa6D443b39fE77B8e1013482d300994cA84B5635C: updateDropURI",
+      "to": "0xa6D443b39fE77B8e1013482d300994cA84B5635C",
+      "dataHash": "0xb1f56f25f77b79539a20da05780d258c294ec926f01ce45908eba7d0d3d84813",
+      "nonce": 49601,
+      "hash": "0x6d85c660a542871dbed80ca26536e4aae7ee9bec64e8cde4b01b07164ce7f49c",
+      "maxGasCostWei": "1494504472500",
+      "status": "success",
+      "block": "74720413",
+      "actualGasCostWei": "944120000000"
+    },
+    {
+      "index": 21,
+      "label": "0xE454667569852d99BeB0C19c7275fAbCc2874104: setEdition",
+      "to": "0xE454667569852d99BeB0C19c7275fAbCc2874104",
+      "dataHash": "0x867b9bf0ba8c26877f5fa62b495791622f6e705a0890e1d8acfd8be0ff6c5cda",
+      "nonce": 49602,
+      "hash": "0x452acef2d58b01e74a894b0e0e7607a523e832012b36040bdfcb968e76f58cab",
+      "maxGasCostWei": "1732200000000",
+      "status": "success",
+      "block": "74720440",
+      "actualGasCostWei": "1125260640000"
+    },
+    {
+      "index": 22,
+      "label": "Deploy edition-10",
+      "to": "0x4e59b44847b379578588920cA78FbF26c0B4956C",
+      "dataHash": "0x6c1987fc9de8786a226170cbe6157e08a0e1584d87f407bc2073183717f9f5fe",
+      "nonce": 49603,
+      "hash": "0xacabd8fb9889d9f1c6241ee78f334697c0908deaa32138c698e5dc1e8833793b",
+      "maxGasCostWei": "149988150000000",
+      "status": "success",
+      "block": "74720458",
+      "actualGasCostWei": "98135900640000"
+    },
+    {
+      "index": 23,
+      "label": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131: configure",
+      "to": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131",
+      "dataHash": "0x18d986fbdfd38ff7b02c4cb48fb4d481d45368cb9f5a09e72e11613332a52e90",
+      "nonce": 49604,
+      "hash": "0x85fc4bbf1b79c8625ff03e59a6cbfced97789b2cdbdbca6e95442804b84528f3",
+      "maxGasCostWei": "4077440190000",
+      "status": "success",
+      "block": "74720486",
+      "actualGasCostWei": "2677664736000"
+    },
+    {
+      "index": 24,
+      "label": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131: setBaseURI",
+      "to": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131",
+      "dataHash": "0x26e117a069ab6a06b8b7053a3c4c4effde13e67334699bab13d0ae7cd80e4421",
+      "nonce": 49605,
+      "hash": "0x1f511e81e41f94f0775771a47d787b9fa9dc3f1565463a8d5eba9c05065a8403",
+      "maxGasCostWei": "5423586695000",
+      "status": "success",
+      "block": "74720503",
+      "actualGasCostWei": "3497447850000"
+    },
+    {
+      "index": 25,
+      "label": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131: setContractURI",
+      "to": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131",
+      "dataHash": "0x7d867debc560ce2a2739378ecf5ee67672cb9444d3963f9d4032204928f61a45",
+      "nonce": 49606,
+      "hash": "0xb92f6207fd982a85f7432ca91e8ff41f2bd53002b943ac49bd3a9901f5ca4c6e",
+      "maxGasCostWei": "5440737930000",
+      "status": "success",
+      "block": "74720531",
+      "actualGasCostWei": "3535580000000"
+    },
+    {
+      "index": 26,
+      "label": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131: setProvenanceHash",
+      "to": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131",
+      "dataHash": "0xb84fd3755f8509acf9613e4bed752a0c4ff8ede32c0b2658f6cbbdff59d3d6a6",
+      "nonce": 49607,
+      "hash": "0x5d6dcc8bfdf14700bdb5260b801a25750b3b7cdf24a2709fb03c6e4d418fc7d6",
+      "maxGasCostWei": "1734141637500",
+      "status": "success",
+      "block": "74720548",
+      "actualGasCostWei": "1114814440000"
+    },
+    {
+      "index": 27,
+      "label": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131: updateDropURI",
+      "to": "0xcF07E0A91EDECCf9aA377BF8d451d50D8f998131",
+      "dataHash": "0xa2b8bb9fb15140def8ebcf8bba6d082be8d35ad26ac5e2dce7cf504181cb35ca",
+      "nonce": 49608,
+      "hash": "0x9184c1264df747cecf32657d556c718d9127aee50c00651dd3b5d19be319fd33",
+      "maxGasCostWei": "1501144425000",
+      "status": "success",
+      "block": "74720575",
+      "actualGasCostWei": "949530816000"
+    },
+    {
+      "index": 28,
+      "label": "0xE454667569852d99BeB0C19c7275fAbCc2874104: setEdition",
+      "to": "0xE454667569852d99BeB0C19c7275fAbCc2874104",
+      "dataHash": "0xcc7dfb9febb389c58b74abbd7e24eb6e35b0221c2baf9652c9127133b5ba9eaf",
+      "nonce": 49609,
+      "hash": "0xb7be48cf86bcd9b23e9aa802366b8009e6d88cf2dd2a68763cb0ee2a04ce4359",
+      "maxGasCostWei": "1737743040000",
+      "status": "success",
+      "block": "74720592",
+      "actualGasCostWei": "1109847168000"
+    },
+    {
+      "index": 29,
+      "label": "0x0D06A5981107629Fadf2e8104c9979afF78E9Dc6: configure",
+      "to": "0x0D06A5981107629Fadf2e8104c9979afF78E9Dc6",
+      "dataHash": "0x1626542cc80597b4ae477ca01bb9df07fb3f8823b643a75c882aa07c1a849acf",
+      "nonce": 49610,
+      "hash": "0xa77f4856c360bcfc9644bd1eacb243563c75a68fb0ad480a20ee0885076126cf",
+      "maxGasCostWei": "4701325000000",
+      "status": "success",
+      "block": "74720609",
+      "actualGasCostWei": "3099216384000"
+    }
+  ],
+  "verifiedAt": "2026-09-28T10:19:49.003Z",
+  "gasCostETH": "0.000525854666942"
+}
