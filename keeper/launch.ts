@@ -55,7 +55,14 @@ try{
     if(listing.status!==0||JSON.parse(listing.stdout).filter((m:{state:string})=>m.state!=='destroyed').length!==1)throw new Error('Expected exactly one deployed Fly keeper Machine before activation.');
     console.log(`This uploads the selected private key and limits to Fly.io encrypted secrets for ${app}, then starts its real signing worker.`);
   }
+  const settings=JSON.parse(readFileSync(configPath,'utf8'));
+  for(const field of ['maxMemberAssets','maxOrderNotional'])if(!/^\d+$/.test(settings[field])||BigInt(settings[field])===0n)
+    settings[field]=String(await askAmount(field==='maxMemberAssets'?'Maximum member equity, USDG (or unlimited): ':'Maximum order notional, USDG: ',6,field==='maxMemberAssets'));
+  // Retain NFT quote operation while explicitly enabling the shared trading loop.
+  settings.nftOnly=false;settings.ownerBootstrap=true;
+  console.log('Settings for this launch:',JSON.stringify(settings,null,2));
   if((await io.question('Type START to enable owner bootstrap and run real transactions: ')).trim()!=='START')throw new Error('Stopped without starting the operator.');
+  writeFileSync(configPath,JSON.stringify(settings,null,2)+'\n',{mode:0o600});
   chmodSync(keyFile,0o600);
 }finally{io.close();}
 let child;

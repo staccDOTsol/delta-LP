@@ -1,0 +1,69 @@
+{
+  "at": "2026-09-28T09:28:00.041Z",
+  "mode": "LOCAL FORK ONLY — fake ETH",
+  "stages": [
+    [
+      "updatePublicDrop",
+      "updatePublicDrop",
+      "updatePublicDrop",
+      "updatePublicDrop"
+    ],
+    [
+      "setQuote",
+      "setFundingQuote",
+      "setFundingQuote",
+      "setFundingQuote",
+      "setFundingQuote"
+    ],
+    [
+      "setPaused"
+    ],
+    [
+      "setPaused",
+      "setPaused",
+      "setPaused",
+      "setPaused"
+    ]
+  ],
+  "minted": [
+    {
+      "denomination": 1,
+      "account": "0x9aaF63C27FaE22768dC610650598B4FA84a79569",
+      "batch": "0xf7B67F16D25f9D7213Ab9C71Cee49EeDEd04d8bd",
+      "contribution": "890000",
+      "gasUsed": "2558014"
+    },
+    {
+      "denomination": 2,
+      "account": "0xd041908423b53eE4Acd433af5a9D14f172645eb3",
+      "batch": "0xf7B67F16D25f9D7213Ab9C71Cee49EeDEd04d8bd",
+      "contribution": "1780000",
+      "gasUsed": "859320"
+    },
+    {
+      "denomination": 5,
+      "account": "0x7d1586d01cA91A8701A00A49bc7c22a88634b575",
+      "batch": "0xf7B67F16D25f9D7213Ab9C71Cee49EeDEd04d8bd",
+      "contribution": "4449997",
+      "gasUsed": "859320"
+    },
+    {
+      "denomination": 10,
+      "account": "0x5aA4cC5ef49E120d1149d8A3CDdA78A1d94aBB31",
+      "batch": "0xf7B67F16D25f9D7213Ab9C71Cee49EeDEd04d8bd",
+      "contribution": "8899982",
+      "gasUsed": "859320"
+    }
+  ],
+  "checks": [
+    "all four real SeaDrop mints",
+    "pending USDG contribution per NFT",
+    "one shared contribution batch",
+    "NFT transfer changes cash control",
+    "old owner cannot withdraw",
+    "3 USDG direct deposit before 2,000 threshold",
+    "full pending refund",
+    "zero premature DN receipt supply",
+    "stale quotes reject mint atomically"
+  ]
+}

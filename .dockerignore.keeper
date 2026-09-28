@@ -7,6 +7,8 @@
 !keeper/**
 !strategy/
 !strategy/**
+!nft/
+!nft/sale-policy.ts
 !evm/
 !evm/deployments/
 !evm/deployments/4663-neutral-v*-registry.json

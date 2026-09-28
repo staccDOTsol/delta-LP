@@ -17,6 +17,7 @@ export function NeutralPanel(){
   const [txHash,setTxHash]=useState(''),[minimum,setMinimum]=useState(''),[cashMinimum,setCashMinimum]=useState('');
   const [exits,setExits]=useState<Exit[]>([]),[exitLimit,setExitLimit]=useState(10);
   const [walletCash,setWalletCash]=useState<{address:string;balance?:bigint;error?:string}>(),[balanceRetry,setBalanceRetry]=useState(0);
+  const [coordinator,setCoordinator]=useState('');
   const running=useRef(false);
   const refreshSequence=useRef(0);
   async function refresh(c=client){
@@ -32,6 +33,11 @@ export function NeutralPanel(){
       const body=await response.json() as {vaults:NeutralState[]};if(sequence===refreshSequence.current)setState(body.vaults[0]);
     }
   }
+  useEffect(()=>{
+    let active=true;setCoordinator('');
+    if(client)void client.coordinator().then(address=>{if(active)setCoordinator(address.toLowerCase());}).catch(()=>{});
+    return()=>{active=false;};
+  },[client]);
   useEffect(()=>{
     if(!client)return;
     let active=true,pending=false;
@@ -86,6 +92,7 @@ export function NeutralPanel(){
     {state?<div className="account-summary"><dl><div><dt>Pending batch</dt><dd>{usd(state.pendingAssets)} / {usd(state.minimumBatchAssets)} USDG</dd></div><div><dt>Receipt supply</dt><dd>{shares(BigInt(state.totalSupply))}</dd></div><div><dt>Pool state</dt><dd>{!state.configured?'Configuring all tiers':!state.entriesOpen?'Entries closed':state.phase===0?'Collecting':state.phase===1?'Building positions':'Refunds available'}</dd></div></dl></div>:<p role="status">{deployed?'Reading pool state…':'Preparing the receipt deployment.'}</p>}
     {!client?<button type="button" className="wl-button" disabled={!!busy||!deployed} onClick={()=>void connect()}><Wallet size={18}/>Connect wallet<ArrowRight size={17}/></button>:<>
       <p className="trade-notice" role="status">{client.address.slice(0,6)}…{client.address.slice(-4)} · {walletCash?.address===client.address&&walletCash.balance!==undefined?`${usd(walletCash.balance)} USDG in wallet`:walletCash?.address===client.address&&walletCash.error?<>{walletCash.error} <button className="inline-link" onClick={()=>setBalanceRetry(n=>n+1)}>Retry balance</button></>:'Loading USDG balance…'}</p>
+      {state?.configured&&!state.entriesOpen&&coordinator===client.address.toLowerCase()?<section className="neutral-position"><h3>Coordinator controls</h3><p>Enable refundable USDG deposits while the pool builds toward 2,000 USDG. This action does not start allocation or trading.</p><button className="secondary-button" disabled={!!busy||!!pending} onClick={()=>void run('Confirm enabling deposits in your wallet…',()=>client.openEntries())}>Enable deposits</button></section>:null}
       <button type="button" className="wl-button" disabled={!!busy||!!pending||!state?.entriesOpen||state.phase!==0} onClick={()=>void run('Confirm entry in your wallet…',()=>client.enter(amount))}>Enter delta neutral<ArrowRight size={17}/></button>
       <p className="trade-notice">One application action; your wallet may ask for USDG approval and deposit separately. Pending deposits earn no pool fees. Pooling must reach the batch minimum before allocation starts.</p>
       {snapshot&&snapshot.pendingAssets>0n?<section className="neutral-position"><h3>Your pending deposit</h3><strong>{usd(snapshot.pendingAssets)} USDG</strong><p>Minimum receipt: {shares(snapshot.minimumShares)} dlpDN. {snapshot.issued?'Member claims issued; paired exposure and LP activation remain pending.':'Cash remains refundable before claims are issued.'}</p>
@@ -101,7 +108,7 @@ export function NeutralPanel(){
       {saved?<section className="neutral-position"><h3>Confirm saved transaction</h3><p>{saved.label} has not been confirmed. No automatic retry will be sent.</p><label>Wallet transaction hash<input value={txHash} placeholder={saved.hash??'0x…'} onChange={e=>setTxHash(e.target.value)}/></label><button className="secondary-button" disabled={!!busy} onClick={()=>void run('Checking the saved transaction…',()=>client.reconcile(txHash||undefined))}>Check confirmation</button></section>:null}
       {journalError?<p className="wl-error" role="alert">{journalError}</p>:null}
     </>}
-    {state&&!state.entriesOpen?<p className="trade-notice">The contract currently has entries closed. Deposits become available when the operator enables this family after venue setup.</p>:null}
+    {state&&!state.entriesOpen?<p className="trade-notice">The coordinator must enable deposits on-chain. The 2,000 USDG minimum starts allocation; it is not a minimum individual deposit.</p>:null}
     <button className="inline-link" disabled={!!busy} onClick={()=>void run('Refreshing on-chain state…',async()=>{await refresh();return 'On-chain state refreshed.';})}>Refresh <RefreshCw size={13}/></button>
     {busy?<p role="status">{busy}</p>:null}{notice?<p className="execution-status" role="status">{notice}</p>:null}{error?<p className="wl-error" role="alert">{error}</p>:null}
   </div>;

@@ -8,6 +8,7 @@ import {receiptMinimum,usdgAmount,exitMinimum} from '../../strategy/neutral-quot
 
 const rpc=createPublicClient({chain,transport:http(undefined,{timeout:10000,retryCount:0})});
 const tokenAbi=parseAbi(['function balanceOf(address) view returns(uint256)','function allowance(address,address) view returns(uint256)','function approve(address,uint256) returns(bool)']);
+const coordinatorAbi=parseAbi(['function keeper() view returns(address)','function setEntriesOpen(bool open)']);
 const journalSchema=z.object({to:z.string().regex(/^0x[0-9a-f]{40}$/i),data:z.string().regex(/^0x[0-9a-f]*$/i),nonce:z.number().int().nonnegative(),
   label:z.string(),hash:z.string().regex(/^0x[0-9a-f]{64}$/i).optional()});
 type Journal=z.infer<typeof journalSchema>;
@@ -21,6 +22,18 @@ export class NeutralClient {
   private get key(){return `dlp.neutral.tx.v1.${this.deployment.address.toLowerCase()}.${this.address.toLowerCase()}`;}
   pending(){const raw=localStorage.getItem(this.key);return raw?journalSchema.parse(JSON.parse(raw)):null;}
   hasPending(){return localStorage.getItem(this.key)!==null;}
+  async coordinator(){
+    const controller=await rpc.readContract({address:this.deployment.address,abi:neutralAbi,functionName:'controller'});
+    return rpc.readContract({address:controller,abi:coordinatorAbi,functionName:'keeper'});
+  }
+  async openEntries(){return this.locked(async()=>{
+    if((await this.coordinator()).toLowerCase()!==this.address.toLowerCase())throw new Error('Only the vault coordinator can enable deposits.');
+    if(await rpc.readContract({address:this.deployment.address,abi:neutralAbi,functionName:'entriesOpen'}))return 'Deposits are already open.';
+    // The deployed vault enforces configured membership and ready fee recipients.
+    // This enables refundable collection; it neither allocates nor trades funds.
+    await this.send(this.deployment.address,encodeFunctionData({abi:coordinatorAbi,functionName:'setEntriesOpen',args:[true]}),'Enable DN deposits');
+    return 'Deposits enabled on-chain. Collection is open; allocation waits for the pooled minimum and operator.';
+  });}
   /** Wallet cash is independent of receipt valuation, venue setup and exit history. */
   async walletBalance(){
     const [chainId,balance]=await Promise.all([

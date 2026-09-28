@@ -22,6 +22,8 @@
     "keeper:run": "tsx keeper/run.ts --execute",
     "keeper:launch": "tsx keeper/launch.ts",
     "keeper:fly-launch": "tsx keeper/launch.ts --fly",
+    "nft:launch": "node --env-file-if-exists=.env.local --import tsx nft/launch.ts",
+    "nft:fly-launch": "node --env-file-if-exists=.env.local --import tsx nft/launch.ts --fly",
     "test:solana": "cd solana && cargo test -p dlp-math",
     "test:evm": "cd evm && forge test -vv"
   },

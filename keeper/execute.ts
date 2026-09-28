@@ -9,10 +9,16 @@ import {Journal,recover,type RecoveryPort} from './journal.js';
 import {bootstrap} from './bootstrap.js';
 import {submitPrepared} from './submission.js';
 import {contributionBatchAbi} from './nft-batch.js';
+import {nftOperation} from './nft-sale.js';
+import {nftOwner} from '../strategy/nft-pins.js';
 
 const controllerCalls=new Set(['bindAccount','reconcile','reconcileVenueSetup','fundVenue','requestVenueWithdrawal','collectVenueWithdrawal','rebalance','cancelVenueOrders','settleRequest','settleBatch','markGroupChecked','configureVenueKey','setEnabled']);
 const vaultCalls=new Set(['startAllocation','activate','setEntriesOpen']);
 export function transactionFor(call:Call){
+  if(call.target==='nft'){
+    if(!call.address)throw new Error('Missing NFT sale destination.');
+    return {to:call.address,data:encodeFunctionData({abi:nftOperation(call.address,call.name) as Abi,functionName:call.name,args:call.args})};
+  }
   if(call.target==='contribution'){
     if(!call.address||call.name!=='queue'||call.args.length!==0)throw new Error('Unrecognized contribution operation.');
     return {to:call.address,data:encodeFunctionData({abi:contributionBatchAbi,functionName:'queue'})};
@@ -27,10 +33,11 @@ export function transactionFor(call:Call){
 
 /** Instantiated ONLY by the owner's explicit --execute command. Observation mode
  * never loads a signing key or submits any transaction. */
-export async function executor(keyFile:string,stateDirectory:string,maximumGasWei:bigint,ownerBootstrap=false){
+export async function executor(keyFile:string,stateDirectory:string,maximumGasWei:bigint,ownerBootstrap=false,nftSales=false){
   if(statSync(keyFile).mode&0o077)throw new Error('Keeper signing file must be private (mode 600).');
   const key=readFileSync(keyFile,'utf8').trim();if(!/^(0x)?[a-fA-F0-9]{64}$/.test(key))throw new Error('Invalid keeper key-file format.');
   const account=privateKeyToAccount((key.startsWith('0x')?key:`0x${key}`) as Hex);
+  if(nftSales&&account.address.toLowerCase()!==nftOwner.toLowerCase())throw new Error('NFT sale execution requires the deployed collection owner.');
   const roles=await Promise.all(['reporter','keeper'].map(functionName=>client.readContract({address:controller,abi:controllerAbi,functionName:functionName as 'reporter'|'keeper'})));
   if(roles.some(role=>role.toLowerCase()!==account.address.toLowerCase()))throw new Error('Signer does not hold the deployed keeper and reporter roles.');
   if(ownerBootstrap&&(await client.readContract({address:controller,abi:controllerAbi,functionName:'owner'})).toLowerCase()!==account.address.toLowerCase())throw new Error('Bootstrap requires the controller owner.');
@@ -67,6 +74,7 @@ export async function executor(keyFile:string,stateDirectory:string,maximumGasWe
     const skipped:{operation:string;member?:string;reason:string}[]=[];
     // Batch gas estimation avoids waiting for each receipt across 100 reporters.
     const prepared=await mapLimit(calls,4,async call=>{
+      if(call.target==='nft'&&!nftSales)throw new Error('NFT sale execution is not enabled.');
       if(Date.now()>=call.expiresAt)return null;
       if(!ownerBootstrap&&['configureVenueKey','setEnabled','setEntriesOpen'].includes(call.name))throw new Error('Owner bootstrap is disabled.');
       const tx=transactionFor(call);

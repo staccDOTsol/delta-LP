@@ -1,6 +1,12 @@
 import {z} from 'zod';
 
 export function cloudHealth(raw:unknown,mode:'observation'|'execution',startedAt:number,now=Date.now()){
+  const nft=z.object({kind:z.literal('nft-sale'),mode:z.enum(['observation','execution']),at:z.string().datetime(),block:z.string().regex(/^\d+$/),
+    collections:z.array(z.object({address:z.string(),paused:z.boolean(),minted:z.string()})).length(4),quoteExpiresAt:z.number()}).safeParse(raw);
+  if(nft.success){
+    const s=nft.data,time=Date.parse(s.at),ok=s.mode===mode&&time>=startedAt&&time<=now+5000&&now-time<=90000;
+    return {ok,mode,kind:s.kind,observedAt:s.at,collections:s.collections,quoteExpiresAt:s.quoteExpiresAt};
+  }
   const parsed=z.object({mode:z.enum(['observation','execution']),at:z.string().datetime(),block:z.string().regex(/^\d+$/),
     members:z.array(z.object({id:z.string(),decision:z.object({state:z.enum(['ready','idle','blocked','waiting'])})})).length(100),
     vault:z.object({entriesOpen:z.boolean()})}).safeParse(raw);
