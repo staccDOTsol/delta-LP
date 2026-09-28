@@ -80,3 +80,24 @@ existing-share-inventory requirement. Actual venue investment/receipt issuance
 requires its separate execution lifecycle once contributions reach the threshold.
 
 See [the runbook](../nft/README.md) and [the fixed fanout interface](NFT-FANOUT-INTERFACE.md).
+
+## Exact pending deployment bundle ready
+
+Corrected v5 receipt is deployed at
+`0x3D4Ee6D147AF67371073e74206D6d49e64960f9c`, recorded in
+`evm/deployments/4663-tokenized-v5.json`. Its actual-target pending NFT plan is
+`artifacts/nft-deployment/unsigned.json`, plan hash
+`0x6039e4dcdf61f194a666ab7300fd643eb5f09ef20e9092fd45891967da725d96`.
+
+All 30 deployment/configuration calls passed the complete local fork simulation,
+using 19,488,229 gas. The additional exact-address local smoke test minted two
+editions with zero canonical DN supply, pooled their real USDG, transferred one
+NFT and withdrew only its own pending cash through the new owner's ERC6551
+account. Reports are `fork-simulation.json` and `pending-mint-simulation.json` in
+that same artifact directory. The temporary local fork is stopped.
+
+Root independently checked the new plan's allowlist and hash. No NFT calls have
+yet been broadcast: the remaining deployment needs network gas. Root requested
+a 0.001 ETH gas top-up, separate from strategy capital. Source and plan are frozen;
+after root's broadcast, use its actual creation transaction map for source/config
+verification and check OpenSea indexing. Do not regenerate the pinned plan.
