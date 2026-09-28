@@ -1,0 +1,9 @@
+evm/
+solana/
+data/
+tests/
+.agents/
+.env*
+!.env.example
+docs/
+.git/

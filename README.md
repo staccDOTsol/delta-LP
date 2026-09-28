@@ -3,6 +3,13 @@
 One receipt over a tight-range CLMM LP and a hedge sized so net delta ≈ 0, recentered as one object.
 The position is a token, not an account: LP it, route it, hook it.
 
+**Strategy readiness and live markets:** [deltalp.fun](https://deltalp.fun).
+**Oil subscription waitlist:** [deltalp.fun/oil](https://deltalp.fun/oil).
+Leveraged strategy execution is not live; the homepage labels estimates and venue links explicitly.
+The Robinhood NVDA/USDG vault is deployed with deposits closed at
+`0x32C47683D0E41DAc58A750fccb7200ad031D3993`.
+See [launch configuration, points rules, and verification](docs/LAUNCH.md).
+
 ```
 r ≈ clmm_fees − recenter_tax − hedge_carry − leftover_IL
 ```

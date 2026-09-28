@@ -1,0 +1,86 @@
+{
+  "chainId": 4663,
+  "rpc": "https://rpc.mainnet.chain.robinhood.com",
+  "explorer": "https://robinhoodchain.blockscout.com",
+  "vault": "0x32C47683D0E41DAc58A750fccb7200ad031D3993",
+  "authority": "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158",
+  "crank": "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158",
+  "depositsEnabled": false,
+  "name": "deltaLP NVDA / USDG",
+  "symbol": "dlpNVDA",
+  "dependencies": {
+    "base": "0xd0601CE157Db5bdC3162BbaC2a2C8aF5320D9EEC",
+    "quote": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
+    "pool": "0xd4EB21209C4D6093f80B5b84f5C45cc093EA14a3",
+    "npm": "0x73991a25C818Bf1f1128dEAaB1492D45638DE0D3",
+    "morpho": "0x9D53d5E3bd5E8d4Cbfa6DB1ca238AEA02E651010",
+    "irm": "0x2BD3d5965B26B51814AC95127B2b80dD6CcC0fa1",
+    "feedBase": "0x379EC4f7C378F34a1B47E4F3cbeBCbAC3E8E9F15",
+    "feedQuote": "0x61B7e5650328764B076A108EFF5fa7282a1B9aD2"
+  },
+  "market": {
+    "loanToken": "0xd0601CE157Db5bdC3162BbaC2a2C8aF5320D9EEC",
+    "collateralToken": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
+    "oracle": "0x2e72230DA46B888BB71d419d4e194577E43bF881",
+    "irm": "0x2BD3d5965B26B51814AC95127B2b80dD6CcC0fa1",
+    "lltv": "625000000000000000"
+  },
+  "marketId": "0xfa02b9d58bb338ea1ac14d89c2586683bf7c209b60073662a7c0dfaa72078be1",
+  "params": {
+    "epsBps": 500,
+    "minHealthX100": 150,
+    "maxPriceDevBps": 100,
+    "maxSwapBps": 5000,
+    "maxMintBpsPerEpoch": 0,
+    "maxBurnBpsPerEpoch": 0,
+    "chainlinkMaxAge": 3600,
+    "twapWindow": 600
+  },
+  "constructorArgs": [
+    "deltaLP NVDA / USDG",
+    "dlpNVDA",
+    "0xd4EB21209C4D6093f80B5b84f5C45cc093EA14a3",
+    "0x73991a25C818Bf1f1128dEAaB1492D45638DE0D3",
+    "0x9D53d5E3bd5E8d4Cbfa6DB1ca238AEA02E651010",
+    {
+      "loanToken": "0xd0601CE157Db5bdC3162BbaC2a2C8aF5320D9EEC",
+      "collateralToken": "0x5fc5360D0400a0Fd4f2af552ADD042D716F1d168",
+      "oracle": "0x2e72230DA46B888BB71d419d4e194577E43bF881",
+      "irm": "0x2BD3d5965B26B51814AC95127B2b80dD6CcC0fa1",
+      "lltv": "625000000000000000"
+    },
+    "0x379EC4f7C378F34a1B47E4F3cbeBCbAC3E8E9F15",
+    "0x61B7e5650328764B076A108EFF5fa7282a1B9aD2",
+    "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158",
+    "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158",
+    {
+      "epsBps": 500,
+      "minHealthX100": 150,
+      "maxPriceDevBps": 100,
+      "maxSwapBps": 5000,
+      "maxMintBpsPerEpoch": 0,
+      "maxBurnBpsPerEpoch": 0,
+      "chainlinkMaxAge": 3600,
+      "twapWindow": 600
+    }
+  ],
+  "creationCodeHash": "0x9265c3f98512681bbee7b91d4bacf390a0e8e928f820123dc85b96b6cf113d6c",
+  "gasEstimate": "5333558",
+  "gasLimit": "6400269",
+  "maxGasCostEth": "0.000258417261144",
+  "preflightBlock": "74474579",
+  "status": "deployed-closed",
+  "nonce": 49178,
+  "transactionHash": "0xd8471efd3c080bcca224b6f6f0285ba17feb18ee272db8e3d02039df86479401",
+  "blockNumber": "74474593",
+  "gasUsed": "5290403",
+  "actualGasCostEth": "0.000107458665736",
+  "deployedCodeHash": "0xd1948d4b2457906d594a8c656aa2206e91d3dd65d47093416eb56e358fd89e09",
+  "verifiedAt": "2026-09-28T03:27:15.275Z",
+  "sourceVerification": {
+    "provider": "Sourcify",
+    "status": "exact_match",
+    "jobId": "75b4a38d-eac6-431d-b1de-fbd347660d80",
+    "url": "https://sourcify.dev/server/verify-ui/jobs/75b4a38d-eac6-431d-b1de-fbd347660d80"
+  }
+}

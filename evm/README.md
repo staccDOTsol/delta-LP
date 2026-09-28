@@ -77,4 +77,14 @@ withdraw‑collateral.
   the flywheel.
 - Withdrawal queue; single rotatable crank; no session/weekend haircut on Morpho collateral
   (see Vigil in the recon for the pattern).
-- Deployment script + verification; nothing is deployed.
+
+## Closed launch deployment
+
+NVDA/USDG vault `0x32C47683D0E41DAc58A750fccb7200ad031D3993` is deployed on chain 4663,
+with deposits disabled and no user funds. The source has an exact-match verification on
+Sourcify. See [`deployments/4663.json`](deployments/4663.json) and
+[the launch runbook](../docs/LAUNCH.md). Borrow liquidity was zero at deployment.
+
+`scripts/preflight.mjs` checks dependencies and liquidity; `scripts/deploy.mjs` defaults
+to gas simulation and requires `--broadcast` to deploy. Run both from the repository root.
+Atomic `depositWithSync` / `withdrawWithSync` entry points support ordinary wallet transactions.
