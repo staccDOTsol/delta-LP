@@ -93,8 +93,7 @@ destination. NFT resale is not automatically a DN redemption.
 ## NFT / SeaDrop consumer
 
 The current integration uses `DnPendingSeaDropEdition`, `DnPendingAdapter` and
-`NftContributionBatch`. The four collections and adapter are prepared and
-fork-tested but await deployment gas. They bind to the deployed v5 receipt at
+`NftContributionBatch`. The four collections and adapter are deployed and configured, with mints paused. They bind to the deployed v5 receipt at
 `0x3D4Ee6D147AF67371073e74206D6d49e64960f9c`.
 
 Each mint converts its net ETH to actual USDG and records an escrow contribution

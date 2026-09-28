@@ -3,8 +3,8 @@
 The September 28 replacement core is deployed on Robinhood Chain 4663. It does
 not modify the older v3 contracts, which retain 2% entry / 4% exit and all-Wizards.
 The reused v4 controller reports 3% entry / 6% exit. All 100 members and the
-corrected v5 receipt are deployed and configured. The four NFT collections are
-prepared and fork-tested; deployment still needs network gas. No opening
+corrected v5 receipt are deployed and configured. The four NFT collections and contribution adapter are
+deployed, configured and paused; all 30 transactions succeeded. No opening
 transaction has been submitted.
 
 | Replacement component | Confirmed address |
@@ -17,8 +17,11 @@ transaction has been submitted.
 All core transaction receipts succeeded and their runtime hashes are recorded in
 `evm/deployments/4663-tokenized-v5.json`. The old empty v4 receipt is superseded;
 v5 measures the execution loss bound after entry fees. All seven canonical core
-contracts have matching creation and runtime source verification on Sourcify. The old keeper is running in observation mode; all nine
+contracts have matching creation and runtime source verification on Sourcify. The v5 keeper is healthy in observation mode; all nine
 transactions in its preserved v3 journal were independently receipt-verified.
+The website now uses v5 addresses and returns the 3%/6% rates. All 200 child
+contracts and five NFT/adapter contracts also have Sourcify creation/runtime
+matches. NFT sales and DN entries remain closed.
 
 ## Economics
 

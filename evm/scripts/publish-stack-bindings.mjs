@@ -13,7 +13,12 @@ const nft=JSON.parse(readFileSync(new URL(`evm/deployments/4663-nft-${version}.j
 if(manifest.controllerName!=='SplitFeeMemberController'||manifest.chainId!==4663||await client.getChainId()!==4663)throw new Error('Wrong replacement deployment.');
 const art=name=>JSON.parse(readFileSync(new URL(`evm/out/${name==='NeutralEscrowFactory'?'NeutralEscrows':name}.sol/${name}.json`,root),'utf8'));
 const names={MemberController:'SplitFeeMemberController',HouseFeeRouter:'SplitHouseFeeRouter',WeightedNftFeeFanout:'WeightedNftFeeFanout',MemberV4Hook:'MemberV4Hook',NeutralEscrowFactory:'NeutralEscrowFactory',NeutralVault:'NeutralVault'};
-const blockNumber=await client.getBlockNumber({cacheTime:0});
+// A load-balanced RPC may report a tip another backend has not indexed yet.
+// Read one confirmed snapshot, after every recorded configuration transaction.
+const tip=await client.getBlockNumber({cacheTime:0});
+const blockNumber=tip>32n?tip-32n:tip;
+const lastNftBlock=nft.calls.reduce((last,call)=>BigInt(call.block)>last?BigInt(call.block):last,0n);
+if(blockNumber<lastNftBlock)throw new Error('Wait for NFT configuration confirmations before publishing bindings.');
 const contracts={};
 for(const [label,name] of Object.entries(names)){
   const step=manifest.steps[name];

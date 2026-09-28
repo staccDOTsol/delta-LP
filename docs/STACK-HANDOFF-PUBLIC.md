@@ -161,7 +161,7 @@ The NFT account can withdraw its USDG before queueing. After allocation, actual
 DN receipts can be claimed to the same account. Stalled allocations have cash
 or in-kind recovery. Pending cash is not a DN position and earns no strategy
 fees. The deployed v5 vault and prepared NFT bundle passed local fork tests;
-NFT broadcasting currently awaits deployment gas. See [NFT-EDITIONS.md](NFT-EDITIONS.md).
+All 30 NFT deployment/configuration calls are confirmed; mints remain paused. See [NFT-EDITIONS.md](NFT-EDITIONS.md).
 
 ## NFT consumers and secondary markets
 

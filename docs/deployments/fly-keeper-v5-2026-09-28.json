@@ -1,0 +1,29 @@
+{
+  "app": "delta-lp-keeper",
+  "deploymentVersion": "v5",
+  "machineId": "807d42cee2d348",
+  "region": "yyz",
+  "image": {
+    "registry": "registry.fly.io",
+    "repository": "delta-lp-keeper",
+    "tag": "deployment-01M3KM4EXXWV35TBP2APS75G2B",
+    "digest": "sha256:c2562b17d19bed25b9a0a3ca1ebcc5d1d64daadf1a30dbba7158a4c6b2e79bba"
+  },
+  "mode": "observation",
+  "stateDirectory": "/data/keeper-v5",
+  "volumeId": "vol_4y82kx6yx0x0p19r",
+  "publicService": false,
+  "verifiedAt": "2026-09-28T09:07:15.248896+00:00",
+  "checks": {
+    "mode": "observation",
+    "members": 100,
+    "entriesOpen": false,
+    "block": "74676466",
+    "oldJournalEntries": 9,
+    "oldJournalSha256": "f58703da1f94943ffd3979344f1a212f2f834d7c7ce298fbd978eb9d33ab2428",
+    "oldJournalStatuses": {
+      "success": 9
+    }
+  },
+  "fundedMainnetLifecycleCompleted": false
+}
