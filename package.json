@@ -21,6 +21,7 @@
     "keeper:observe": "tsx keeper/run.ts",
     "keeper:run": "tsx keeper/run.ts --execute",
     "keeper:launch": "tsx keeper/launch.ts",
+    "keeper:fly-launch": "tsx keeper/launch.ts --fly",
     "test:solana": "cd solana && cargo test -p dlp-math",
     "test:evm": "cd evm && forge test -vv"
   },

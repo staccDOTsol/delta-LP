@@ -6,8 +6,68 @@ and reporter roles to `0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158`.
 
 The service has been tested with mocked venue execution, the real vendored signing
 WASM, and read-only snapshots of all 100 deployed members. It has **not** completed
-a funded mainnet lifecycle. The September 28 deployment left entries closed,
-strategy accounts unfunded, and the signing service stopped.
+a funded mainnet lifecycle. The September 28 deployment left entries closed and
+strategy accounts unfunded. The Fly worker is running in **observation mode**;
+transaction signing is disabled and no private key was uploaded during deployment.
+
+## Fly deployment
+
+[`delta-lp-keeper`](https://fly.io/apps/delta-lp-keeper/monitoring) runs one Machine
+in Toronto (`yyz`), with 1 shared CPU and 512 MB memory. Its encrypted 1 GB
+`keeper_data` volume mounts at `/data`; status and transaction journals live at
+`/data/keeper-v3`. Keep exactly one worker for this operator account. The app has
+no public HTTP service or public IP; its internal `/healthz` check requires a fresh
+snapshot of all 100 distinct members from the current process.
+The [September 28 deployment record](deployments/fly-keeper-2026-09-28.json)
+contains the image, Machine, volume and verified observation state.
+
+```sh
+cd /Users/stacc/delta-LP
+flyctl status --app delta-lp-keeper
+flyctl checks list --app delta-lp-keeper
+flyctl logs --app delta-lp-keeper
+```
+
+The deployed image includes only explicitly allowed source, public deployment
+metadata and the vendored signer. Local environment files, keys and journals are
+excluded from the Docker build context. For subsequent deployments:
+
+```sh
+flyctl deploy --app delta-lp-keeper --config fly.toml --ha=false --no-public-ips
+```
+
+Use `--ha=false` to avoid creating a second worker. The persistent volume has daily
+snapshots with seven-day retention. It survives a Machine restart, but it is not a
+shared or automatically replicated journal. Do not create a fresh empty volume
+to get past a signing or recovery failure.
+
+### Activate signing on Fly yourself
+
+```sh
+cd /Users/stacc/delta-LP
+npm run keeper:fly-launch
+```
+
+The interactive helper asks for your per-member USDG limit, per-order notional
+limit, ETH gas budget and existing key-file path. It checks that there is exactly
+one Fly Machine and refuses an active local worker or existing local transaction
+history that has not been migrated. Type `START` only to authorize real execution.
+The helper sends the key and configuration to Fly's encrypted secrets through
+stdin, stages `DELTA_KEEPER_MODE=execute`, and deploys the single worker. It never
+puts the key in shell arguments or image layers. This is an explicit upload of
+signing authority to Fly; the cloud worker writes restricted runtime files under
+`/run/delta-keeper`, outside the persistent journal volume.
+
+To return the worker to observation mode, run:
+
+```sh
+flyctl secrets set DELTA_KEEPER_MODE=observe --app delta-lp-keeper
+```
+
+Fly secrets override `fly.toml` environment settings: editing the TOML default
+alone does not disable an already activated signer. Switching modes does not
+cancel accepted transactions, close entries or close existing positions. Reconcile
+pending journal entries before another signer uses this account.
 
 ## Check without signing
 
@@ -22,7 +82,7 @@ vault phase. `ready` means an unsigned next operation was identified; it does
 not mean trading is live. On the empty deployment those operations are initial
 zero-equity reports, proven by unused custody state and the L1 account registry.
 
-## Choose limits and start
+## Local alternative: choose limits and start
 
 For the guided interactive startup, run this yourself:
 
@@ -73,11 +133,12 @@ DELTA_KEEPER_KEY_FILE="$HOME/staccoverflow.eth" \
 npm run keeper:run
 ```
 
-This command can move the members' accounted collateral and place real leveraged
-orders. It uses the existing key file locally; do not paste or upload the key.
+This local command can move the members' accounted collateral and place real leveraged
+orders. It uses the existing key file locally; do not paste the key into commands.
 It does not take USDG from the operator wallet. Keep the terminal/process running;
 Ctrl-C stops after the current cycle and preserves its journals. No OS service
-or automatic restart job was installed by the build.
+or automatic restart job was installed locally. Stop the Fly signer before using
+this alternative, and migrate its transaction history rather than resetting it.
 
 ## Deposit and activation
 
@@ -118,6 +179,9 @@ An expired request or unachievable minimum requires the owner's recovery action.
   venue keys are derived in memory from an owner signature, matching `/operator`.
 - A process lock rejects a second worker. After a crash, confirm the old process
   is gone and reconcile pending transactions before removing only `worker.lock`.
+  On Fly this lock is `/data/keeper-v3/worker.lock`. A graceful SIGTERM restart
+  removes it after the current cycle; a forced kill can leave it behind. Automatic
+  process restart deliberately does not erase that lock or the signed journal.
 - API errors, wrong custody identity, unprocessed priority requests, foreign
   positions/collateral, remaining orders or stale data block reporting and trading.
   An accepted order transaction is never treated as a guaranteed full fill.
