@@ -1,0 +1,138 @@
+[
+ [
+  "0x1193bcbfafeb2f25c516817c46bd3143936d1d5c",
+  "pTEST",
+  "Arcus pToken Test",
+  200.90342632755585,
+  293.046041,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ],
+ [
+  "0x4472c69d299382f8847ebce4fc6ed8e295510e3e",
+  "pBTC3x",
+  "Arcus BTC (3x Long)",
+  375.4722799682743,
+  75226.890548,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ],
+ [
+  "0xe24cabdf76dd1c2576049167eb1755c84b985c36",
+  "pHOOD3x",
+  "Arcus HOOD (3x Long)",
+  1570.0871231563467,
+  259977.880492,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ],
+ [
+  "0x4595a18b47c6fb46f3a157e2918f5c34cdca35eb",
+  "pTESTR",
+  "pToken Redemption Test",
+  307.1141634355532,
+  283.026066,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ],
+ [
+  "0x925f92f055edb79c42b5d45e64a1b74143b90ea0",
+  "pBTC",
+  "Arcus BTC (1x Long)",
+  233.65119626306964,
+  24717.734745,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ],
+ [
+  "0xc25c966168a8e933b0aba0dc8a25cac4a2b2b91d",
+  "sBTC",
+  "Arcus BTC (1x Short)",
+  139.27518511671764,
+  13261.045803,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ],
+ [
+  "0xadcceee8e422050f890522fa798f8a93a4857083",
+  "sBTC3x",
+  "Arcus BTC (3x Short)",
+  265.4767880463341,
+  21589.597443,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ],
+ [
+  "0x0053333fcaff9486fa55877044f09137c1a52530",
+  "sHOOD3x",
+  "Arcus HOOD (3x Short)",
+  202.09440165664358,
+  56294.317864,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ],
+ [
+  "0x37a2afaa98648f2e13658623885f821ac8365609",
+  "pGLD5x",
+  "Arcus GLD (5x Long)",
+  567.6918373909467,
+  49868.978527,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ],
+ [
+  "0xb2cb7371bc45a460f856712a3088c23acd385df8",
+  "sGLD5x",
+  "Arcus GLD (5x Short)",
+  462.1019181301886,
+  50208.581168,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ],
+ [
+  "0x9b319b9ffbe969be6fcdcb0ad09ad0405eda05b0",
+  "pSPCX5x",
+  "Arcus SPCX (5x Long)",
+  5.482493868134679,
+  449.872207,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ],
+ [
+  "0x2e9c527032daaa6084b15bf0c2dbf50f9675253c",
+  "sSPCX5x",
+  "Arcus SPCX (5x Short)",
+  5.749612149352935,
+  688.176409,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ],
+ [
+  "0x5c3b9a9b021e86b54202abcb4580f1f5c271875b",
+  "pGME5x",
+  "Arcus GME (5x Long)",
+  563.8653933931887,
+  50124.314497,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ],
+ [
+  "0x1a596466cb593bee293be8366d9ce493582189c2",
+  "sGME5x",
+  "Arcus GME (5x Short)",
+  621.8397225225128,
+  54326.394227,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ],
+ [
+  "0x122408c1399e51c41b096402fea46e20e762a950",
+  "pTEST3",
+  "Test 3",
+  0.0,
+  0.0,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ],
+ [
+  "0x8b9d2eb675e33e541cb7de25a55724d2e70e8dab",
+  "pSPCX3x",
+  "Arcus SPCX (3x Long)",
+  501.45537205510936,
+  49734.278951,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ],
+ [
+  "0x17271bd2a1eaa350a002d25236bcc4dc07ceb6a9",
+  "sSPCX3x",
+  "Arcus SPCX (3x Short)",
+  104.0415096072684,
+  10127.98481,
+  "0x5fc5360d0400a0fd4f2af552add042d716f1d168"
+ ]
+]
