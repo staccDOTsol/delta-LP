@@ -224,3 +224,12 @@ are under `evm/deployments/`; signed operator journals stay in ignored `artifact
 ## RPC and replacement fee deployment
 
 Use `ROBINHOOD_RPC_URL` for server reads and the keeper; `VITE_ROBINHOOD_RPC_URL` is the separate browser-scoped endpoint. Do not expose the server key in browser bundles. See [the replacement runbook](REPLACEMENT-FEES.md) for the new fee controller, seven-collection setup and journal-preserving migration.
+
+## Editing the sale in OpenSea Studio stops the keeper (2026-09-28)
+
+Studio's publish sends `multiConfigure` from the owner wallet, which is the keeper's signer. Two guards then stop every cycle until an operator acts, and the quotes expire about 15 minutes later, so every SeaDrop mint reverts with `MintUnavailable` (`0x93898ab0`) before any subcall:
+
+1. `nft/sale-policy.ts` compares the on-chain public drop with the reviewed policy in the `DELTA_KEEPER_CONFIG_JSON` secret. Studio's 365-day end time differed from the launcher's 30-day default. Fix: set `nftSale.endTime` in `artifacts/keeper-v6/config.json` to the on-chain value and re-import only that secret (`printf 'DELTA_KEEPER_CONFIG_JSON=%s\n' "$(jq -c . artifacts/keeper-v6/config.json)" | fly secrets import --app delta-lp-keeper`). The private key secret is untouched.
+2. `keeper/submission.ts` refuses when the account nonce is ahead of the journal. Reconcile by appending the off-journal transactions to `/data/keeper-v6/transactions.json` as `success` items whose `raw` bytes hash to their `hash` (rebuild `raw` with viem's `serializeTransaction` from the on-chain fields and signature, and check `keccak256(raw) === hash` before writing). Back the journal up first; the 2026-09-28 reconcile added nonces 49628 to 49634 (four publishes, two approvals, one test mint).
+
+A stopped machine does not restart on a secret import; run `fly machine start` (or `restart`) afterwards and confirm `quoteExpiresAt` moves in the logs.
