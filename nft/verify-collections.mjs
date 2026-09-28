@@ -4,6 +4,7 @@ import {execFileSync} from 'node:child_process';
 import {homedir} from 'node:os';
 import {createPublicClient,http,keccak256,toHex} from 'viem';
 const plan=JSON.parse(readFileSync('artifacts/nft-deployment/unsigned.json','utf8'));
+if(plan.launchMode!=='pending-contribution')throw Error('Superseded inventory-funded plan');
 const simulation=JSON.parse(readFileSync('artifacts/nft-deployment/fork-simulation.json','utf8'));
 if(simulation.planHash!==keccak256(toHex(readFileSync('artifacts/nft-deployment/unsigned.json','utf8'))))throw Error('Plan changed after fork simulation');
 const client=createPublicClient({transport:http(process.env.ROBINHOOD_RPC_URL||'https://rpc.mainnet.chain.robinhood.com')});
@@ -20,7 +21,7 @@ for(const entry of plan.deployments){
  const code=await client.getCode({address:entry.address,blockNumber:block.number});
  if(!code||keccak256(code)!==simulation.runtimeHashes[entry.address.toLowerCase()])throw Error(`${entry.label}: deployed bytecode does not match the tested fork`);
  if(!equalAddress(await read(entry.contract,entry.address,'owner'),plan.owner))throw Error('Owner mismatch');
- if(entry.contract==='DnSeaDropEdition'){
+ if(entry.contract==='DnPendingSeaDropEdition'){
   const config=plan.collections.find(c=>equalAddress(c.address,entry.address));
   if(!await read(entry.contract,entry.address,'configured')||!equalAddress(await read(entry.contract,entry.address,'adapter'),plan.adapter)
       ||!equalAddress(await read(entry.contract,entry.address,'receipt'),plan.dependencies.receipt.address)

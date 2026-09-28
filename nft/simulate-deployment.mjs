@@ -8,7 +8,7 @@ const client=createPublicClient({transport:http(endpoint)});
 const version=await client.request({method:'web3_clientVersion'});
 if(!version.toLowerCase().includes('anvil')||await client.getChainId()!==4663)throw Error('Expected a local Robinhood Anvil fork');
 const plan=JSON.parse(readFileSync('artifacts/nft-deployment/unsigned.json','utf8'));
-if(plan.chainId!==4663||plan.status!=='unsigned-paused-deployment'||plan.collections.length!==4)throw Error('Unexpected four-edition plan');
+if(plan.chainId!==4663||plan.launchMode!=='pending-contribution'||plan.status!=='unsigned-paused-deployment'||plan.collections.length!==4)throw Error('Unexpected four-edition plan');
 for(const [name,dependency] of Object.entries(plan.dependencies)){
  const code=await client.getCode({address:dependency.address});
  if(!code||keccak256(code)!==dependency.runtimeCodeHash)throw Error(`Fork dependency mismatch: ${name}`);
@@ -26,9 +26,9 @@ for(const call of plan.calls){
 }
 const artifact=name=>JSON.parse(readFileSync(`evm/out/${name}.sol/${name}.json`,'utf8'));
 const read=(name,address,functionName,args=[])=>client.readContract({address,abi:artifact(name).abi,functionName,args});
-if(await read('DnInventoryAdapter',plan.adapter,'ENTRY_BPS')!==300n||!await read('DnInventoryAdapter',plan.adapter,'paused'))throw Error('Adapter fee/pause mismatch');
+if(!await read('DnPendingAdapter',plan.adapter,'paused')||await read('DnPendingAdapter',plan.adapter,'currentBatch')!=='0x0000000000000000000000000000000000000000')throw Error('Expected paused, unused pending adapter');
 for(const collection of plan.collections){
- const check=fn=>read('DnSeaDropEdition',collection.address,fn);
+ const check=fn=>read('DnPendingSeaDropEdition',collection.address,fn);
  if(!await check('configured')||!await check('paused')||await check('totalMinted')!==0n||await check('MAX_SUPPLY')!==10000n
     ||Number(await check('denominationUsd'))!==collection.denomination||await check('baseURI')!==collection.baseURI
     ||await check('contractURI')!==collection.contractURI||await check('provenanceHash')!==collection.provenanceHash)throw Error('Collection configuration mismatch');
@@ -42,5 +42,5 @@ for(const deployment of plan.deployments){
  const code=await client.getCode({address:deployment.address});if(!code||code==='0x')throw Error('Missing simulated runtime');
  runtimeHashes[deployment.address.toLowerCase()]=keccak256(code);
 }
-writeFileSync('artifacts/nft-deployment/fork-simulation.json',JSON.stringify({status:'local-fork-simulation-only',at:new Date().toISOString(),planHash:keccak256(toHex(readFileSync('artifacts/nft-deployment/unsigned.json','utf8'))),runtimeHashes,receipts},null,2));
+writeFileSync('artifacts/nft-deployment/fork-simulation.json',JSON.stringify({status:'local-fork-simulation-only',launchMode:plan.launchMode,at:new Date().toISOString(),planHash:keccak256(toHex(readFileSync('artifacts/nft-deployment/unsigned.json','utf8'))),runtimeHashes,receipts},null,2));
 console.log(JSON.stringify({status:'local-fork-simulation-passed',calls:receipts.length,totalGas:String(receipts.reduce((n,r)=>n+BigInt(r.gasUsed),0n)),collections:4,paused:true}));

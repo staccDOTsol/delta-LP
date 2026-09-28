@@ -1,132 +1,113 @@
-# Four-edition publication and deployment
+# Four-edition mint-proceeds-funded launch
 
-Run commands from the repository root. Original art is read from the four
-denomination folders under `NFT_ART_ROOT` (default `/Users/stacc/10k`). The scripts
-never overwrite those originals. Credentials come from ignored environment files.
+The launch is $1/$2/$5/$10, each capped at 10,000 NFTs. Higher tiers are retained
+locally and excluded from the fixed 180,000-weight fee pool. Run commands from
+the repository root. Credentials stay in ignored environment files.
 
-## Publish
+## Funding model
+
+A mint does not need existing DN shares or an operator-funded reserve. The
+`DnPendingSeaDropEdition` receives SeaDrop's creator payment, pays the fixed
+Wizards portion, and passes the strategy portion to `DnPendingAdapter`. A bounded
+ETH/USDG swap converts actual sale proceeds into USDG. `NftContributionBatch`
+credits that cash to a claim controlled by each NFT's ERC-6551 account.
+
+The initial state is **pending USDG contribution**, not invested DN shares. The
+cash is held in the batch escrow, with its withdrawal/claim rights bound to the
+NFT account. Transferring the NFT transfers control of that same account and its
+rights. The current owner can withdraw their contribution before the batch queues;
+the OpenSea/Wizards sale fees already paid are not refunded by that withdrawal.
+
+Permissionless `queue()` aggregates contributions into one vault payer/receiver
+when they and any existing pending vault deposits meet the strategy batch
+threshold. The current 2,000 USDG threshold is a collective investment threshold,
+not an upfront bill for the creator or a minimum per NFT buyer. New mints can
+collect in a fresh escrow while the previous batch settles.
+
+Actual canonical DN shares can be delivered to the fixed NFT accounts only after
+vault activation produces them. Cash refunds and in-kind recovery remain distinct
+outcomes; permissionless claim callers cannot redirect proceeds. The batch has a
+24-hour recovery delay after queueing, and in-kind member claims are paginated.
+No adapter-issued IOU is presented as canonical DN shares. Investment execution
+and future NAV remain dependent on the venue/keeper, and receipt issuance is not
+promised to happen within a fixed time or at a guaranteed return.
+
+Primary fees remain 10% OpenSea / 1% Wizards / 89% pending strategy funding.
+The strategy's 3% entry fee occurs later when invested; it is not charged again
+as an extra tax on the pending cash credit. Secondary royalties remain 10% to
+Wizards. Member 3%/6% house fees are split 50/50 between Wizards and the NFT pool.
+
+The old `DnInventoryAdapter` and `DnSeaDropEdition` implement a different, atomic
+inventory-backed design. They are retained as historical tested software and are
+not the confirmed launch path. The old unsigned bundle is marked superseded;
+its original plan/simulation are retained under
+`artifacts/nft-deployment/superseded-inventory/` and must not be broadcast.
+
+## Assets
+
+All 40,000 launch image/metadata pairs have been published and verified. Original
+art is read from `NFT_ART_ROOT` (default `/Users/stacc/10k`) without overwriting it.
 
 ```sh
 NFT_UPLOAD_CONCURRENCY=96 node --env-file=.env.local nft/publish-assets.mjs
 ```
 
-The publisher checks every PNG's chunk CRCs and decompression, hashes original
-PNG/JSON bytes, and enforces 10,000 distinct trait combinations per edition.
-It writes public images and JSON metadata into versioned paths. Token metadata
-uses extensionless decimal IDs because the collection's `tokenURI` appends the
-ID to `baseURI`. No random Blob suffix is added and overwrites are rejected.
+The publisher checks local PNG CRCs/decompression and source hashes, enforces
+10,000 distinct trait combinations per edition, and uses versioned public paths.
+Every public metadata body is fetched and hash-checked, every image is checked
+for type/size, and eleven full image downloads per edition are hash-checked.
+Token metadata uses extensionless IDs matching the collection's `tokenURI`.
+Vercel Blob hosting requires the hosting account to remain available; provenance
+and versioned URLs are not a promise of permanent decentralized storage.
 
-Every token metadata body is fetched publicly and hash-checked; every referenced
-PNG is HEAD-checked for type and size. Eleven image samples per edition are also
-downloaded and hash-checked. This is not a claim that every remote PNG was fully
-downloaded. The original local PNG hashes and exact URLs are in each public
-manifest. Blob hosting still requires its account/storage to remain available;
-versioned paths and provenance hashes are not a promise of permanent IPFS storage.
+Completed records are in `artifacts/nft-publication/editions.json`; the public
+catalog is `public/nft-editions.json`. The append-only upload journal enables
+resuming without overwriting immutable paths. Never remove a live publisher lock.
 
-`artifacts/nft-publication/editions.json` contains only completed, verified editions.
-`uploaded.jsonl` is an append-only resume journal. An interrupted upload checks
-content at an already-existing immutable path rather than overwriting it.
-Completed editions retain their original verification time when resumed.
-Do not remove `publisher.lock` while its PID is alive.
+## Prepare, simulate and verify
 
-## Prepare the paused collections
-
-After the replacement stack exists and all four publications finish:
+Once the final fee-aware vault deployment is recorded:
 
 ```sh
-node --env-file=.env.local nft/prepare-deployment.mjs --version=v4
+node --env-file=.env.local nft/prepare-deployment.mjs --version=v5
 ```
 
-Alternatively, `--target=path.json` accepts:
+Alternatively use `--target=path.json` with chainId4663 plus actual receipt and
+weightedFanout addresses/runtime hashes. The tool checks deployed dependencies,
+3%/6% fees, four-edition count/weight, the unconfigured fanout and its initializer.
+It emits an explicit `launchMode: pending-contribution` plan containing zero-value
+software/configuration calls for one pending adapter and four paused collections.
+It configures metadata, provenance, adapter permissions and the permanent fee
+registry. It includes no paid mint, financial deposit, trade or sale-opening call.
 
-```json
-{
-  "chainId": 4663,
-  "receipt": {"address": "ACTUAL_ADDRESS", "runtimeCodeHash": "ACTUAL_HASH"},
-  "weightedFanout": {"address": "ACTUAL_ADDRESS", "runtimeCodeHash": "ACTUAL_HASH"}
-}
-```
-
-Placeholders are not deployable targets. The builder reads and pins actual
-code, checks the 3%/6% policy and fanout, and requires the unconfigured fanout's
-initializer to be the collection operator. It keeps the separate Wizards-only
-router for the NFT's 1% primary fee and 10% secondary royalty.
-
-The resulting `artifacts/nft-deployment/unsigned.json` contains only zero-value
-CREATE2 deployment/configuration calldata: one receipt-inventory adapter, four
-10,000-piece collections, metadata, provenance, adapter permissions and one-time
-registration of the four addresses. Both adapter and collections remain paused.
-It contains no seed deposit, trade, approval, mint, or sale-opening call.
-
-## Verify on a local fork, then on chain
-
-Start an isolated Anvil fork on loopback port 9557 and run:
+Start an isolated Anvil fork on loopback port9557, then run:
 
 ```sh
 node nft/simulate-deployment.mjs
 ```
 
-The simulation script rejects non-loopback endpoints and checks Anvil/chain
-identity before impersonation. It runs the complete plan and checks actual
-configuration, metadata, source-derived runtime hashes and finalized fanout order.
-The simulated balance is local test ETH only.
+The script rejects remote endpoints, checks chain/client identity, simulates the
+complete plan, and records plan/runtime hashes and configuration checks. The
+impersonation balance is local test ETH only. Submit the reviewed bundle through
+the deployment task's sole transaction writer; do not compete with the keeper.
 
-After the operator's single transaction writer broadcasts the reviewed software
-plan, save an address-to-creation-transaction-hash JSON mapping and run:
+After broadcast, save actual address-to-creation-tx hashes and run:
 
 ```sh
 node --env-file=.env.local nft/verify-collections.mjs --transactions=path.json
-```
-
-This matches runtime against the successful fork simulation, checks collection
-bindings, and submits source to Sourcify. Run again to read verification results;
-submission is not verification. Do not use a second signing process alongside
-the keeper EOA.
-
-Check marketplace indexing independently, using an OpenSea API key from an
-ignored local environment file:
-
-```sh
 node --env-file=.env.local --env-file=.env.nft-opensea.local nft/check-opensea.mjs
 ```
 
-This read-only check saves `artifacts/nft-deployment/opensea-status.json`: actual
-contract deployment, collection slug/URL when indexed, drop state when found,
-collection pauses, vault supply and adapter inventory/readiness. A 404 is
-recorded as not indexed, and an authentication error is not silently treated as
-proof of indexing. An active marketplace stage alone is not proof a funded mint
-will succeed. OpenSea's optional instant API keys expire after seven days.
+Source verification compares live runtime with the tested fork and checks actual
+configuration. Source submission is not confirmed verification. The OpenSea
+check separately records indexing, actual collection URLs when returned, drop
+state, pauses, vault supply and current batch contributions. An API 404 is not
+indexed; authentication errors are not indexing proof. Temporary OpenSea keys
+expire after seven days.
 
-## Funding and sales are separate
-
-`DnInventoryAdapter` sells existing activated receipts. A donor must understand
-that `donateInventory` contributes irrevocable protocol inventory; it creates no
-LP withdrawal claim. No user-held NFT receipts can be pulled back by the reserve.
-
-Sale ETH is exchanged on the fixed native ETH/USDG v4 pool. The selected receipt's
-live NAV/supply determines output, bounded by the collection's minimum receipt
-quote, the adapter's USDG minimum, receipt-price cap, inventory balance, finite
-15-minute quote and aggregate native sales budget. The controller's entry fee is
-reserved in the quote and is paid only upon later replenishment issuance. This
-does not levy a second receipt transfer tax.
-
-Replenishment queues cash with one fixed adapter payer/receiver. The queued cash
-does not increase sellable inventory. Vault activation must mint real receipts
-before those receipts can support another NFT sale. Reserve price/execution losses
-can exhaust capacity and close minting; constant capital availability is not
-promised. Initial inventory and a validated funded venue lifecycle are still live
-launch dependencies.
-
-Opening requires actual inventory, fresh bounded quotes, explicit fixed-wei
-SeaDrop prices/schedule and per-wallet limits, followed by operator unpausing.
-Dollar denominations are targets, not permanently fixed ETH prices or redemption
-guarantees. OpenSea indexing/custom mint compatibility and royalty enforcement
-must be verified separately from protocol-compatible contract deployment.
-
-The fixed 40k fee entitlement policy, current-owner claims and unminted reserves
-are documented in [NFT-FANOUT-INTERFACE](../docs/NFT-FANOUT-INTERFACE.md).
-
-The $20/$50/$100 art is retained locally for a possible later release. Those
-editions are not registered recipients in this launch and cannot dilute its
-fixed 180,000-weight denominator. The partial $20 upload journal is retained; no
-higher-tier collection has been configured by this task.
+Opening a pending-funded sale still requires fresh bounded swap quotes, fixed-wei
+prices/schedule and per-wallet limits, clear pending/refund disclosures, and
+operator activation. Quotes are USDG6 per ETH, not receipt-share units. Dollar
+denominations are price targets rather than permanent ETH prices or dollar pegs.
+OpenSea indexing/custom-drop compatibility is verified separately from SeaDrop
+protocol compatibility. An indexed contract alone does not establish an open sale.

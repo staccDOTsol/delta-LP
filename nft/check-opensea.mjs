@@ -3,13 +3,13 @@ import {readFileSync,writeFileSync} from 'node:fs';
 import {createPublicClient,http,parseAbi} from 'viem';
 
 const plan=JSON.parse(readFileSync('artifacts/nft-deployment/unsigned.json','utf8'));
-if(plan.chainId!==4663||plan.collections.length!==4)throw Error('Expected four Robinhood editions');
+if(plan.chainId!==4663||plan.launchMode!=='pending-contribution'||plan.collections.length!==4)throw Error('Expected four Robinhood editions');
 const client=createPublicClient({transport:http(process.env.ROBINHOOD_RPC_URL||'https://rpc.mainnet.chain.robinhood.com')});
 if(await client.getChainId()!==4663)throw Error('Wrong chain');
 const block=await client.getBlock();
 const headers={accept:'application/json'};
 if(process.env.OPENSEA_API_KEY)headers['x-api-key']=process.env.OPENSEA_API_KEY;
-const abi=parseAbi(['function paused() view returns(bool)','function totalMinted() view returns(uint256)','function totalSupply() view returns(uint256)','function ready() view returns(bool)','function balanceOf(address) view returns(uint256)']);
+const abi=parseAbi(['function paused() view returns(bool)','function totalMinted() view returns(uint256)','function totalSupply() view returns(uint256)','function ready() view returns(bool)','function currentBatch() view returns(address)','function totalContributions() view returns(uint256)','function collecting() view returns(bool)']);
 const read=(address,functionName,args=[])=>client.readContract({address,abi,functionName,args,blockNumber:block.number});
 const get=async path=>{
  const r=await fetch(`https://api.opensea.io/api/v2/${path}`,{headers,signal:AbortSignal.timeout(20000)});
@@ -44,7 +44,9 @@ for(const collection of plan.collections){
 }
 const adapterCode=await client.getCode({address:plan.adapter,blockNumber:block.number});
 let adapter=null;
-if(adapterCode&&adapterCode!=='0x')adapter={address:plan.adapter,paused:await read(plan.adapter,'paused'),ready:await read(plan.adapter,'ready'),receiptInventory:String(await read(plan.dependencies.receipt.address,'balanceOf',[plan.adapter]))};
-const report={at:new Date().toISOString(),chainId:4663,block:String(block.number),receiptSupply:String(await read(plan.dependencies.receipt.address,'totalSupply')),adapter,collections:records,note:'Read-only snapshot. OpenSea indexing and an active stage do not prove a mint will succeed; fresh adapter quotes, available inventory and transaction simulation are also required.'};
+if(adapterCode&&adapterCode!=='0x')adapter={address:plan.adapter,paused:await read(plan.adapter,'paused'),ready:await read(plan.adapter,'ready'),currentBatch:await read(plan.adapter,'currentBatch')};
+let collectingBatch=null;
+if(adapter?.currentBatch&&adapter.currentBatch!=='0x0000000000000000000000000000000000000000')collectingBatch={address:adapter.currentBatch,collecting:await read(adapter.currentBatch,'collecting'),contributionsUSDG:String(await read(adapter.currentBatch,'totalContributions'))};
+const report={launchMode:plan.launchMode,collectingBatch,at:new Date().toISOString(),chainId:4663,block:String(block.number),receiptSupply:String(await read(plan.dependencies.receipt.address,'totalSupply')),adapter,collections:records,note:'Read-only snapshot. OpenSea indexing and an active stage do not prove a mint will succeed; fresh swap quotes and transaction simulation are also required. Pending USDG is not activated DN shares; minting does not require existing receipt inventory.'};
 writeFileSync('artifacts/nft-deployment/opensea-status.json',JSON.stringify(report,null,2));
 console.log(JSON.stringify(report));

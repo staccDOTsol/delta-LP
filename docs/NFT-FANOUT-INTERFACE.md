@@ -1,62 +1,38 @@
 # Weighted NFT fanout integration
 
-User confirmed four-edition launch on September 28, 2026 at approximately 08:25 UTC:
-$1/$2/$5/$10, 40,000 NFTs, totalWeight 180,000. $20/$50/$100 are excluded from
-this fee pool and retained only for a possible later release. All four launch
-asset sets are fully published/verified; higher-tier uploading has been stopped.
-Do not deploy or configure the obsolete seven-recipient ABI. Implementation:
-`evm/src/tokenized/WeightedNftFeeFanout.sol`. Implementation and 13 four-edition unit/fuzz tests pass locally. The fanout is
-deployed at `0x5D38705D0c40c814CF2Eeb67d9ECD885cd9708FC` on chain 4663;
-its four collection recipients are not configured yet. Root owns the split router and controller, and this task owns the
-weighted fanout, its tests, asset publication, NFT adapter and collection tooling.
+The confirmed launch is $1/$2/$5/$10: 40,000 NFTs, totalWeight180000.
+$20/$50/$100 are excluded from this immutable pool and retained only for a possible
+later release. All four launch asset sets are published and verified. Their
+catalog and provenance URLs are in `public/nft-editions.json`.
 
-## Current ready-to-integrate artifacts
+The four-recipient fanout is deployed at
+`0x5D38705D0c40c814CF2Eeb67d9ECD885cd9708FC` on Robinhood Chain4663. It remains
+unconfigured. ZERO NFT calls were broadcast before the launch flow correction.
+The 13 four-edition fanout tests pass; root also ran the original complete
+four-edition suite (102 Solidity /153 application passing,17 environment skips).
 
-- All four asset sets are complete in `artifacts/nft-publication/editions.json`.
-- Public catalog and all four preview/metadata/provenance URLs are in
-  `public/nft-editions.json`; the catalog itself was published and read-back verified.
-- `WeightedNftFeeFanout.configure(address[4])`, count40000 and weight180000 are
-  implemented and its 13 tests pass. Root subsequently confirmed the full
-  four-edition suite: 102 Solidity tests and 153 application tests passed
-  (17 environment-dependent application tests skipped).
-- NFT prepare/simulate tooling now requires exactly the four editions and checks
-  the live fanout's count40000/weight180000 before generating any configuration.
+## Pending contribution launch
 
-## Validation and deployment-tool update
+The user explicitly confirmed that NFT sales contribute toward the collective
+DN batch threshold. There is no 2,000 USDG upfront requirement for the creator.
+The initial inventory-backed NFT bundle was wrong for that bootstrap and is
+marked superseded in `artifacts/nft-deployment/superseded-inventory/`.
 
-The four-edition tests passed, including a complete 50-NFT claim,
-wrong-owner atomic rollback, uint256-max units, cumulative rounding and a 256-run
-asset-conservation fuzz test. Log: `/tmp/delta-four-fanout-tests.log`.
+The new path is `DnPendingSeaDropEdition` + `DnPendingAdapter` +
+`NftContributionBatch`. Real mint proceeds become pending USDG claims owned by
+fixed NFT accounts. Receipt claims arise only from actual vault activation.
+The adapter/collection's 13 fork tests pass with zero existing DN supply. Root
+owns the batch's settlement/recovery tests and corrected fee-aware vault.
 
-The previously reported adapter constructor-test failure is fixed. Its actual
-cause was unavailable historical RPC state at block 74635064 while deploying a
-new test address. Tests now fork current state and wrap failing constructors in
-an external call. All 12 adapter tests pass in
-`/tmp/delta-nft-final-components.log` (23 combined before adding two fanout tests).
-No adapter production behavior was loosened to make the test pass.
+`nft/prepare-deployment.mjs` requires explicit pending-contribution mode, the
+final receipt address/hash,3%/6% fees,a bounded1% post-fee execution-loss check,
+and exactly these four fee recipients. The new actual-target plan and complete
+fork simulation must pass before the sole deployment writer broadcasts it.
+No historical inventory-plan simulation validates this new code.
 
-`nft/prepare-deployment.mjs` accepts `--version=v4` with
-`evm/deployments/4663-tokenized-v4.json` or `--target=path` with
-`{chainId, receipt: {address,runtimeCodeHash}, weightedFanout: {address,runtimeCodeHash}}`.
-Versioned manifests must identify `controllerName: SplitFeeMemberController` and
-have `steps.NeutralVault` plus `steps.WeightedNftFeeFanout`. The builder verifies
-3%/6%, the controller's split-router fanout, exact runtime hashes, and initializer
-ownership; it includes `fanout.configure()` after all four edition deployments.
-No old v3 default is silently used. It requires all four asset sets to complete.
-The actual v4 receipt is `0x385d37788a63a205df8044cf7cF6a59CC740159A`;
-the core manifest records its successful deployment and runtime hash. The actual
-30-call NFT plan at `artifacts/nft-deployment/unsigned.json` passed its complete
-local-fork simulation (17,699,482 gas). The matching plan hash and simulated
-runtime hashes are in `artifacts/nft-deployment/fork-simulation.json`. Planned
-CREATE2 addresses are not proof of deployment. Root owns the sole mainnet signer.
-
-`nft/simulate-deployment.mjs` runs the resulting zero-value deployment/configuration
-bundle only on a loopback Anvil fork, checking pauses, cap, receipt fee rate,
-metadata/provenance and finalized registry order. It cannot submit to mainnet. The source verifier
-`nft/verify-collections.mjs` compares live runtime against that tested fork, checks
-configuration and submits source to Sourcify. Supply `--transactions=path` with a
-JSON mapping of deployed contract addresses to their actual CREATE2 transaction
-hashes; explorer challenge pages are not used as a creation-data source.
+Source verification compares live runtime with the tested plan. Marketplace
+indexing is checked independently with `nft/check-opensea.mjs`; deployment alone
+is not proof of indexing, a sale opening, or invested DN funds.
 
 ## Exact interface
 
@@ -86,7 +62,7 @@ checks deployed code, ERC-721 support, the exact `denominationUsd()` and
 authority. The array is never replaceable. No withdrawal, recipient redirect,
 asset sweep or administrator entitlement exists.
 
-The existing `DnSeaDropEdition` already exposes the required methods. Token IDs
+The pending-funding `DnPendingSeaDropEdition` exposes the required methods. Token IDs
 are sequential 1–10000. **No mint-registration hook is needed** under the fixed
 full-collection entitlement policy requested by root. A mint checkpoint design
 was considered before root specified that unminted entitlements are reserved;
@@ -123,7 +99,7 @@ routing and may call `harvest()` after sending the NFT portion.
 ## Fee separation and deployment order
 
 Root reports the user's revised deltaLP 3% entry / 6% exit policy and 50/50 house
-split. Existing live v3 remains 2%/4% all-Wizards until replacement deployment.
+split. Existing live v3 remains 2%/4% all-Wizards on the old deployment; v4 uses the revised fees.
 
 The existing primary NFT 10% OpenSea / 1% Wizards / 89% DN split remains separate.
 At 3% DN entry, illustrative backing is 86.33% of gross before conversion/execution
@@ -132,14 +108,15 @@ The explicitly all-Wizards primary 1% and secondary 10% must keep using a direct
 Wizards router; passing them through the split house router would change policy.
 
 1. Deploy the unconfigured distributor with the operator as initializer.
-2. Deploy the replacement fee/controller/receipt stack and the inventory adapter.
-3. Deploy four paused editions with the inventory adapter and direct Wizards
+2. Deploy the replacement fee/controller/receipt stack and the pending-contribution adapter.
+3. Deploy four paused editions with the pending-contribution adapter and direct Wizards
    router; publish their metadata and provenance.
 4. Configure this distributor once with those four exact addresses.
-5. Verify source, destinations, fee rates, real inventory and readiness before
+5. Verify source, destinations, fee rates, pending-cash funding, recovery and readiness before
    any funding or opening of sales.
 
 The collection constructor does not reference the new distributor, so registration
-avoids a circular CREATE2 dependency. The inventory adapter binds
-`(owner, NeutralVault vault, expectedVaultHash)` and reads the selected controller's
-actual entry rate; it cannot change an existing vault's economics.
+avoids a circular CREATE2 dependency. The pending adapter binds `(owner, NeutralVault vault, expectedVaultHash)`.
+It issues no receipt tokens and requires no seed inventory; mint proceeds are
+credited as actual USDG in batch escrows. The bound vault charges its entry fee
+when those contributions are eventually invested.

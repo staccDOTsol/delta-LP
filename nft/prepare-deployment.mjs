@@ -30,9 +30,10 @@ for(const [name,address] of Object.entries(dependencies)){
 const expectedReceiptHash=target.receipt.runtimeCodeHash;
 if(pinned.receipt.runtimeCodeHash!==expectedReceiptHash)throw Error('Canonical receipt hash mismatch');
 if(pinned.weightedFanout.runtimeCodeHash!==target.weightedFanout.runtimeCodeHash)throw Error('Fanout hash mismatch');
-const abi=parseAbi(['function totalSupply() view returns(uint256)','function entriesOpen() view returns(bool)','function controller() view returns(address)','function ENTRY_FEE_BPS() view returns(uint256)','function EXIT_FEE_BPS() view returns(uint256)','function FEE_FANOUT() view returns(address)','function nftFanout() view returns(address)','function configured() view returns(bool)','function initializer() view returns(address)','function tokenCount() view returns(uint256)','function totalWeight() view returns(uint256)']);
+const abi=parseAbi(['function totalSupply() view returns(uint256)','function entriesOpen() view returns(bool)','function controller() view returns(address)','function ENTRY_FEE_BPS() view returns(uint256)','function EXIT_FEE_BPS() view returns(uint256)','function FEE_FANOUT() view returns(address)','function nftFanout() view returns(address)','function configured() view returns(bool)','function initializer() view returns(address)','function tokenCount() view returns(uint256)','function totalWeight() view returns(uint256)','function MAX_EXECUTION_LOSS_BPS() view returns(uint256)']);
 const read=(address,functionName)=>client.readContract({address,abi,functionName,blockNumber:block.number});
 const controller=await read(receipt,'controller');
+if(await read(receipt,'MAX_EXECUTION_LOSS_BPS')!==100n)throw Error('Pending launch requires the corrected fee-aware vault with a bounded 1% execution-loss budget');
 if(await read(controller,'ENTRY_FEE_BPS')!==300n||await read(controller,'EXIT_FEE_BPS')!==600n)throw Error('Replacement controller must charge 3%/6%');
 const splitRouter=await read(controller,'FEE_FANOUT');
 if((await read(splitRouter,'nftFanout')).toLowerCase()!==target.weightedFanout.address.toLowerCase())throw Error('Controller points to a different NFT fanout');
@@ -45,7 +46,7 @@ const deployments=[];
 function deploy(name,args,label){
  const artifact=art(name),init=encodeDeployData({abi:artifact.abi,bytecode:artifact.bytecode.object,args});
  if((artifact.deployedBytecode.object.length-2)/2>24576||(init.length-2)/2>49152)throw Error('Contract size limit');
- const salt=keccak256(toHex(`deltaLP:nft:v1:${label}`));
+ const salt=keccak256(toHex(`deltaLP:nft:pending:v1:${label}`));
  const address=getCreate2Address({from:factory,salt,bytecodeHash:keccak256(init)});
  const data=concat([salt,init]);
  calls.push({label:`Deploy ${label}`,to:factory,data,value:'0'});
@@ -53,7 +54,7 @@ function deploy(name,args,label){
  return address;
 }
 function configure(contract,address,fn,args=[]){calls.push({label:`${address}: ${fn}`,to:address,data:encodeFunctionData({abi:art(contract).abi,functionName:fn,args}),value:'0'});}
-const adapter=deploy('DnInventoryAdapter',[owner,receipt,expectedReceiptHash],'inventory-adapter');
+const adapter=deploy('DnPendingAdapter',[owner,receipt,expectedReceiptHash],'pending-adapter');
 const collections=[];
 for(const edition of assets){
  // Read back the public collection and boundary tokens before encoding immutable URIs.
@@ -61,18 +62,18 @@ for(const edition of assets){
   const r=await fetch(url,{signal:AbortSignal.timeout(30000)});if(!r.ok)throw Error(`Unavailable public metadata for $${edition.denomination}`);
   const m=await r.json();if(!m.image||m.image.includes('REPLACE_WITH_CID'))throw Error('Invalid public image URL');
  }
- const address=deploy('DnSeaDropEdition',[`Money Doubler $${edition.denomination}`,`DLP${edition.denomination}`,BigInt(edition.denomination),owner,adapter,houseFees],`edition-${edition.denomination}`);
- configure('DnSeaDropEdition',address,'configure');
- configure('DnSeaDropEdition',address,'setBaseURI',[edition.baseURI]);
- configure('DnSeaDropEdition',address,'setContractURI',[edition.contractURI]);
- configure('DnSeaDropEdition',address,'setProvenanceHash',[edition.provenanceHash]);
- configure('DnSeaDropEdition',address,'updateDropURI',[dependencies.seaDrop,edition.contractURI]);
- configure('DnInventoryAdapter',adapter,'setEdition',[address,true]);
+ const address=deploy('DnPendingSeaDropEdition',[`Money Doubler $${edition.denomination}`,`DLP${edition.denomination}`,BigInt(edition.denomination),owner,adapter,houseFees],`edition-${edition.denomination}`);
+ configure('DnPendingSeaDropEdition',address,'configure');
+ configure('DnPendingSeaDropEdition',address,'setBaseURI',[edition.baseURI]);
+ configure('DnPendingSeaDropEdition',address,'setContractURI',[edition.contractURI]);
+ configure('DnPendingSeaDropEdition',address,'setProvenanceHash',[edition.provenanceHash]);
+ configure('DnPendingSeaDropEdition',address,'updateDropURI',[dependencies.seaDrop,edition.contractURI]);
+ configure('DnPendingAdapter',adapter,'setEdition',[address,true]);
  collections.push({...edition,address});
 }
 configure('WeightedNftFeeFanout',target.weightedFanout.address,'configure',[collections.map(x=>x.address)]);
-const bundle={version:1,status:'unsigned-paused-deployment',chainId:4663,owner,observedAt:new Date(Number(block.timestamp)*1000).toISOString(),block:String(block.number),receiptSupply:String(supply),entriesOpen:open,adapter,collections,dependencies:pinned,deployments,calls,
- openingRequirements:['Activated canonical receipts donated to the protocol inventory by their owner.','Fresh bounded swap/NAV quotes and exact ETH prices, sale schedule, and per-wallet mint limit.','Canonical single-writer transaction submission; do not compete with the keeper EOA.','Verified deployed source/configuration and OpenSea indexing/compatibility check.'],
+const bundle={version:2,launchMode:'pending-contribution',status:'unsigned-paused-deployment',chainId:4663,owner,observedAt:new Date(Number(block.timestamp)*1000).toISOString(),block:String(block.number),receiptSupply:String(supply),entriesOpen:open,adapter,collections,dependencies:pinned,deployments,calls,
+ openingRequirements:['Explicit pending-USDG contribution display, fixed NFT-account withdrawal and later actual-receipt claims. No seed receipt inventory is required.','Fresh bounded ETH/USDG swap quotes and exact ETH prices, sale schedule, and per-wallet mint limit.','Canonical single-writer transaction submission; do not compete with the keeper EOA.','Verified deployed source/configuration and OpenSea indexing/compatibility check.'],
  explicitlyExcluded:['No USDG/ETH capital funding, swap, trade, approval, deposit, mint or unpause transaction is included.']};
 mkdirSync('artifacts/nft-deployment',{recursive:true});
 writeFileSync('artifacts/nft-deployment/unsigned.json',JSON.stringify(bundle,(_,v)=>typeof v==='bigint'?String(v):v,2));

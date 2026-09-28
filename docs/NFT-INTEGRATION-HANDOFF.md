@@ -1,88 +1,82 @@
-# NFT integration status — September 28, 2026
+# NFT launch integration — September28,2026
 
-The confirmed launch is four editions: $1/$2/$5/$10, each capped at 10,000 NFTs.
-The fixed fee pool covers 40,000 IDs and total denomination weight 180,000.
-$20/$50/$100 originals remain local for a possible later release; they are not
-recipients of this launch's fee pool. Their upload was stopped without deleting
-the partial journal or source files.
+The user confirmed four editions ($1/$2/$5/$10),40,000 NFTs, and explicitly said
+mint proceeds contribute toward the strategy's2,000USDG batch. They do not have
+2,000USDG to prefund. The launch must work without a creator-funded receipt reserve.
 
-## Published assets
+## Assets are complete
 
-All 40,000 launch images and metadata are published and remotely verified.
-`artifacts/nft-publication/editions.json` contains the four completed records;
-`public/nft-editions.json` contains the public catalog, previews and provenance.
+All40,000 launch image/metadata pairs are published and verified. The publisher
+checks every local PNG's CRCs/decompression and source hashes; every public
+metadata body is fetched and hash-checked, every PNG checked for type/size, and
+11full PNG downloads per edition hash-checked. Originals are unchanged.
+`artifacts/nft-publication/editions.json` records completion and
+`public/nft-editions.json` provides public catalog/provenance/preview URLs.
+$20/$50/$100 remain local for possible later use and are excluded from the fee pool.
 
-The publisher checks every local PNG's CRCs and decompression, source hashes,
-and trait uniqueness. Every public metadata body is fetched and hash-checked;
-every image is checked for size/type, with eleven downloaded hash samples per
-edition. Source artwork and metadata remain unchanged. Public JSON uses actual
-image URLs instead of placeholder IPFS paths. Hosting is versioned Vercel Blob,
-not a claim of permanent decentralized storage.
+## Confirmed funding design
 
-## Contract state
+`DnPendingSeaDropEdition` routes mint proceeds through `DnPendingAdapter` into
+real ETH/USDG swaps. `NftContributionBatch` credits actual USDG to each fixed
+ERC6551account's contribution. It is pending cash, not invested DN shares.
+Before queueing, the NFT account can withdraw its own contribution. An NFT
+transfer changes who controls that same account and claim. Primary sale fees
+already paid are not refunded by a pending-cash withdrawal.
 
-The v4 core is deployed on Robinhood Chain (4663); actual transaction receipts
-and runtime hashes are in `evm/deployments/4663-tokenized-v4.json`.
+One batch is one vault payer/receiver, avoiding the32depositor-per-epoch limit.
+Permissionless queueing starts once the batch and existing vault pending assets
+meet the collective threshold. New mints can use a fresh collecting escrow.
+After activation, permissionless claims send real canonical receipts only to the
+fixed NFT accounts. Cash refunds and in-kind recovery are separate outcomes;
+24-hour timeout recovery and bounded member-asset claims preserve user ownership.
+The adapter never creates an IOU and labels it canonical DN shares.
 
-- NeutralVault: `0x385d37788a63a205df8044cf7cF6a59CC740159A`.
-- Weighted NFT fanout: `0x5D38705D0c40c814CF2Eeb67d9ECD885cd9708FC`.
-- Split controller: `0xae3600b13a2F894f81F6565DD207492601B2Ce3E`.
-- Split router: `0x0264C6739483f80285B4e6ebd342B22b3785A9F0`.
+`contributedAssets(account)` is the contribution weight/history after settlement,
+not proof of current pending cash. The UI must read batch.state and claimedAsset.
 
-Root confirmed 102 Solidity tests and 153 application tests passing, with 17
-environment-dependent application tests skipped. The fanout includes 13 tests
-for four-edition accounting, ownership, cumulative rounding, and conservation.
-The adapter's 12 fork tests pass. Funded test cases use synthetic local inventory
-and mocked NAV: they do not prove a funded production lifecycle.
+Primary split:10%OpenSea /1%Wizards /89%pending strategy cash. The strategy later
+charges3%entry/6%exit, with house fees split50/50between Wizards and the fixed
+four-edition NFT pool. Secondary royalty10%goes directly to Wizards. Ordinary
+member transfers remain untaxed.
 
-`nft/prepare-deployment.mjs --version=v4` prepared the unsigned 30-call
-four-collection deployment/configuration plan at
-`artifacts/nft-deployment/unsigned.json`. Its complete isolated local fork
-simulation PASSED: 30 successful calls, 17,699,482 gas, all four collections
-configured and paused, final fee registry bound to the correct addresses.
-The plan hash and expected runtime hashes are in
-`artifacts/nft-deployment/fork-simulation.json`. Root has the bundle for its sole
-mainnet transaction writer. No second signer is started by the NFT task.
+## Validation and deployment state
 
-The plan deploys one inventory adapter and four paused editions; it sets their
-metadata, provenance, SeaDrop configuration and adapter permissions, then
-permanently registers the four fee recipients. CREATE2 predictions alone are
-not deployment proof. Both the adapter and collections remain paused.
+The pending adapter/collection has13passing local-fork tests:
+`/tmp/delta-pending-nft-tests.log`. They prove first mint with ZERO DN supply;
+actual SeaDrop/pool/USDG accounting; exact primary fees; pooling across editions;
+withdrawal after ownership transfer; minimum/slippage atomic rollback;20-NFT
+cash conservation and escrow rollover. The rollover transition mocks vault.entry;
+actual batch lifecycle is tested separately. These are not mainnet venue trades.
 
-## Economics and funding
+Root reports8batch tests passing, including256-run conservation, one-payer
+aggregation, refunded-cash detection, delayed cancellation and100-member recovery
+in20-token pages. Root is fixing the vault's fee-aware activation loss bound and
+will deploy the corrected empty receipt while reusing the100deployed members,
+controller, hook and four-recipient fanout.
 
-Member entry/exit fees are 3%/6%, divided equally between Wizards and the weighted
-NFT pool. See [the exact fanout interface](NFT-FANOUT-INTERFACE.md) for fixed
-entitlements, unminted reserves, owner claims and rounding.
+No NFT deployment calls were broadcast. Fanout remains unconfigured at
+`0x5D38705D0c40c814CF2Eeb67d9ECD885cd9708FC`. The original atomic inventory-backed
+30-call plan/simulation is archived as superseded; it must not be broadcast.
+A new pending-mode plan requires the final corrected receipt address/hash and
+must pass the complete local-fork simulation before root's sole signer submits it.
+No competing signer, funded trade, capital deposit or paid mainnet mint is started
+by this task. Network gas is distinct from strategy seed capital.
 
-NFT primary allocation remains 10% OpenSea / 1% direct Wizards / 89% DN. The
-3% DN entry fee inside that 89% leaves 86.33% of gross backing before conversion
-and execution costs. Secondary royalty is 10% to direct Wizards. Those specific
-Wizards-only flows use the existing direct router, not the split house router.
+## Ownership and next steps
 
-`DnInventoryAdapter` delivers already-activated vault receipts into each NFT's
-ERC-6551 account. Its fixed ETH/USDG swap route, finite quotes and budget,
-code-hash bindings, fresh NAV/delta checks and per-NFT minimum delivery checks
-must all pass. Pending replenishment is not sellable receipt inventory.
-Donating initial inventory gives no LP withdrawal claim. The reserve cannot
-withdraw receipts already delivered to NFT accounts.
+Root owns NftContributionBatch/tests, vault changes, keeper, website, shared RPC
+configuration and the only deployment signer. This NFT task owns pending adapter,
+collection, their tests, publication/deployment/verification tooling and these docs.
 
-The prepared vault has zero receipt supply. Initial receipt inventory and a
-validated funded venue lifecycle remain live dependencies. No capital transfer,
-swap, trade, reserve seed or paid mint has been performed by this task.
+New prepare/simulate/verify scripts require launchMode:pending-contribution. The
+CREATE2 namespace is deltaLP:nft:pending:v1:. The old mode is explicitly rejected.
+Once the corrected vault is deployed: prepare actual plan, fork all configuration
+calls, let root broadcast, then check live bytecode/configuration and source with
+actual creation transaction hashes. Check OpenSea indexing/drop status separately.
 
-## Verification and opening
+Opening still needs fresh bounded USDG6-per-ETH swap quotes, actual fixed-wei mint
+prices/schedule, clear pending/refund UI and operator activation. There is no
+existing-share-inventory requirement. Actual venue investment/receipt issuance
+requires its separate execution lifecycle once contributions reach the threshold.
 
-After the software bundle is broadcast, save actual creation transaction hashes
-and run `nft/verify-collections.mjs --transactions=path.json`. It checks live
-bytecode against the successful fork, collection bindings and source verification.
-Source submission alone is not confirmed verification.
-
-Mint opening additionally needs actual inventory, fresh bounded quotes, exact
-ETH sale prices/schedule and per-wallet limits, followed by operator activation.
-OpenSea supports Robinhood Chain, but collection indexing and custom-drop
-compatibility still require direct verification; SeaDrop configuration alone is
-not evidence of an OpenSea listing or an open mint.
-
-Root owns the shared website, RPC configuration, keeper and sole deployment
-signer. Server RPC secrets must remain outside browser bundles and public docs.
+See [the runbook](../nft/README.md) and [the fixed fanout interface](NFT-FANOUT-INTERFACE.md).
