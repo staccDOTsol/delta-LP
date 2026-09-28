@@ -4,12 +4,17 @@ Public site: https://deltalp.fun
 
 Previous site: https://delta-lp.stacc.bio (redirects to the primary domain).
 
-The homepage shows live Robinhood Chain strategy readiness, the deployed vault's on-chain
-state, and current Lighter order books. Long/short 3×/5×/10× controls calculate non-executable
-order estimates only. The deltaLP Lighter execution adapter is not implemented. No trade
-has been placed and no leveraged product is live. The linked external Lighter app holds
-positions in the user's Lighter account, not a deltaLP receipt.
+The homepage now includes browser-wallet execution on Lighter's Robinhood domain:
+USDG deposits, trading-key authorization, isolated 3×/5×/10× directional orders,
+fill/position reconciliation, reduce-only closes, and USDG withdrawal requests.
+Orders are signed in the user's browser; the web server has no trading key.
+The adapter has unit/transport tests and real offline WASM-signing tests, but a funded
+mainnet deposit/open/close/withdraw round trip has **not** been verified. Positions
+belong to the user's Lighter account and do not mint deltaLP vault receipts.
 
+The separate delta-neutral LP vault remains closed: LP inventory integration,
+asynchronous hedge rebalancing, and combined NAV/receipt accounting are unfinished.
+See [execution and recovery details](LIGHTER-ROUTE.md).
 The oil-subscription waitlist is at https://deltalp.fun/oil. Email verification, private
 passes, ranking, and referral points use the real database. No fuel subscription is sold.
 The preserved `platform/` code is a local fuel-operations sandbox with synthetic payments,

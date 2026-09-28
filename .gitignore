@@ -16,3 +16,6 @@ solana/target/
 !.env.example
 .agents/
 skills-lock.json
+.venv-execution/
+__pycache__/
+*.pyc

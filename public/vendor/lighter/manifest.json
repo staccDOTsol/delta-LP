@@ -1,0 +1,21 @@
+{
+  "repository": "https://github.com/elliottech/lighter-ts",
+  "revision": "d0493ae8c3499e94c1810d1256f317a6bbff6c20",
+  "files": {
+    "main.wasm": {
+      "sha256": "072594dfb8bfdf59e583c0f1c3e63aa12dce4599ebda4f0828b7836c9f3a5b4b",
+      "bytes": 7513860,
+      "source": "examples/react/src/lib/signers/wasm/main.wasm"
+    },
+    "wasm_exec.js": {
+      "sha256": "ee1a4783eaca6826f0239c3038d906edb5164289bf1923bcc0b6418de21039a0",
+      "bytes": 19200,
+      "source": "examples/react/src/wasm_exec.js"
+    },
+    "LICENSE": {
+      "sha256": "877bc01b254362ddc246fc6c5a58c131051876e0b09e167cabab70b878ba630f",
+      "bytes": 1082,
+      "source": "LICENSE"
+    }
+  }
+}

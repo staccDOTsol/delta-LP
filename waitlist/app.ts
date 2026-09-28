@@ -37,7 +37,7 @@ export function createWaitlistApp(store: WaitlistStore, options: { origin: strin
   app.use(express.json({ limit:'4kb' }));
   app.get('/api/health', async (_req,res) => { await store.stats(); res.json({ ok:true, mode:'waitlist' }); });
   app.get('/api/strategies/markets', async (_req,res) => {
-    try { res.json({chainId:4663,venue:'Lighter Robinhood',markets:await markets(),executionEnabled:false}); }
+    try { res.json({chainId:4663,venue:'Lighter Robinhood',markets:await markets(),executionEnabled:true,executionMode:'user-wallet',fundedExecutionVerified:false}); }
     catch {res.status(503).json({error:'Live market data is temporarily unavailable.'});}
   });
   app.get('/api/strategies/vault',async(_req,res)=>{
