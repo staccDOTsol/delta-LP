@@ -3,12 +3,13 @@ import {z} from 'zod';
 import {marketIds, quoteInput, type Market} from './lighter.js';
 
 const decimal=z.string().regex(/^\d{1,18}(\.\d{1,18})?$/);
+const signedDecimal=z.string().regex(/^-?\d{1,18}(\.\d{1,18})?$/);
 export const positionSchema=z.object({market_id:z.number().int(),symbol:z.string(),sign:z.number().int().min(-1).max(1),
   position:decimal,initial_margin_fraction:decimal,margin_mode:z.number().int(),
   open_order_count:z.number().int().nonnegative(),pending_order_count:z.number().int().nonnegative(),position_tied_order_count:z.number().int().nonnegative(),
   unrealized_pnl:z.string(),liquidation_price:decimal});
 export const accountSchema=z.object({index:z.number().int().nonnegative(),l1_address:z.string().regex(/^0x[a-fA-F0-9]{40}$/),
-  account_type:z.number().int(),account_trading_mode:z.number().int().default(0),available_balance:decimal,collateral:decimal,
+  account_type:z.number().int(),account_trading_mode:z.number().int().default(0),available_balance:signedDecimal,collateral:signedDecimal,
   total_order_count:z.number().int().nonnegative(),pending_order_count:z.number().int().nonnegative(),positions:z.array(positionSchema)});
 export type TradingAccount=z.infer<typeof accountSchema>;
 export type OrderPlan={marketId:number;symbol:keyof typeof marketIds;side:'long'|'short';leverage:3|5|10;collateral:string;
@@ -31,6 +32,7 @@ export function exactUnits(value:string,decimals:number):bigint{
   return units;
 }
 const decimalCanonical=(value:string)=>value.replace(/^0+(?=\d)/,'').replace(/(\.\d*?)0+$/,'$1').replace(/\.$/,'');
+export function signedUnits(value:string,decimals:number){signedDecimal.parse(value);return value.startsWith('-')?-exactUnits(value.slice(1),decimals):exactUnits(value,decimals);}
 export function assertNoOrders(account:TradingAccount){
   if(account.total_order_count||account.pending_order_count||account.positions.some(p=>p.open_order_count||p.pending_order_count||p.position_tied_order_count))throw new Error('Cancel existing orders on Lighter before placing this trade.');
 }
@@ -55,7 +57,7 @@ export function makePlan(raw:unknown,market:Market,account:TradingAccount,reduce
   if(reduceOnly){if(!before)throw new Error('No position to close.');base=before<0n?-before:before;}
   else{
     if(account.positions.some(p=>exactUnits(p.position,18)>0n))throw new Error('Close existing positions before opening a new one in this account.');
-    if(!collateral||collateral>exactUnits(account.available_balance,6))throw new Error('Not enough available USDG in Lighter.');
+    if(!collateral||collateral>signedUnits(account.available_balance,6))throw new Error('Not enough available USDG in Lighter.');
     if(input.leverage>market.maxLeverage)throw new Error('Selected leverage is not available.');
     // Reserve 1% for fees and rounding; isolated margin rounds 3x down to 2.9994x.
     base=collateral*99n*10000n*priceScale*scale/(100n*BigInt(imf)*upper*1000000n);

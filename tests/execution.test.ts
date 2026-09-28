@@ -51,6 +51,13 @@ test('close uses exact current size and reduce-only, including below opening min
     assert.equal(plan.baseTicks,'1');assert.equal(plan.reduceOnly,true);assert.equal(plan.side,sign===1?'short':'long');
   }
 });
+test('negative available equity blocks opening but does not block reducing risk',()=>{
+  const {account,market}=fixture();account.available_balance='-0.50';account.collateral='-0.50';
+  assert.throws(()=>makePlan(request,market,account),/Not enough/);
+  account.positions[0].position='0.0050';account.positions[0].sign=-1;
+  const plan=makePlan({...request,collateral:'0'},market,account,true);
+  assert.equal(plan.reduceOnly,true);assert.equal(plan.side,'long');assert.equal(plan.baseTicks,'50');
+});
 function orderFixture(){
   const {account,market}=fixture(),plan=makePlan(request,market,account),clientOrderIndex=123;
   const order={owner_account_index:account.index,market_index:0,client_order_index:clientOrderIndex,order_index:456,initial_base_amount:plan.size,price:plan.price,is_ask:false,reduce_only:false,time_in_force:'immediate-or-cancel',status:'filled',filled_base_amount:plan.size,filled_quote_amount:formatUnits(BigInt(plan.baseTicks)*BigInt(plan.priceTicks),6)};

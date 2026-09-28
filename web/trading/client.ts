@@ -1,6 +1,6 @@
 import {createPublicClient,createWalletClient,custom,defineChain,encodeFunctionData,formatUnits,http,parseAbi,toHex,type Address,type EIP1193Provider,type Hash} from 'viem';
 import {z} from 'zod';
-import {accountSchema,assertNoOrders,exactUnits,makePlan,marginBps,reconcileOrder,signedPosition,transactionState,type OrderPlan,type TradingAccount} from '../../strategy/execution.js';
+import {accountSchema,assertNoOrders,exactUnits,makePlan,marginBps,reconcileOrder,signedPosition,signedUnits,transactionState,type OrderPlan,type TradingAccount} from '../../strategy/execution.js';
 import {LIGHTER_API,marketIds,type Market} from '../../strategy/lighter.js';
 import {wasm} from './wasm.js';
 
@@ -160,7 +160,7 @@ export class TradingClient{
     assertNoOrders(account);
     if(signedPosition(account,plan.marketId,plan.sizeDecimals)!==BigInt(plan.before))throw new Error('Position changed. Review a fresh quote.');
     if(!plan.reduceOnly){
-      if(account.positions.some(p=>exactUnits(p.position,18)>0n)||exactUnits(account.available_balance,6)<exactUnits(plan.collateral,6))throw new Error('Account exposure or balance changed.');
+      if(account.positions.some(p=>exactUnits(p.position,18)>0n)||signedUnits(account.available_balance,6)<exactUnits(plan.collateral,6))throw new Error('Account exposure or balance changed.');
       const margin=account.positions.find(p=>p.market_id===plan.marketId);
       if(!margin||margin.margin_mode!==1||exactUnits(margin.initial_margin_fraction,2)!==BigInt(plan.marginBps))throw new Error('Isolated margin is not confirmed.');
     }
@@ -173,7 +173,7 @@ export class TradingClient{
     await this.identity();this.ensureClear();if(!this.authorized)throw new Error('Authorize trading first.');
     const account=await this.refresh();if(!account)throw new Error('No Lighter account.');assertNoOrders(account);
     if(account.positions.some(p=>exactUnits(p.position,18)>0n))throw new Error('Close positions before withdrawing.');
-    const units=exactUnits(value,6);if(!units||units>exactUnits(account.available_balance,6))throw new Error('Insufficient available USDG.');
+    const units=exactUnits(value,6);if(!units||units>signedUnits(account.available_balance,6))throw new Error('Insufficient available USDG.');
     const signed=await this.signer<Signed>('_signWithdraw',account.index,3,0,String(units),await this.nonce());
     const outcome=await this.submit(signed,13,{kind:'withdraw',accountIndex:account.index});
     return outcome.state==='executed'?{...outcome,message:'Withdrawal accepted by Lighter. Settlement to your wallet is still pending; check your wallet balance.'}:outcome;
