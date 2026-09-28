@@ -6,10 +6,12 @@ later release. All four launch asset sets are published and verified. Their
 catalog and provenance URLs are in `public/nft-editions.json`.
 
 The four-recipient fanout is deployed at
-`0x5D38705D0c40c814CF2Eeb67d9ECD885cd9708FC` on Robinhood Chain4663. It remains
-unconfigured. ZERO NFT calls were broadcast before the launch flow correction.
-The 13 four-edition fanout tests pass; root also ran the original complete
-four-edition suite (102 Solidity /153 application passing,17 environment skips).
+`0x5D38705D0c40c814CF2Eeb67d9ECD885cd9708FC` on Robinhood Chain 4663. It is
+permanently configured with the four v5 collections, in denomination order, and
+the initializer is the zero address. The 13 fanout tests pass. The deployment
+task reports the complete 128-test Solidity suite passing. Actual source,
+configuration and indexing evidence is recorded in
+[`4663-nft-v5-verification.json`](../evm/deployments/4663-nft-v5-verification.json).
 
 ## Pending contribution launch
 
@@ -25,10 +27,10 @@ The adapter/collection's 13 fork tests pass with zero existing DN supply. Root
 owns the batch's settlement/recovery tests and corrected fee-aware vault.
 
 `nft/prepare-deployment.mjs` requires explicit pending-contribution mode, the
-final receipt address/hash,3%/6% fees,a bounded1% post-fee execution-loss check,
-and exactly these four fee recipients. The new actual-target plan and complete
-fork simulation must pass before the sole deployment writer broadcasts it.
-No historical inventory-plan simulation validates this new code.
+final receipt address/hash, 3%/6% fees, a bounded 1% post-fee execution-loss check,
+and exactly these four fee recipients. The actual-target pending plan and all
+30 configuration/deployment calls passed local-fork simulation and subsequently
+succeeded on mainnet. No historical inventory plan was broadcast.
 
 Source verification compares live runtime with the tested plan. Marketplace
 indexing is checked independently with `nft/check-opensea.mjs`; deployment alone
@@ -98,8 +100,8 @@ routing and may call `harvest()` after sending the NFT portion.
 
 ## Fee separation and deployment order
 
-Root reports the user's revised deltaLP 3% entry / 6% exit policy and 50/50 house
-split. Existing live v3 remains 2%/4% all-Wizards on the old deployment; v4 uses the revised fees.
+The v5 launch uses the revised deltaLP 3% entry / 6% exit policy and 50/50 house
+split. This document concerns v5, not the older 2%/4% all-Wizards deployment.
 
 The existing primary NFT 10% OpenSea / 1% Wizards / 89% DN split remains separate.
 At 3% DN entry, illustrative backing is 86.33% of gross before conversion/execution
@@ -107,13 +109,12 @@ costs. The 2.67% DN entry portion is split 1.335% each to Wizards and the NFT po
 The explicitly all-Wizards primary 1% and secondary 10% must keep using a direct
 Wizards router; passing them through the split house router would change policy.
 
-1. Deploy the unconfigured distributor with the operator as initializer.
-2. Deploy the replacement fee/controller/receipt stack and the pending-contribution adapter.
-3. Deploy four paused editions with the pending-contribution adapter and direct Wizards
-   router; publish their metadata and provenance.
-4. Configure this distributor once with those four exact addresses.
-5. Verify source, destinations, fee rates, pending-cash funding, recovery and readiness before
-   any funding or opening of sales.
+Deployment, one-time registration, metadata publication, source matching and
+fee-destination checks are complete. The collections and adapter remain paused;
+paid sales, recurring fresh swap quotes, OpenSea drop publication and actual DN
+investment execution remain separate steps. See
+[`NFT-INTEGRATION-HANDOFF.md`](NFT-INTEGRATION-HANDOFF.md) for exact addresses and
+[`nft/SALE-SETUP.md`](../nft/SALE-SETUP.md) for the missing operator inputs.
 
 The collection constructor does not reference the new distributor, so registration
 avoids a circular CREATE2 dependency. The pending adapter binds `(owner, NeutralVault vault, expectedVaultHash)`.

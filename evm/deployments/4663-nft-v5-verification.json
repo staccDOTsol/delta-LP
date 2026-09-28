@@ -1,0 +1,227 @@
+{
+  "schemaVersion": 1,
+  "chainId": 4663,
+  "recordedAt": "2026-09-28T09:14:57.396Z",
+  "status": "deployed-source-matched-indexed-minting-paused",
+  "launchMode": "pending-contribution",
+  "planHash": "0x6039e4dcdf61f194a666ab7300fd643eb5f09ef20e9092fd45891967da725d96",
+  "successfulDeploymentCalls": 30,
+  "owner": "0x26E8134eCC3af5cCE32f34B03E7BD2f318B25158",
+  "observations": {
+    "sourceCheckedBlock": "74675819",
+    "policyCheckedAt": "2026-09-28T09:06:09.754Z",
+    "policyCheckedBlock": "74676620",
+    "mintAndIndexingCheckedAt": "2026-09-28T09:11:21.836Z",
+    "mintAndIndexingCheckedBlock": "74679731"
+  },
+  "adapter": {
+    "address": "0x7518E5121A2841568dDE5A81eec8C962EcfCc0C5",
+    "paused": true,
+    "ready": false,
+    "currentBatch": "0x0000000000000000000000000000000000000000"
+  },
+  "vault": {
+    "address": "0x3D4Ee6D147AF67371073e74206D6d49e64960f9c",
+    "receiptSupply": "0"
+  },
+  "collectingBatch": null,
+  "fanout": {
+    "address": "0x5D38705D0c40c814CF2Eeb67d9ECD885cd9708FC",
+    "configured": true,
+    "initializer": "0x0000000000000000000000000000000000000000",
+    "tokenCount": "40000",
+    "totalWeight": "180000"
+  },
+  "feePolicy": {
+    "entryFeeBps": "300",
+    "exitFeeBps": "600",
+    "houseWizardsBps": 5000,
+    "houseNftPoolBps": 5000,
+    "primaryOpenSeaBps": 1000,
+    "primaryDirectWizardsBps": 100,
+    "primaryPendingStrategyBps": 8900,
+    "secondaryRoyaltyBps": 1000,
+    "directWizardFanout": "0x1b88A6c6516FD2918905186F21Bb9F5CaA1a15c8"
+  },
+  "contracts": [
+    {
+      "label": "pending-adapter",
+      "address": "0x7518E5121A2841568dDE5A81eec8C962EcfCc0C5",
+      "creationTransaction": "0xde1d4617dce0938564c7fa2bf6ac4a710df49f9073705dc095ebef115df07d70",
+      "runtimeCodeHash": "0xc38340e0d5d17037ca8178e5c1d1526feb4ee366ae619244a4e6813108c7cc54",
+      "source": {
+        "provider": "Sourcify",
+        "status": "verified",
+        "creationMatch": "match",
+        "runtimeMatch": "match",
+        "checkedBlock": "74675819",
+        "url": "https://sourcify.dev/server/v2/contract/4663/0x7518E5121A2841568dDE5A81eec8C962EcfCc0C5"
+      },
+      "etherscan": {
+        "status": "pending",
+        "result": "Pending in queue",
+        "checkedAt": "2026-09-28T09:11:21.808Z",
+        "url": "https://robin.etherscan.io/address/0x7518E5121A2841568dDE5A81eec8C962EcfCc0C5#code"
+      }
+    },
+    {
+      "label": "edition-1",
+      "address": "0xa8dC97388FD0919A654bc05E21034afaafd1FF43",
+      "creationTransaction": "0x8a3020aad6959949a7a16772af5a767b8ba9b37450381ea8654d4c49b1636705",
+      "runtimeCodeHash": "0x5788116b0ed5fd5abc40047960bb82890a8938c940f54028c6bd2b05cba656fe",
+      "source": {
+        "provider": "Sourcify",
+        "status": "verified",
+        "creationMatch": "match",
+        "runtimeMatch": "match",
+        "checkedBlock": "74675819",
+        "url": "https://sourcify.dev/server/v2/contract/4663/0xa8dC97388FD0919A654bc05E21034afaafd1FF43"
+      },
+      "etherscan": {
+        "status": "pending",
+        "result": "Pending in queue",
+        "checkedAt": "2026-09-28T09:11:23.086Z",
+        "url": "https://robin.etherscan.io/address/0xa8dC97388FD0919A654bc05E21034afaafd1FF43#code"
+      }
+    },
+    {
+      "label": "edition-2",
+      "address": "0x95fc6306d95F8264Ad6cc5336FB8df7e58BCbb7A",
+      "creationTransaction": "0x4820bc1e6019dca982c480775a5c9c7e49768552e7e69a41f4589e9d841e32af",
+      "runtimeCodeHash": "0x36bf217849f47ba65c5812015ebc770ca14acb34b89d0464e6fd58ba1e57224e",
+      "source": {
+        "provider": "Sourcify",
+        "status": "verified",
+        "creationMatch": "match",
+        "runtimeMatch": "match",
+        "checkedBlock": "74675819",
+        "url": "https://sourcify.dev/server/v2/contract/4663/0x95fc6306d95F8264Ad6cc5336FB8df7e58BCbb7A"
+      },
+      "etherscan": {
+        "status": "pending",
+        "result": "Pending in queue",
+        "checkedAt": "2026-09-28T09:11:24.354Z",
+        "url": "https://robin.etherscan.io/address/0x95fc6306d95F8264Ad6cc5336FB8df7e58BCbb7A#code"
+      }
+    },
+    {
+      "label": "edition-5",
+      "address": "0xA09255F0D9cF94475369A962B3Df6Fd7ac926761",
+      "creationTransaction": "0x02e617410f99c042a328f31ff0f8cdb8a6be1dfb8822895fe9c0dd48966dd953",
+      "runtimeCodeHash": "0x7028363b010d457a7e5cd8c955a249453f0e2a27769204a50d4648a0a0bc1898",
+      "source": {
+        "provider": "Sourcify",
+        "status": "verified",
+        "creationMatch": "match",
+        "runtimeMatch": "match",
+        "checkedBlock": "74675819",
+        "url": "https://sourcify.dev/server/v2/contract/4663/0xA09255F0D9cF94475369A962B3Df6Fd7ac926761"
+      },
+      "etherscan": {
+        "status": "pending",
+        "result": "Pending in queue",
+        "checkedAt": "2026-09-28T09:11:25.625Z",
+        "url": "https://robin.etherscan.io/address/0xA09255F0D9cF94475369A962B3Df6Fd7ac926761#code"
+      }
+    },
+    {
+      "label": "edition-10",
+      "address": "0xDa66c3e243D15813E6810c0370823A67b1497672",
+      "creationTransaction": "0x9745f7e4206249054fb87b3a885e617b7db62a86902e9571125fdfb8b72d8e2e",
+      "runtimeCodeHash": "0x000ecf7847f390fc21d18edf216ef84597e61787aa221d53c55245536ac71306",
+      "source": {
+        "provider": "Sourcify",
+        "status": "verified",
+        "creationMatch": "match",
+        "runtimeMatch": "match",
+        "checkedBlock": "74675819",
+        "url": "https://sourcify.dev/server/v2/contract/4663/0xDa66c3e243D15813E6810c0370823A67b1497672"
+      },
+      "etherscan": {
+        "status": "pending",
+        "result": "Pending in queue",
+        "checkedAt": "2026-09-28T09:11:26.894Z",
+        "url": "https://robin.etherscan.io/address/0xDa66c3e243D15813E6810c0370823A67b1497672#code"
+      }
+    }
+  ],
+  "collections": [
+    {
+      "denomination": 1,
+      "address": "0xa8dC97388FD0919A654bc05E21034afaafd1FF43",
+      "supplyCap": 10000,
+      "paused": true,
+      "totalMinted": "0",
+      "metadataBaseURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/1/67b222d1aa4a4f513515ca4bcf360d123fe4dc614dc81c187af29d9e1b929445/metadata/",
+      "royaltyBps": "1000",
+      "royaltyReceiver": "0xBfac70063f04e116F5a509cC746BEeb2F053467D",
+      "opensea": {
+        "indexed": true,
+        "contractLookupHTTP": 200,
+        "collectionURL": "https://opensea.io/collection/money-doubler-1",
+        "dropLookupHTTP": 404,
+        "dropPublished": false
+      }
+    },
+    {
+      "denomination": 2,
+      "address": "0x95fc6306d95F8264Ad6cc5336FB8df7e58BCbb7A",
+      "supplyCap": 10000,
+      "paused": true,
+      "totalMinted": "0",
+      "metadataBaseURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/2/483cb9583e8dc808e16ae27e091d3c0829f0c8ffc461de02be4e84bc249c6d96/metadata/",
+      "royaltyBps": "1000",
+      "royaltyReceiver": "0xBfac70063f04e116F5a509cC746BEeb2F053467D",
+      "opensea": {
+        "indexed": true,
+        "contractLookupHTTP": 200,
+        "collectionURL": "https://opensea.io/collection/money-doubler-2",
+        "dropLookupHTTP": 404,
+        "dropPublished": false
+      }
+    },
+    {
+      "denomination": 5,
+      "address": "0xA09255F0D9cF94475369A962B3Df6Fd7ac926761",
+      "supplyCap": 10000,
+      "paused": true,
+      "totalMinted": "0",
+      "metadataBaseURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/5/2a5060dafde9802cedebaec481ac94d6e9ce92e4f0e15cb458e9f824fd8e9c93/metadata/",
+      "royaltyBps": "1000",
+      "royaltyReceiver": "0xBfac70063f04e116F5a509cC746BEeb2F053467D",
+      "opensea": {
+        "indexed": true,
+        "contractLookupHTTP": 200,
+        "collectionURL": "https://opensea.io/collection/money-doubler-5",
+        "dropLookupHTTP": 404,
+        "dropPublished": false
+      }
+    },
+    {
+      "denomination": 10,
+      "address": "0xDa66c3e243D15813E6810c0370823A67b1497672",
+      "supplyCap": 10000,
+      "paused": true,
+      "totalMinted": "0",
+      "metadataBaseURI": "https://sz0wj37dl0wv19us.public.blob.vercel-storage.com/editions/10/d753926317deb4dd0deaa06c055b6f8b4f0b59e8e384c8b24a75a34e1cfe0afc/metadata/",
+      "royaltyBps": "1000",
+      "royaltyReceiver": "0xBfac70063f04e116F5a509cC746BEeb2F053467D",
+      "opensea": {
+        "indexed": true,
+        "contractLookupHTTP": 200,
+        "collectionURL": "https://opensea.io/collection/money-doubler-10",
+        "dropLookupHTTP": 404,
+        "dropPublished": false
+      }
+    }
+  ],
+  "remaining": {
+    "operatorInputs": "nft/sale-inputs.template.json",
+    "runbook": "nft/SALE-SETUP.md",
+    "saleConfiguration": "Fixed wei prices, public windows, wallet limits and fresh executable swap floors/caps/expiries remain unset.",
+    "quoteOperation": "An owner-operated quote refresh process is needed for sustained minting; the adapter expiry is at most 15 minutes.",
+    "openSeaDrop": "Creator-authorized configuration/publication and custom-contract publish compatibility remain unverified.",
+    "dnExecution": "Worker is in observation mode. Funded execution/receipt activation has not been established by these checks."
+  },
+  "scope": "Read-only verification snapshot; no mainnet mint, unpause, capital deposit or venue execution was performed. Source matching is not an audit or proof of invested backing."
+}

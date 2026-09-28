@@ -66,7 +66,13 @@ resuming without overwriting immutable paths. Never remove a live publisher lock
 
 ## Prepare, simulate and verify
 
-Once the final fee-aware vault deployment is recorded:
+The v5 bundle is deployed and paused. Source matches on Sourcify; all four
+collections are indexed on OpenSea, with no published drop returned. See
+`evm/deployments/4663-nft-v5-verification.json` and the remaining inputs in
+[SALE-SETUP.md](SALE-SETUP.md). The preparation commands below document the tested
+deployment; do not regenerate or redeploy the frozen bundle to open a sale.
+
+For preparing a replacement deployment after its vault has been recorded:
 
 ```sh
 node --env-file=.env.local nft/prepare-deployment.mjs --version=v5
@@ -100,6 +106,7 @@ After broadcast, save actual address-to-creation-tx hashes and run:
 
 ```sh
 node --env-file=.env.local nft/verify-collections.mjs --transactions=path.json
+node --env-file=.env.explorer.local nft/verify-explorer.mjs --version=v5
 node --env-file=.env.local --env-file=.env.nft-opensea.local nft/check-opensea.mjs
 ```
 
@@ -110,9 +117,18 @@ state, pauses, vault supply and current batch contributions. An API 404 is not
 indexed; authentication errors are not indexing proof. Temporary OpenSea keys
 expire after seven days.
 
+`verify-explorer.mjs` submits standard JSON and constructor arguments to Etherscan
+using `ETHERSCAN_API_KEY` from the ignored environment file. It checks the
+deployed plan hash and successful transactions, records accepted jobs separately
+from confirmed verification, and never signs. The five current submissions are
+queued; Sourcify source matching is complete.
+
 Opening a pending-funded sale still requires fresh bounded swap quotes, fixed-wei
 prices/schedule and per-wallet limits, clear pending/refund disclosures, and
 operator activation. Quotes are USDG6 per ETH, not receipt-share units. Dollar
 denominations are price targets rather than permanent ETH prices or dollar pegs.
 OpenSea indexing/custom-drop compatibility is verified separately from SeaDrop
 protocol compatibility. An indexed contract alone does not establish an open sale.
+Use [sale-inputs.template.json](sale-inputs.template.json) for unsigned operator
+values. Quote expiry/cap means a one-time opening cannot sustain a sale; an
+ongoing owner-operated quote refresh process remains to be configured.
